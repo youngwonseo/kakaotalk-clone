@@ -1,11 +1,57 @@
 import React from 'react';
+import { Route, Switch  } from 'react-router-dom';
+import { Helmet }  from 'react-helmet-async';
+import styled from 'styled-components';
+
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ChatPage from './pages/ChatPage';
+import ProfilePage from './pages/ProfilePage';
+import SettingPage from './pages/SettingPage';
 
 
-function App() {
+const AppWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const Intro = styled.div`
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Main = styled.div`
+  width: 400px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+interface Props {
+
+}
+
+const App: React.FC<Props> = () => {
   return (
-    <div>
-      
-    </div>
+    <AppWrapper>
+      <Intro>
+        <h1>Intro</h1>
+      </Intro>
+      <Main>
+        <Switch>
+          <Route exact path="/login" component={LoginPage}/>
+          <Route exact path="/register" component={RegisterPage}/>
+          <Route path="/profile" component={ProfilePage}/>
+          <Route path="/profile/:id" component={ProfilePage}/>
+          <Route path="/chat" component={ChatPage}/>
+          <Route path="/setting" component={SettingPage}/>
+        </Switch>
+      </Main>
+    </AppWrapper>
   );
 }
 

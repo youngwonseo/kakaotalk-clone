@@ -7,6 +7,11 @@ services:
       context: ./nginx
     ports:
       - '3000:80'
+  mongodb:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./mongodb
   front-end:
     stdin_open: true
     build:
