@@ -8,7 +8,7 @@ import RegisterPage from './pages/RegisterPage';
 import ChatPage from './pages/ChatPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingPage from './pages/SettingPage';
-
+import ModalProvider from './lib/createModalProvider';
 
 const AppWrapper = styled.div`
   height: 100%;
@@ -42,14 +42,16 @@ const App: React.FC<Props> = () => {
         <h1>Intro</h1>
       </Intro>
       <Main>
-        <Switch>
-          <Route exact path="/login" component={LoginPage}/>
-          <Route exact path="/register" component={RegisterPage}/>
-          <Route path="/profile" component={ProfilePage}/>
-          <Route path="/profile/:id" component={ProfilePage}/>
-          <Route path="/chat" component={ChatPage}/>
-          <Route path="/setting" component={SettingPage}/>
-        </Switch>
+        <ModalProvider>
+          <Switch>
+            <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/register" component={RegisterPage} />
+            <Route exact path="/" component={ProfilePage} />
+            <Route path="/profile/:id" component={ProfilePage} />
+            <Route path="/chat" component={ChatPage} />
+            <Route path="/setting" component={SettingPage} />
+          </Switch>
+        </ModalProvider>
       </Main>
     </AppWrapper>
   );
