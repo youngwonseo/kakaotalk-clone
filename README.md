@@ -10,13 +10,11 @@
 
 
 
-
-
-
 ## Back-end
 - Typescript
+- NestJS
 
-
+https://github.com/mung9/nestjs-boilerplate
 
 
 ## 페이지 목록
@@ -41,6 +39,8 @@
   * 대화참여인원목록
 
 * 설정
+  * theme
+  * notification
 
 
 ## 데이터베이스
