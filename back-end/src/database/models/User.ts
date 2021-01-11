@@ -4,33 +4,22 @@ import { Document, Model, model, Types, Schema, Query } from "mongoose"
 
 // properties, methods
 export interface UserInterface{
-  // properties
   username: string;
+  statusMessage: string;
+  email: string;
   hashedPassword: string;
-  theme: any;
   config: any;
-  role: any;
   createdAt: any;
-
-  // methods
-  setPassword: Function;
-  checkPassword: Function;
-  serialize: Function;
-  generateToken: Function;
-  
 }
 
 
 // for mongodb schema
-interface UserBaseDocument extends UserInterface, Document {
-
-}
-
+interface UserBaseDocument extends UserInterface, Document {}
 
 
 // static
 interface UserDocument extends UserBaseDocument {
-  findByUsername(name: string): any;  
+  // findByUsername(name: string): any;  
 }
 
 
@@ -38,17 +27,15 @@ export interface UserModel extends Model<UserDocument> {
 
 }
 
+
 const UserSchema = new Schema<UserDocument, UserModel>({
   username: String,
+  email: String,
   hashedPassword: String,
-  theme: {
-    type: String,
-    ref: 'Theme',
-  },
+  
   config: {
     ThemeTone: String,
   },
-  role: String,
   createdAt: { type: Date, default: Date.now },
 });
 

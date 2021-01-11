@@ -20,12 +20,12 @@ import { Provider } from "@nestjs/common";
 //     underscored: true
 //   }
 // };
-
+// mongoose.Promise = global.Promise;
 export const databaseProviders: Provider[] = [
   {
     provide: "MONGO",
     useFactory: async () => {
-      // mongoose.Promise = global.Promise;
+      // (<any>mongoose).Promise = global.Promise;
       mongoose
         .connect("", { useUnifiedTopology: true, useNewUrlParser: true })
         .then(() => {

@@ -1,5 +1,5 @@
 import {
-  Controller, Param, Get
+  Controller, Param, Get, Post
 } from '@nestjs/common';
 import { UserService } from '../services/user';
 import User, { UserModel, UserInterface } from "../database/models/User";
@@ -18,9 +18,15 @@ export class UserController {
     return user;
   }
 
-  @Get("/test")
-  public test() {
-    return "hi";
+  @Get("")
+  public async getUsers(){
+    const users = await this.userService.findUsers();
+    return users;
   }
 
+  @Get("/test")
+  public test() {
+    
+    return "hi";
+  }
 }
