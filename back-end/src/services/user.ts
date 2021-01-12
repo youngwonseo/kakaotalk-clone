@@ -13,7 +13,7 @@ export class UserService {
     return await this.userDao.getList();
   }
   public async findUser(id: number): Promise<UserInterface> {
-    return await this.userDao.getById(id);
+    return await this.userDao.getOne(id);
   }
 
 }

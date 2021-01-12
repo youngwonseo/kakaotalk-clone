@@ -11,7 +11,7 @@ export interface MessageInterface{
   createdAt: any;
 }
 
-
+//파일일경우
 
 // for mongodb schema
 interface MessageBaseDocument extends MessageInterface, Document {}
