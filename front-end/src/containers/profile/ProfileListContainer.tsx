@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import io from 'socket.io-client';
 
 import ProfileList from '../../components/profile/ProfileList';
 import ProfileItem from '../../components/profile/ProfileItem';
@@ -8,6 +9,18 @@ interface Props {};
 
 // 컨테이너 또는 컴포넌트 조합
 const ProfileListContainer : React.FC<Props> = () => {
+  
+  useEffect(()=>{
+
+    // 소켓 연결
+    const socket = io('/chat');
+    socket.on('connect', function(){
+    })
+    socket.on('data', (payload: any) => {
+      // dispatch(setData(payload.data));
+    });
+  },[]);
+
   
   const myProfile = {
     idx: 1,
@@ -114,6 +127,8 @@ const ProfileListContainer : React.FC<Props> = () => {
       img: "/profile-default.png",
     },
   ];
+
+
 
 
   return (

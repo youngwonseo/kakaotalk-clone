@@ -1,4 +1,6 @@
-import { Document, Model, model, Types, Schema, Query } from "mongoose"
+import { Document, Model, model, Types, Schema, Query } from "mongoose";
+
+
 // import crypto from 'crypto';
 // import jwt from 'jsonwebtoken';
 
@@ -81,6 +83,9 @@ UserSchema.methods.setTheme = function setTheme() {
 UserSchema.statics.findByUsername = function findByUsername(username: string) {
   return this.findOne({ username });
 };
+
+
+
 
 export default model<UserDocument, UserModel>('User', UserSchema);
 

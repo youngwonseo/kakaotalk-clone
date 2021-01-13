@@ -1,7 +1,7 @@
 import { Document, Model, model, Types, Schema, Query } from "mongoose"
 // import crypto from 'crypto';
 // import jwt from 'jsonwebtoken';
-import { UserInterface } from './User';
+import { UserInterface } from './user.model';
 
 // properties, methods
 export interface MessageInterface{

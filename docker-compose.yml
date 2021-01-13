@@ -7,11 +7,6 @@ services:
       context: ./nginx
     ports:
       - '3000:80'
-  mongodb:
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./mongodb
   front-end:
     stdin_open: true
     build:
@@ -29,7 +24,4 @@ services:
       - ./back-end:/app
     environment:
       - PORT=5000
-      - MONGO_URI=mongodb://3.35.20.27:9080/dropcare-cnuh
-      - SECRET_KEY=MySecretKey
-      - JWT_SECRET=asdasdasd
-      - INFLUX_URL=http://db.doctorsfab.com:8086
+      - MONGO_URI=

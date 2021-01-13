@@ -27,7 +27,7 @@ export const databaseProviders: Provider[] = [
     useFactory: async () => {
       // (<any>mongoose).Promise = global.Promise;
       mongoose
-        .connect("", { useUnifiedTopology: true, useNewUrlParser: true })
+        .connect(process.env.MONGO_URI || "" , { useUnifiedTopology: true, useNewUrlParser: true })
         .then(() => {
           console.log('Successfully connected to mongodb');
         })

@@ -15,8 +15,8 @@ async function start() {
   process.on("SIGINT", function() {
     return app.close().then(() => process.exit(1));
   });
-
-  const port = process.env.PORT || 3000;
+  
+  const port = process.env.PORT || 5000;
 
   await app.listen(port, () => {
     console.log(`Listening on port ${port}`);
