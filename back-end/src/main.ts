@@ -1,11 +1,14 @@
 import { AppModule } from "./modules";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
+import { WsAdapter } from "@nestjs/platform-ws";
 // import helmet = require("helmet");
 
-async function start() {
+async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.setGlobalPrefix("/api/v1");
+  // const app = await NestFactory.create(ApplicationModule);
+  // app.useWebSocketAdapter(new WsAdapter(app));
   // app.use(helmet());
 
   process.on("SIGTERM", function() {
@@ -23,4 +26,4 @@ async function start() {
   });
 }
 
-start();
+bootstrap();

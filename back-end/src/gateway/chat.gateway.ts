@@ -1,26 +1,37 @@
-import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit } from '@nestjs/websockets';
 
 
 @WebSocketGateway()
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
+
 
   @WebSocketServer() server: any;
   users: number = 0;
 
-
-  async handleDisconnect(client: any) {
-    throw new Error("Method not implemented.");
+  afterInit(server: any) {
+    // console.log(server);
+    // throw new Error("Method not implemented.");
   }
 
-  async handleConnection(client: any, ...args: any[]) {
-    throw new Error("Method not implemented.");
+  handleDisconnect(client: any) {
+    // throw new Error("Method not implemented.");
+    this.users--;
+    console.log('dis connection!!', this.users);
+  }
+
+  handleConnection(client: any, ...args: any[]) {
+    // throw new Error("Method not implemented.");
+    this.users++;
+    console.log('connection!!', this.users);
   }
 
   // 메세지
-  @SubscribeMessage('chat')
+  @SubscribeMessage('msgToServer')
   async onChat(client: any, message: any){
+    console.log('~~~')
     console.log(message);
-    client.broadcast.emit('chat', message);
+    
+    // client.broadcast.emit('data', "hi");
   }
 
 

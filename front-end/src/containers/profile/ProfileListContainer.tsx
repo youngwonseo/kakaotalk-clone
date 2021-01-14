@@ -10,17 +10,33 @@ interface Props {};
 // 컨테이너 또는 컴포넌트 조합
 const ProfileListContainer : React.FC<Props> = () => {
   
-  useEffect(()=>{
+  
+  
 
-    // 소켓 연결
-    const socket = io('/chat');
-    socket.on('connect', function(){
-    })
-    socket.on('data', (payload: any) => {
-      // dispatch(setData(payload.data));
-    });
+  useEffect(()=>{
+    // console.log('useEffect');
+    // // 소켓 연결
+
+    // const socket = io('/');
+    // socket.on('connect_error', (error: any)=> {
+    //   console.log(error);
+    // });
+    // socket.on('connect', () => {
+    //   console.log('conection!');
+    // });
+    // socket.on('error', (error: any) => {
+    //   console.log(error);
+    // });
+      
+    
   },[]);
 
+
+  const emitData = () => {
+    // console.log('!!')
+    // console.log(socket);
+    // socket.emit('msgToServer', {name: 'hi'});
+  }
   
   const myProfile = {
     idx: 1,
@@ -133,8 +149,9 @@ const ProfileListContainer : React.FC<Props> = () => {
 
   return (
     <>
-      <ProfileItem profile={myProfile}/>
-      <ProfileList title={"친구"} profiles={profiles} />
+      {/* <ProfileItem profile={myProfile}/>
+      <ProfileList title={"친구"} profiles={profiles} /> */}
+      <a onClick={emitData}>하이</a>
     </>
   );
 }

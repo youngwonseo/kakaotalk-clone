@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch  } from 'react-router-dom';
 import { Helmet }  from 'react-helmet-async';
 import styled from 'styled-components';
@@ -9,6 +9,10 @@ import ChatPage from './pages/ChatPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingPage from './pages/SettingPage';
 import ModalProvider from './lib/createModalProvider';
+
+import io from 'socket.io-client';
+
+
 
 const AppWrapper = styled.div`
   height: 100%;
@@ -36,6 +40,26 @@ interface Props {
 }
 
 const App: React.FC<Props> = () => {
+
+  
+  useEffect(()=>{
+    const socket = io('/');
+    socket.on('connect_error', (error: any)=> {
+      console.log(error);
+    });
+    socket.on('connect_timeout', (err: any) => {
+      console.log("client connect_timeout: ", err);
+  });
+
+    socket.on('connect', () => {
+      console.log('conection!');
+    });
+    socket.on('error', (error: any) => {
+      console.log(error);
+    });
+  }, []);
+ 
+
   return (
     <AppWrapper>
       <Intro>
