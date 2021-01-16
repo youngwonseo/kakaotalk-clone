@@ -1,45 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import LoginForm from '../../components/auth/LoginForm';
+import React, { useEffect, useState } from 'react';
+import RegisterForm from '../../components/auth/RegisterForm';
 import { useDispatch, useSelector } from 'react-redux';
-import { initializeForm, changeField, login } from '../../modules/auth';
+import { initializeForm, changeField, register } from '../../modules/auth';
 
-interface Props {};
 
-const LoginContainer: React.FC<Props> = () => {
+
+interface Props {
+
+}
+
+
+const RegisterContainer: React.FC<Props> = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState<any>(null);
   const {
     form,
     auth, 
-    authError,
-    // user
+    authError
   } = useSelector(({ auth, user }: {auth: any, user: any}) => ({
-    form: auth.login,
+    form: auth.register,
     auth: auth.auth,
-    authError: auth.authError,
-    // user: user.user
+    authError: auth.authError
   }));
-  
-  
+
   useEffect(() => {
-    dispatch(initializeForm('login'));
-  },[dispatch]);
-  
+    dispatch(initializeForm("register"));
+  }, [dispatch]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
-    dispatch(changeField({ form: 'login', key: name, value }));
-  }
+    dispatch(changeField({ form: 'register', key: name, value }));
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { email, password } = form;
-    dispatch(login.request({ email, password }));
-  }
-
-
+    dispatch(register.request({ email, password }));
+  };
 
   return (
-    <LoginForm
+    <RegisterForm
       form={form}
       handleChange={handleChange}
       handleSubmit={handleSubmit}
@@ -48,4 +48,5 @@ const LoginContainer: React.FC<Props> = () => {
   );
 };
 
-export default LoginContainer;
+
+export default RegisterContainer;

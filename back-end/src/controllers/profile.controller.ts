@@ -1,5 +1,5 @@
 import {
-  Controller, Param, Get
+  Controller, Param, Get, Post, Delete, Put
 } from '@nestjs/common';
 
 
@@ -7,4 +7,9 @@ import {
 @Controller("/profiles")
 export class ProfileController {
 
+  
+  // 친구 추가를 위한 검색
+
+
+  
 }

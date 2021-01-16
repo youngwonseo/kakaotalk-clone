@@ -1,40 +1,51 @@
 import { Document, Model, model, Types, Schema, Query } from "mongoose";
-
+import Friend, { FriendModel, FriendInterface } from "./friend.model";
 
 // import crypto from 'crypto';
 // import jwt from 'jsonwebtoken';
 
 // properties, methods
-export interface UserInterface{
+export interface UserInterface extends Document{
   username: string;
   statusMessage: string;
   email: string;
   hashedPassword: string;
   config: any;
+  friends: [FriendInterface?];
   createdAt: any;
 }
 
-
-// for mongodb schema
-interface UserBaseDocument extends UserInterface, Document {}
+interface UserModel extends Model<UserInterface> {}
 
 
-// static
-interface UserDocument extends UserBaseDocument {
-  // findByUsername(name: string): any;  
-}
+
+// // for mongodb schema
+// interface UserBaseDocument extends UserInterface, Document {
+  
+// }
 
 
-export interface UserModel extends Model<UserDocument> {
+// // static
+// interface UserDocument extends UserBaseDocument {
+//   // findByUsername(name: string): any;  
+// }
 
-}
+
+// export interface UserModel extends Model<UserDocument> {
+  
+// }
 
 
-const UserSchema = new Schema<UserDocument, UserModel>({
+const UserSchema = new Schema<UserInterface, UserModel>({
   username: String,
   email: String,
   hashedPassword: String,
-  
+  friends: [
+    {
+      type: String,
+      ref: "Friend",
+    },
+  ],
   config: {
     ThemeTone: String,
   },
@@ -87,6 +98,6 @@ UserSchema.statics.findByUsername = function findByUsername(username: string) {
 
 
 
-export default model<UserDocument, UserModel>('User', UserSchema);
+export default model<UserInterface, UserModel>('User', UserSchema);
 
 

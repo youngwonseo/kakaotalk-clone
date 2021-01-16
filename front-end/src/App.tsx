@@ -43,20 +43,23 @@ const App: React.FC<Props> = () => {
 
   
   useEffect(()=>{
-    const socket = io('/');
-    socket.on('connect_error', (error: any)=> {
-      console.log(error);
-    });
-    socket.on('connect_timeout', (err: any) => {
-      console.log("client connect_timeout: ", err);
-  });
 
-    socket.on('connect', () => {
-      console.log('conection!');
-    });
-    socket.on('error', (error: any) => {
-      console.log(error);
-    });
+    
+  //   const socket = io('/');
+
+  //   socket.on('connect_error', (error: any)=> {
+  //     console.log("connect_error: ", error);
+  //   });
+  //   socket.on('connect_timeout', (err: any) => {
+  //     console.log("client connect_timeout: ", err);
+  // });
+
+  //   socket.on('connect', () => {
+  //     console.log('conection!');
+  //   });
+  //   socket.on('error', (error: any) => {
+  //     console.log(error);
+  //   });
   }, []);
  
 

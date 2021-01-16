@@ -2,9 +2,8 @@ import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayConnectio
 
 
 @WebSocketGateway()
-export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
-
-
+export class ChatGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: any;
   users: number = 0;
 
@@ -16,25 +15,27 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   handleDisconnect(client: any) {
     // throw new Error("Method not implemented.");
     this.users--;
-    console.log('dis connection!!', this.users);
+    console.log("dis connection!!", this.users);
   }
 
   handleConnection(client: any, ...args: any[]) {
     // throw new Error("Method not implemented.");
     this.users++;
-    console.log('connection!!', this.users);
+    console.log("connection!!", this.users);
   }
 
+
   // 메세지
-  @SubscribeMessage('msgToServer')
-  async onChat(client: any, message: any){
-    console.log('~~~')
+  @SubscribeMessage("msgToServer")
+  async onChat(client: any, message: any) {
+    console.log("~~~");
     console.log(message);
-    
+    // 노티 ?
+    // 채팅방id
+    // 글쓴사람id
+    // 
     // client.broadcast.emit('data', "hi");
   }
 
-
   // 카운트
-
 }

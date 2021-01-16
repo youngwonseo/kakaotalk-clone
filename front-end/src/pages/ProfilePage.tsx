@@ -1,6 +1,6 @@
 import React from 'react';
 import UserTemplate from '../components/template/UserTemplate';
-import ProfileListContainer from '../containers/profile/ProfileListContainer';
+import ProfileContainer from '../containers/profile/ProfileContainer';
 import { Route, Link } from "react-router-dom"
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 const ProfilePage : React.FC<Props> = ({ match }) => {
   return (
     <UserTemplate title={"친구"}>
-      <ProfileListContainer />
+      <ProfileContainer />
     </UserTemplate>
   );
 }

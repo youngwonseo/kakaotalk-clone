@@ -1,8 +1,8 @@
 import { combineReducers  } from 'redux';
 import { all } from 'redux-saga/effects';
 
-// import loading from './loading';
-// import auth, { authSaga } from './auth';
+import loading from './loading';
+import auth, { authSaga } from './auth';
 // import main, { mainSaga } from './main';
 // import data, { dataSaga } from './data';
 // import device, { deviceSaga } from './device';
@@ -15,9 +15,9 @@ import { all } from 'redux-saga/effects';
 // import user, { userSaga } from './user';
 
 const rootReducer = combineReducers({
-  // loading,
+  loading,
   // base,
-  // auth,
+  auth,
   // data,
   // main,
   // device,
@@ -29,7 +29,7 @@ const rootReducer = combineReducers({
 export function* rootSaga() {
   yield all([
     // baseSaga(),
-    // authSaga(),
+    authSaga(),
     // dataSaga(),
     // mainSaga(),
     // deviceSaga(),

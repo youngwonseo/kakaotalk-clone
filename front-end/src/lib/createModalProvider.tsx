@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react';
 import styled from 'styled-components';
+import ProfileSearch from '../components/profile/ProfileSearch';
 
 
 interface State{
@@ -78,10 +79,16 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <ModalContext.Provider value={{ openModal, closeModal }}>
-      
-      {children}    
-      
-      {showModal && <Modal><a onClick={closeModal}>닫기</a>모달</Modal>}
+      {children}
+      {showModal && (
+        <Modal>
+          <ProfileSearch/>
+          
+          <div>
+            <a onClick={closeModal}>닫기</a>
+          </div>
+        </Modal>
+      )}
     </ModalContext.Provider>
   );
 };

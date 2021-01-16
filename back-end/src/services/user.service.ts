@@ -25,4 +25,8 @@ export class UserService {
     return await this.userDao.create(addUserDto);
   }
 
+  public async deleteUser(id: string) {
+    await this.userDao.delete(id);
+  }
+
 }
