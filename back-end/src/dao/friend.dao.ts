@@ -1,5 +1,8 @@
 import { Injectable, Inject} from '@nestjs/common';
 import Friend, { FriendInterface } from "../database/models/friend.model";
+import { UpdateFriendDto, AddFriendDto } from '../dto/friend.dto';
+
+
 
 
 
@@ -13,16 +16,16 @@ export class FriendDao {
     
   }
 
-  public create(username: string, id: string): Promise<FriendInterface>{
-    return this.friend.create({username: username, friend: id});
+  public create(addFriendDto: AddFriendDto): Promise<FriendInterface>{
+    return this.friend.create(addFriendDto);
   }
 
-  public update() {
+  public update(updateFriendDto: UpdateFriendDto) {
 
   }
 
-  public delete() {
-
+  public delete(id: string) {
+    this.friend.remove({_id: id}).exec();
   }
 
 

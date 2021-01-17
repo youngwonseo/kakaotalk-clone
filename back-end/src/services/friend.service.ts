@@ -22,7 +22,7 @@ export class FriendService {
 
   public async addFriend(id: string, addFriendDto: AddFriendDto) {
 
-    const friend = await this.friendDao.create("friend", addFriendDto.friend);
+    const friend = await this.friendDao.create(addFriendDto);
     
     console.log('friend', friend);
 
@@ -41,8 +41,8 @@ export class FriendService {
   //   return await this.userDao.create(addUserDto);
   // }
 
-  // public async deleteUser(id: string) {
-  //   await this.userDao.delete(id);
-  // }
+  public async deleteFriend(id: string) {
+    await this.friendDao.delete(id);
+  }
 
 }

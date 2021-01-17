@@ -14,25 +14,28 @@ const Title = styled.div`
 interface Props {
   title: string;
   profiles: any[];
+  handleFriendSelect: any;
 };
 
-const ProfileList: React.FC<Props> = ({ title, profiles }) => {
-  
+const ProfileList: React.FC<Props> = ({
+  title,
+  profiles,
+  handleFriendSelect,
+}) => {
   const { openModal, closeModal } = useContext(ModalContext);
 
-  useEffect(()=>{
-
-      return ()=>{
-        // console.log(.pageYOffset);
-      }
-  },[]);
+  useEffect(() => {
+    return () => {
+      // console.log(.pageYOffset);
+    };
+  }, []);
 
   return (
     <>
       <Title>{title}</Title>
       {profiles.map((profile: any) => (
         <div onClick={openModal}>
-        <ProfileItem key={profile.idx} profile={profile}/>
+          <ProfileItem key={profile.idx} profile={profile} handleSelect={handleFriendSelect} />
         </div>
       ))}
     </>

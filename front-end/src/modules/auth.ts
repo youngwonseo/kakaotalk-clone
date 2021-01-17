@@ -77,15 +77,17 @@ export function* authSaga() {
 interface AuthState {
   [key:string] : any;
   register: {
-    [key:string] : any;
+    [key:string] : string;
+    username: string;
     email: string;
     password: string;
     // passwordConfirm: string;
   };
   login: {
-    [key:string] : any;
+    [key:string] : string;
     email: string;
     password: string;
+    username: string;
     // remember: boolean;
   };
   auth: any;
@@ -94,11 +96,13 @@ interface AuthState {
 
 const initialState: AuthState = {
   register: {
+    username: '',
     email: '',
     password: '',
     // passwordConfirm: '',
   },
   login: {
+    username:'',
     email: '',
     password: '',
     // remember: false,

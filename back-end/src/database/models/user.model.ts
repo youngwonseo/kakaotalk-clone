@@ -1,5 +1,6 @@
 import { Document, Model, model, Types, Schema, Query } from "mongoose";
 import Friend, { FriendModel, FriendInterface } from "./friend.model";
+import { ChatInterface } from "./chat.model";
 
 // import crypto from 'crypto';
 // import jwt from 'jsonwebtoken';
@@ -12,6 +13,7 @@ export interface UserInterface extends Document{
   hashedPassword: string;
   config: any;
   friends: [FriendInterface?];
+  chats: [ChatInterface?];
   createdAt: any;
 }
 
@@ -44,6 +46,12 @@ const UserSchema = new Schema<UserInterface, UserModel>({
     {
       type: String,
       ref: "Friend",
+    },
+  ],
+  chats: [
+    {
+      type: String,
+      ref: "Chat",
     },
   ],
   config: {

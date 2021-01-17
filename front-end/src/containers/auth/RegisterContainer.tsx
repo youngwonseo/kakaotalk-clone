@@ -34,8 +34,8 @@ const RegisterContainer: React.FC<Props> = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { email, password } = form;
-    dispatch(register.request({ email, password }));
+    const { username, email, password } = form;
+    dispatch(register.request({ username, email, password }));
   };
 
   return (

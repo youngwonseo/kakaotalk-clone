@@ -12,7 +12,7 @@ import ModalProvider from './lib/createModalProvider';
 
 import io from 'socket.io-client';
 
-
+import ModalContent from '../src/lib/ModalContent';
 
 const AppWrapper = styled.div`
   height: 100%;
@@ -35,6 +35,9 @@ const Main = styled.div`
   align-items: center;
 `;
 
+
+
+
 interface Props {
 
 }
@@ -44,7 +47,7 @@ const App: React.FC<Props> = () => {
   
   useEffect(()=>{
 
-    
+    localStorage.setItem("token", "token!!");
   //   const socket = io('/');
 
   //   socket.on('connect_error', (error: any)=> {
@@ -66,10 +69,10 @@ const App: React.FC<Props> = () => {
   return (
     <AppWrapper>
       <Intro>
-        <h1>Intro</h1>
+        <h1>Kakao Talk</h1>
       </Intro>
       <Main>
-        <ModalProvider>
+        <ModalProvider contentsMap={ModalContent}>
           <Switch>
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/register" component={RegisterPage} />

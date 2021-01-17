@@ -4,21 +4,39 @@ import {
 import { ChatService } from '../services/chat.service';
 import Chat, { ChatModel, ChatInterface } from "../database/models/chat.model";
 import { validationPipeOptions } from '../validations';
+import { AddChatDto } from '../dto/chat.dto';
 // import { AddUserDto, UpdateUserDto } from '../dto/chat';
 
-@Controller("/users")
+@Controller("/chats")
 export class ChatController {
 
-  // @Get("/:id")
-  // public async getUser(@Param("id") id: string): Promise<ChatInterface>{
-  //   // const user = await this.userService.findUser(id);
-  //   // return user;
-  // }
+  public constructor(private readonly chatService: ChatService) {}
+
+  @Get("/")
+  public async getList() {
+    
+    const id = "6002f36991667013d2b3d46a";  
+    const chats = this.chatService.getChats(id);
+    // const user = await this.userService.findUser(id);
+    // return user;
+    return chats;
+  }
 
 
-  // add User
+  public async getChat(@Param("id") id: string) {
+    // const user = await this.userService.findUser(id);
+    // return user;
+
+  }
 
 
+  // add chat
+  @Post("/")
+  public async addChat(@Body() addChatDto: AddChatDto) {
+    const id = "6002f36991667013d2b3d46a";  
+    console.log(id, addChatDto);
+  }
+  
   
 
 

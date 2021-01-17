@@ -28,6 +28,12 @@ const RegisterForm: React.FC<Props> = ({
       <form onSubmit={handleSubmit}>
         <input
           type="text"
+          name="username"
+          onChange={handleChange}
+          value={form.username}
+        />
+        <input
+          type="text"
           name="email"
           onChange={handleChange}
           value={form.email}

@@ -29,15 +29,18 @@ const ProfilelastMessage = styled.div`
 
 interface Props {
   profile: any;
+  handleSelect: any;
 };
 
-const ProfileItem : React.FC<Props> = ({ profile }) => {
+const ProfileItem : React.FC<Props> = ({ profile, handleSelect }) => {
   return (
-    <ProfileItemWrapper>
-      <ProfileImg src={profile.img} />
+    <ProfileItemWrapper onClick={()=>{
+      handleSelect(profile._id);
+    }}>
+      <ProfileImg src={profile.img || "/profile-default.png"} />
       <ProfileInfo>
-        <ProfileName>{profile.name}</ProfileName>
-        <ProfilelastMessage>{profile.lastMessage}</ProfilelastMessage>
+        <ProfileName>{profile.username}</ProfileName>
+        <ProfilelastMessage>{profile.stateMessage}</ProfilelastMessage>
       </ProfileInfo>
     </ProfileItemWrapper>
   );

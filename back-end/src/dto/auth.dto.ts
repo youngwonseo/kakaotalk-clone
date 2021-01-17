@@ -14,6 +14,12 @@ export class LoginDto {
 export class RegisterDto {
 
   @IsString()
+  readonly profileImg: string = '/profile-default.png';
+
+  @IsString()
+  readonly stateMessage: string = '';
+
+  @IsString()
   readonly username: string;
 
   @IsString()

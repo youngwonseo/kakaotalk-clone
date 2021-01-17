@@ -3,29 +3,22 @@ import { Document, Model, model, Types, Schema, Query } from "mongoose"
 // import jwt from 'jsonwebtoken';
 
 // properties, methods
-export interface ChatInterface{
+export interface ChatInterface extends Document{
   users: any;
-  chats: any;   
+  messages: any;
   createdAt: any;
 }
 
 
-// for mongodb schema
-interface ChatBaseDocument extends ChatInterface, Document {}
 
 
-// static
-interface ChatDocument extends ChatBaseDocument {
-  // findByUsername(name: string): any;  
-}
 
-
-export interface ChatModel extends Model<ChatDocument> {
+export interface ChatModel extends Model<ChatInterface> {
 
 }
 
 
-const ChatSchema = new Schema<ChatDocument, ChatModel>({
+const ChatSchema = new Schema<ChatInterface, ChatModel>({
   users: [
     {
       type: String,
@@ -42,6 +35,6 @@ const ChatSchema = new Schema<ChatDocument, ChatModel>({
 });
 
 
-export default model<ChatDocument, ChatModel>('Chat', ChatSchema);
+export default model<ChatInterface, ChatModel>('Chat', ChatSchema);
 
 

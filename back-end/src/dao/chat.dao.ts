@@ -1,29 +1,20 @@
 import { Injectable, Inject} from '@nestjs/common';
-
+import Chat, { ChatInterface } from "../database/models/chat.model";
 
 
 
 @Injectable()
 export class ChatDao {
-
-
+  constructor(@Inject("CHATS") private chat: typeof Chat) {}
   // 가장 마지막 메세지와 함께
-  public getListByUser() {
-    
+  public getListByUser() {}
+
+  public create(users: any): Promise<ChatInterface> {
+    return this.chat.create({ users: users });
   }
 
-  public create() {
+  public update() {}
 
-  }
-
-  public update() {
-
-  }
-
-  public delete() {
-
-  }
-
-
+  public delete() {}
 }
 

@@ -3,6 +3,7 @@ import User, { UserInterface } from "../database/models/user.model";
 import Friend, { FriendInterface } from "../database/models/friend.model";
 import { AddUserDto } from '../dto/user.dto';
 import { AddFriendDto } from '../dto/friend.dto';
+import { ChatInterface } from '../database/models/chat.model';
 // import { AddUserDto } from "../dto";
 
 
@@ -30,22 +31,38 @@ export class UserDao {
   }
 
   public getOneWithFriends(id: string): Promise<UserInterface> {
-    const friends = this.user.findById(id).populate({ path: 'friends' }).exec();
+    const friends = this.user.findById(id).populate({ path: 'friends', populate: [{ path: 'friend' }] }).exec();
     return friends;
   }
 
+  public getOneWithChats(id: string): Promise<UserInterface> {
+    const chats = this.user.findById(id).populate({ path: 'chats', populate: [{ path: 'users' }] }).exec();
+    return chats;
+  }
+
+
   public addFriend(id: string, friend: FriendInterface): Promise<UserInterface> {
-
-    //
-
-    
-    
-
     return this.user
       .findByIdAndUpdate(
         id,
         {
           $push: { friends: friend._id },
+          //$push: { friends: addFriendDto.friend },
+        },
+        {
+          new: true,
+        }
+      )
+      .exec();
+  }
+
+
+  public addChat(id: string, chat: ChatInterface): Promise<UserInterface> {
+    return this.user
+      .findByIdAndUpdate(
+        id,
+        {
+          $push: { chats: chat._id },
           //$push: { friends: addFriendDto.friend },
         },
         {

@@ -3,7 +3,8 @@ import { all } from 'redux-saga/effects';
 
 import loading from './loading';
 import auth, { authSaga } from './auth';
-// import main, { mainSaga } from './main';
+import profile, { profileSaga } from './profile';
+import chat, { chatSaga } from './chat';
 // import data, { dataSaga } from './data';
 // import device, { deviceSaga } from './device';
 // import patient, { patientSaga } from './patient';
@@ -18,6 +19,8 @@ const rootReducer = combineReducers({
   loading,
   // base,
   auth,
+  profile,
+  chat,
   // data,
   // main,
   // device,
@@ -30,6 +33,8 @@ export function* rootSaga() {
   yield all([
     // baseSaga(),
     authSaga(),
+    profileSaga(),
+    chatSaga(),
     // dataSaga(),
     // mainSaga(),
     // deviceSaga(),

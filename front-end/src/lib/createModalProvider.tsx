@@ -1,7 +1,13 @@
 import React, { createContext, useState } from 'react';
 import styled from 'styled-components';
 import ProfileSearch from '../components/profile/ProfileSearch';
+// import ContentMap from '../lib/ModalContent';
+import DefaultComponent from './DefaultComponent';
 
+
+import MyProfileContainer from '../containers/profile/MyProfileContainer';
+import FriendProfileContainer from '../containers/profile/FriendProfileContainer';
+import ProfileSearchContainer from '../containers/profile/ProfileSearchContainer';
 
 interface State{
   openModal: any;
@@ -9,8 +15,7 @@ interface State{
 }
 
 
-
-
+ 
 const Overlay = styled.div`
   position: absolute;
   z-index: 9999;
@@ -23,12 +28,16 @@ const Overlay = styled.div`
 
 const Wrapper = styled.div`
   vertical-align: middle;
+  width: 100%;
+    height: 100%;
 `;
 
 const Container = styled.div`
   /* margin: 40px auto 0px; */
   /* padding: */
   background-color: white;
+  width: 100%;
+    height: 100%;
   /* width: 400px; */
 `;
 
@@ -65,11 +74,16 @@ export { ModalContext };
 
 
 
-const ModalProvider = ({ children }: { children: React.ReactNode }) => {
+
+const ModalProvider = ({ contentsMap, children }: { contentsMap: any, children: React.ReactNode }) => {
   
   const [showModal, setShowModal] = useState<boolean>(false)
-
-  const openModal = () => {
+  // const [Content, setContent] = useState<React.FC>(DefaultComponent);
+  let Content = DefaultComponent;
+  const openModal = (contentId: string) => {
+    // setContent(contentsMap[contentId]);
+    Content = contentsMap[contentId];
+    console.log(Content);
     setShowModal(true);
   }
 
@@ -80,13 +94,13 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ModalContext.Provider value={{ openModal, closeModal }}>
       {children}
-      {showModal && (
+      {showModal && Content && (
         <Modal>
-          <ProfileSearch/>
-          
-          <div>
+          {/* <MyProfileContainer/> */}
+          <FriendProfileContainer/>
+          {/* <div>
             <a onClick={closeModal}>닫기</a>
-          </div>
+          </div> */}
         </Modal>
       )}
     </ModalContext.Provider>
