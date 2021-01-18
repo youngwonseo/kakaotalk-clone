@@ -1,17 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
+import Message from './Message';
 
 const MessageListWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
 `;
 
-interface Props {};
+interface Props {
+  messages: any;
+};
 
 
-const MessageList : React.FC<Props> = () => {
-  return (<MessageListWrapper>Message</MessageListWrapper>);
-}
+const MessageList: React.FC<Props> = ({ messages }) => {
+  return (
+    <MessageListWrapper>
+      {messages.map((message: any) => (
+        <Message message={message} />
+      ))}
+    </MessageListWrapper>
+  );
+};
 
 export default MessageList;

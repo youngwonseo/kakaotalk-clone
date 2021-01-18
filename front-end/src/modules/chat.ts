@@ -18,6 +18,7 @@ import { AxiosError } from 'axios';
 
 const CHANGE_FIELD = 'chat/CHANGE_FIELD';
 const INITIALIZE_FORM = 'chat/INITIALIZE_FORM';
+const ADD_MESSAGE = 'chat/ADD_MESSAGE';
 
 const [
   LOAD_CHATS, 
@@ -70,6 +71,20 @@ export const removeChat = createAsyncAction(
 )<string, any, AxiosError>();
 
 
+export const changeField = createAction(
+  CHANGE_FIELD,
+  ({ key, value }: { key: string; value: string }) => ({
+    key,
+    value,
+  })
+)();
+
+export const addMessage = createAction(
+  ADD_MESSAGE,
+  ({ message } : {message: any}) => ({
+    message,
+  }),
+)();
 
 const loadChatsSaga = createAsyncSaga(LOAD_CHATS, chatAPI.loadChats);
 const registerChatSaga = createAsyncSaga(REGISTER_CHAT, chatAPI.registerChat);
@@ -90,7 +105,8 @@ export function* chatSaga() {
 interface ChatState {
   chats: any;
   chat: any;
-  // messages: any;
+  message: any;
+  messages: any;
 
 }
 
@@ -99,16 +115,23 @@ const initialState: ChatState = {
   chats: [],
   // messages: [],
   chat: null,
+  message: '',
+  messages: [{ contents: 'test message1'}, {contents: 'test message2'}]
 }
 
 const chat = createReducer<ChatState, any>(initialState, {
   [CHANGE_FIELD]: (state, { payload: { key, value } }) => ({
     ...state,
+    [key]: value,
   }),
   [LOAD_CHATS_SUCCESS]: (state, { payload: chats }) => ({
     ...state,
     chats,
-  })
+  }),
+  [ADD_MESSAGE]: (state, { payload }) =>
+    produce(state, (draft) => {
+      draft.messages.push(payload.message);
+    }),
   // [REGISTER_CHAT]
 });
 

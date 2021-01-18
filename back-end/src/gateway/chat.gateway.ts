@@ -7,6 +7,11 @@ export class ChatGateway
   @WebSocketServer() server: any;
   users: number = 0;
 
+
+  constructor() {
+
+  }
+
   afterInit(server: any) {
     // console.log(server);
     // throw new Error("Method not implemented.");
@@ -26,15 +31,17 @@ export class ChatGateway
 
 
   // 메세지
-  @SubscribeMessage("msgToServer")
+  @SubscribeMessage("toServer")
   async onChat(client: any, message: any) {
     console.log("~~~");
     console.log(message);
+
+
     // 노티 ?
     // 채팅방id
     // 글쓴사람id
     // 
-    // client.broadcast.emit('data', "hi");
+    client.broadcast.emit('fromServer', message);
   }
 
   // 카운트

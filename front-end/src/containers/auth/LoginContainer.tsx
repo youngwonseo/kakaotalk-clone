@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LoginForm from '../../components/auth/LoginForm';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { initializeForm, changeField, login } from '../../modules/auth';
 import { withRouter, RouteComponentProps } from "react-router";
 
@@ -20,7 +20,7 @@ const LoginContainer: React.FC<Props> = ({ history }) => {
     auth: auth.auth,
     authError: auth.authError,
     // user: user.user
-  }));
+  }), shallowEqual);
 
   useEffect(() => {
     dispatch(initializeForm("login"));

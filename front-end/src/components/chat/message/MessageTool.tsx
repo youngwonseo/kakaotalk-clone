@@ -9,11 +9,25 @@ const MessageToolWrapper = styled.div`
   border: 1px solid blue;
 `;
 
-interface Props {};
+interface Props {
+  message: string;
+  handleChangeMessage: any;
+  handleSendMessage: any;
+};
 
 
-const MessageTool : React.FC<Props> = () => {
-  return (<MessageToolWrapper><input type="text"/></MessageToolWrapper>);
-}
+const MessageTool: React.FC<Props> = ({
+  message,
+  handleChangeMessage,
+  handleSendMessage,
+}) => {
+  return (
+    <MessageToolWrapper>
+      <form onSubmit={handleSendMessage}>
+        <input type="text" name="message" onChange={handleChangeMessage} value={message} />
+      </form>
+    </MessageToolWrapper>
+  );
+};
 
 export default MessageTool;

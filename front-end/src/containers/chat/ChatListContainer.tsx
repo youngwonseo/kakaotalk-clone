@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import styled from 'styled-components';
 
 import ChatList from '../../components/chat/ChatList';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { RootState, } from '../../modules';
 import { loadChats } from '../../modules/chat';
 import { ModalContext } from '../../lib/createModalProvider';
@@ -20,7 +20,8 @@ const ChatListContainer : React.FC<Props> = () => {
   } = useSelector(
     (state: RootState) => ({
       chats: state.chat.chats,
-    })
+    }),
+    shallowEqual
   );
 
 

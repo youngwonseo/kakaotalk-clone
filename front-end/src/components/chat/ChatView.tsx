@@ -16,21 +16,30 @@ const ChatViewWrapper = styled.div`
 `;
 
 interface Props {
-  
+  message: any;
+  messages: any;
+  handleChangeMessage: any;
+  handleSendMessage: any;  
 };
 
 
-const ChatView : React.FC<Props> = ({  }) => {
-
-  
-  
+const ChatView: React.FC<Props> = ({
+  message,
+  messages,
+  handleChangeMessage,
+  handleSendMessage,
+}) => {
   return (
     <ChatViewWrapper>
-      <ChatHeader/>
-      <MessageList/>
-      <MessageTool/>
+      <ChatHeader />
+      <MessageList messages={messages} />
+      <MessageTool
+        message={message}
+        handleChangeMessage={handleChangeMessage}
+        handleSendMessage={handleSendMessage}
+      />
     </ChatViewWrapper>
   );
-}
+};
 
 export default ChatView;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import RegisterForm from '../../components/auth/RegisterForm';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { initializeForm, changeField, register } from '../../modules/auth';
 
 
@@ -21,7 +21,7 @@ const RegisterContainer: React.FC<Props> = () => {
     form: auth.register,
     auth: auth.auth,
     authError: auth.authError
-  }));
+  }), shallowEqual);
 
   useEffect(() => {
     dispatch(initializeForm("register"));
