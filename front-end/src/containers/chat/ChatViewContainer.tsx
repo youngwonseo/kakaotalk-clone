@@ -1,6 +1,8 @@
 import React from 'react';
-import ChatTemplate from '../../components/chat/ChatTemplate';
+
 import { useDispatch, useSelector } from 'react-redux';
+import ChatModalTemplate from '../../components/template/ChatModalTemplate';
+import ChatView from '../../components/chat/ChatView';
 
 // 모달에서 열림
 
@@ -33,7 +35,11 @@ const ChatViewContainer : React.FC<Props> = () => {
 
   }
 
-  return <ChatTemplate title={"서영원"}></ChatTemplate>;
+  return (
+    <ChatModalTemplate>
+      <ChatView />
+    </ChatModalTemplate>
+  );
 }
 
 export default ChatViewContainer;

@@ -32,12 +32,15 @@ const ChatLastMessage = styled.div`
 
 interface Props {
   chat: any;
+  handleOpenChat: any;
 };
 
 
-const ChatItem : React.FC<Props> = ({ chat }) => {
+const ChatItem : React.FC<Props> = ({ chat, handleOpenChat }) => {
   return (
-    <ChatItemWrapper>
+    <ChatItemWrapper onClick={()=>{
+      handleOpenChat(chat._id);
+    }}>
       <ChatImg src={chat.img} />
       <ChatInfo>
         <ChatTitle>{chat.title}</ChatTitle>

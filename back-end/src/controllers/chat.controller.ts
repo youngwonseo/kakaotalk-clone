@@ -35,6 +35,10 @@ export class ChatController {
   public async addChat(@Body() addChatDto: AddChatDto) {
     const id = "6002f36991667013d2b3d46a";  
     console.log(id, addChatDto);
+
+
+
+    this.chatService.addChat(id, addChatDto);
   }
   
   

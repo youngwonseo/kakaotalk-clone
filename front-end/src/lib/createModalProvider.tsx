@@ -8,6 +8,7 @@ import DefaultComponent from './DefaultComponent';
 import MyProfileContainer from '../containers/profile/MyProfileContainer';
 import FriendProfileContainer from '../containers/profile/FriendProfileContainer';
 import ProfileSearchContainer from '../containers/profile/ProfileSearchContainer';
+import ChatViewContainer from '../containers/chat/ChatViewContainer';
 
 interface State{
   openModal: any;
@@ -97,7 +98,7 @@ const ModalProvider = ({ contentsMap, children }: { contentsMap: any, children: 
       {showModal && Content && (
         <Modal>
           {/* <MyProfileContainer/> */}
-          <FriendProfileContainer/>
+          <ChatViewContainer/>
           {/* <div>
             <a onClick={closeModal}>닫기</a>
           </div> */}

@@ -89,19 +89,26 @@ export function* chatSaga() {
 
 interface ChatState {
   chats: any;
-  messages: any;
+  chat: any;
+  // messages: any;
+
 }
 
 
 const initialState: ChatState = {
   chats: [],
-  messages: [],
+  // messages: [],
+  chat: null,
 }
 
 const chat = createReducer<ChatState, any>(initialState, {
   [CHANGE_FIELD]: (state, { payload: { key, value } }) => ({
     ...state,
   }),
+  [LOAD_CHATS_SUCCESS]: (state, { payload: chats }) => ({
+    ...state,
+    chats,
+  })
   // [REGISTER_CHAT]
 });
 

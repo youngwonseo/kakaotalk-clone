@@ -6,19 +6,18 @@ import { ModalContext } from "../../lib/createModalProvider";
 
 interface Props {
   chats: any[];
+  handleOpenChat: any;
 };
 
 
-const ChatList : React.FC<Props> = ({ chats }) => {
+const ChatList : React.FC<Props> = ({ chats, handleOpenChat }) => {
 
-  const { openModal, closeModal } = useContext(ModalContext);
+  
   
   return (
     <>
       {chats.map((chat: any) => (
-        <div onClick={openModal}>
-          <ChatItem key={chat.idx} chat={chat} />
-        </div>
+        <ChatItem key={chat.idx} chat={chat} handleOpenChat={handleOpenChat} />
       ))}
     </>
   );

@@ -18,7 +18,7 @@ export class ChatService {
     const user = await this.userDao.getOneWithChats(id);
     // const user = await this.userDao.getOne(id);
     // console.log('user', user);
-    return user.friends;
+    return user.chats;
   }
   public async listChatByUser(){
 
