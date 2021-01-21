@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 const NavigationWrapper = styled.div`
   height: 70px;
   display: flex;
-  background-color: #0000ff;
+  background-color: #f7e600;
 `;
 
 interface Props {  
@@ -19,7 +19,7 @@ const Navigation: React.FC<Props> = ({ children }) => {
 
 
 const Link = styled(NavLink)`
-  
+  flex: 1;
 `;
 
 

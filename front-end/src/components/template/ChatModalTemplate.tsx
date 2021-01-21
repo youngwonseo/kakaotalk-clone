@@ -9,7 +9,7 @@ const ModalWrapper = styled.div`
   height: 100%;
 `;
 
-const CloseButtom = styled.button`
+const CloseButtom = styled.a`
   position: absolute;
   top: 10px;
   left: 10px;

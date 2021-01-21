@@ -107,7 +107,6 @@ interface ChatState {
   chat: any;
   message: any;
   messages: any;
-
 }
 
 

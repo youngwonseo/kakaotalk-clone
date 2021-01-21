@@ -136,7 +136,7 @@ interface ProfileState {
 }
 
 const initialState: ProfileState = {
-  friends: [],
+  friends: null,
   searchEmail: '',
   searchResult: null,
   friend: null,

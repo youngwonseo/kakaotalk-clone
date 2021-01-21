@@ -4,7 +4,7 @@ import Message from './Message';
 
 const MessageListWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   width: 100%;
   height: 100%;
 `;

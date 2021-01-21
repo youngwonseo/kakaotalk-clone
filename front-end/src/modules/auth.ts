@@ -11,6 +11,9 @@ import createAsyncSaga, {
 } from '../lib/createAsyncSaga';
 import * as authAPI from '../lib/api/auth';
 import { AxiosError } from 'axios';
+import axios from 'axios';
+const JWT_EXPIRY_TIME = 24 * 3600 * 1000;
+
 
 const CHANGE_FIELD = 'auth/CHANGE_FIELD';
 const INITIALIZE_FORM = 'auth/INITIALIZE_FORM';
@@ -141,11 +144,15 @@ const auth = createReducer<AuthState, any>(initialState, {
     ...state,
     authError: error
   }),
-  [LOGIN_SUCCESS]: (state, { payload: auth }) => ({
-    ...state,
-    authError: null,
-    auth
-  }),
+  [LOGIN_SUCCESS]: (state, { payload: accessToken }) => {
+    
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    return {
+      ...state,
+      // authError: null,
+      // auth
+    }
+  },
   [LOGIN_FAILURE]: (state, { payload: error }) => ({
     ...state,
     authError: error

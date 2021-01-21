@@ -1,7 +1,7 @@
 import { Document, Model, model, Types, Schema, Query } from "mongoose";
 import Friend, { FriendModel, FriendInterface } from "./friend.model";
 import { ChatInterface } from "./chat.model";
-
+import jsonwebtoken from 'jsonwebtoken';
 // import crypto from 'crypto';
 // import jwt from 'jsonwebtoken';
 

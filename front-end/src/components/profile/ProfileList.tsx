@@ -33,7 +33,8 @@ const ProfileList: React.FC<Props> = ({
   return (
     <>
       <Title>{title}</Title>
-      {profiles.map((profile: any) => (
+      {!profiles && 'loading...'}
+      {profiles && profiles.map((profile: any) => (
         <div onClick={openModal}>
           <ProfileItem key={profile.idx} profile={profile} handleSelect={handleFriendSelect} />
         </div>

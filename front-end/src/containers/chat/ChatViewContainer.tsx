@@ -72,7 +72,12 @@ const ChatViewContainer : React.FC<Props> = () => {
 
   return (
     <ChatModalTemplate>
-      <ChatView message={message} messages={messages} handleChangeMessage={handleChangeMessage} handleSendMessage={handleSendMessage}/>
+      <ChatView
+        message={message}
+        messages={messages}
+        handleChangeMessage={handleChangeMessage}
+        handleSendMessage={handleSendMessage}
+      />
     </ChatModalTemplate>
   );
 }

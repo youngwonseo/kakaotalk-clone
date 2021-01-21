@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-
 import Header from '../layout/Header';
 import Navigation, { NavigationButton } from '../layout/Navigation';
+import { IconContext } from "react-icons";
+
 
 
 const UserTemplateWrapper = styled.div`
@@ -37,8 +38,8 @@ const UserTemplate : React.FC<Props> = ({ title, children }) => {
       </Contents>
       <Navigation>
         <NavigationButton to="/">Profile</NavigationButton>
-        <NavigationButton to="/chat">chat</NavigationButton>
-        <NavigationButton to="/setting">setting</NavigationButton>
+        <NavigationButton to="/chat">Chat</NavigationButton>
+        <NavigationButton to="/setting">Setting</NavigationButton>
       </Navigation>
     </UserTemplateWrapper>
   );

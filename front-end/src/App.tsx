@@ -46,8 +46,8 @@ const App: React.FC<Props> = () => {
 
   
   useEffect(()=>{
-
-    localStorage.setItem("token", "token!!");
+    console.log('silent refresh')
+    // localStorage.setItem("token", "token!!");
   //   const socket = io('/');import io from 'socket.io-client';
 
   //   socket.on('connect_error', (error: any)=> {

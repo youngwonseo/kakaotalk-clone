@@ -1,9 +1,11 @@
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 const client = axios.create({headers: {
   'Authorization': `JWT_TOKEN ${localStorage.getItem("token")}`,
   'Content-Type': 'application/json'
 }});
+
 
 
 //set header
