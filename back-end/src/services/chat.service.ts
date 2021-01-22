@@ -1,38 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { ChatDao } from '../dao/chat.dao';
-import { ChatInterface } from "../database/models/chat.model";
-import { AddUserDto } from '../dto/user.dto';
-import { UserDao } from '../dao/user.dao';
+
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { AddChatDto } from '../dto/chat.dto';
+
 
 
 
 
 @Injectable()
 export class ChatService {
-  
-  public constructor(private chatDao: ChatDao, private userDao: UserDao){}
+  constructor(
+    // @InjectModel(User.name) private userModel: Model<UserDocument>,
+    // @InjectModel(Chat.name) private chatModel: Model<ChatDocument>
+  ) {}
 
-  public async getChats(id: string): Promise<[any?]> {
+  // public constructor(private chatDao: ChatDao, private userDao: UserDao){}
 
-    const user = await this.userDao.getOneWithChats(id);
-    // const user = await this.userDao.getOne(id);
-    // console.log('user', user);
-    return user.chats;
-  }
-  public async listChatByUser(){
-
-  }
-
-
-  public async addChat(id: string, addChatDto: AddChatDto) {
-
-
-    const chat = await this.chatDao.create([id, addChatDto.friend]);
+  public async findAll(id: string) {
+    // const user = this.userModel.findOne({_id: id}).exec();
+    // // const user = await this.userDao.getOne(id);
+    // // console.log('user', user);
+    // return user.chats;
     
-    console.log('chat', chat);
+  }
 
-    return await this.userDao.addChat(id, chat);
+  public async create(id: string, addChatDto: AddChatDto) {
+    // const createdChat = new this.chatModel(addChatDto);
+    // return createdChat.save();
   }
 
   // public async getChat

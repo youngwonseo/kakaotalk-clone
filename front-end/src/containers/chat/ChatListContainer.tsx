@@ -7,6 +7,7 @@ import { RootState, } from '../../modules';
 import { loadChats } from '../../modules/chat';
 import { ModalContext } from '../../lib/createModalProvider';
 
+import { CHAT_MODAL } from "../../lib/ModalContent";
 
 interface Props {};
 
@@ -37,7 +38,7 @@ const ChatListContainer : React.FC<Props> = () => {
 
   const handleOpenChat = (id: string) => {
     console.log(id);
-    openModal();
+    openModal(CHAT_MODAL);
   }
 
 

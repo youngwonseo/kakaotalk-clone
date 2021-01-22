@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { AuthDao } from '../dao/auth.dao';
-import { UserInterface } from "../database/models/user.model";
+
+
 import { AddUserDto } from '../dto/user.dto';
 import { LoginDto, RegisterDto } from '../dto/auth.dto';
+import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from '../schemas/user.schema';
+import { Model } from 'mongoose';
+
 
 
 
 @Injectable()
 export class AuthService {
-  
-  public constructor(private authDao: AuthDao){}
+  public constructor(
+    private jwtService: JwtService,
+    @InjectModel(User.name) private userModel: Model<UserDocument>
+  ) {}
 
   //로그인 처리
-  public async login(loginDto: LoginDto): Promise<UserInterface> {
-    return await this.authDao.login(loginDto);
+  public async login(loginDto: LoginDto) {
+    const user =  await this.userModel.find(loginDto).exec();
+    if(!user) {
+      return null;
+    }
+    const payload = { sub: user._id, email: user.email, username: user.username };
+    return {
+      access_token : this.jwtService.sign(payload)
+    };
   }
 
   // 회원가입
-  public async register(registerDto: RegisterDto): Promise<UserInterface> {
-    return await this.authDao.register(registerDto);
+  public async register(registerDto: RegisterDto) {
+    // return 
   }
-
-  
-
 }

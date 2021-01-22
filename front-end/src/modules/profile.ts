@@ -9,7 +9,8 @@ import { takeLatest } from 'redux-saga/effects';
 import createAsyncSaga, {
   createActionTypes
 } from '../lib/createAsyncSaga';
-import * as friendAPI from '../lib/api/friend';
+import * as authAPI from '../lib/api/auth';
+// import * as friendAPI from '../lib/api/friend';
 import * as profileAPI from '../lib/api/profile';
 import { AxiosError } from 'axios';
 
@@ -18,69 +19,58 @@ import { AxiosError } from 'axios';
 const CHANGE_FIELD = 'profile/CHANGE_FIELD';
 const INITIALIZE_FORM = 'profile/INITIALIZE_FORM';
 
-// const [
-//   LOAD_FRIEND, 
-//   LOAD_FRIEND_SUCCESS, 
-//   LOAD_FRIEND_FAILURE
-// ] = createActionTypes('profile/LOAD_FRIEND');
-
-// export const loadFriend = createAsyncAction(
-//   LOAD_FRIEND, 
-//   LOAD_FRIEND_SUCCESS, 
-//   LOAD_FRIEND_FAILURE
-// )<void, any, AxiosError>();
-
 
 
 const [
-  LOAD_FRIENDS, 
-  LOAD_FRIENDS_SUCCESS, 
-  LOAD_FRIENDS_FAILURE
-] = createActionTypes('profile/LOAD_FRIENDS');
+  LOAD_PROFILE,
+  LOAD_PROFILE_SUCCESS,
+  LOAD_PROFILE_FAILURE
+] = createActionTypes('profile/LOAD_PROFILE');
 
-export const loadFriends = createAsyncAction(
-  LOAD_FRIENDS, 
-  LOAD_FRIENDS_SUCCESS, 
-  LOAD_FRIENDS_FAILURE
+export const loadProfile = createAsyncAction(
+  LOAD_PROFILE,
+  LOAD_PROFILE_SUCCESS,
+  LOAD_PROFILE_FAILURE
 )<void, any, AxiosError>();
 
 
+
 const [
-  REGISTER_FRIEND, 
-  REGISTER_FRIEND_SUCCESS, 
-  REGISTER_FRIEND_FAILURE
-] = createActionTypes('profile/REGISTER_FRIEND');
+  REGISTER_FOLLOWING, 
+  REGISTER_FOLLOWING_SUCCESS, 
+  REGISTER_FOLLOWING_FAILURE
+] = createActionTypes('profile/REGISTER_FOLLOWING');
 
 export const registerFriend = createAsyncAction(
-  REGISTER_FRIEND, 
-  REGISTER_FRIEND_SUCCESS, 
-  REGISTER_FRIEND_FAILURE
+  REGISTER_FOLLOWING, 
+  REGISTER_FOLLOWING_SUCCESS, 
+  REGISTER_FOLLOWING_FAILURE
 )<any, any, AxiosError>();
 
 
 const [
-  UPDATE_FRIEND, 
-  UPDATE_FRIEND_SUCCESS, 
-  UPDATE_FRIEND_FAILURE
-] = createActionTypes('profile/UPDATE_FRIEND');
+  UPDATE_FOLLOWING, 
+  UPDATE_FOLLOWING_SUCCESS, 
+  UPDATE_FOLLOWING_FAILURE
+] = createActionTypes('profile/UPDATE_FOLLOWING');
 
-export const updateFriend = createAsyncAction(
-  UPDATE_FRIEND, 
-  UPDATE_FRIEND_SUCCESS, 
-  UPDATE_FRIEND_FAILURE
+export const updateFollowing = createAsyncAction(
+  UPDATE_FOLLOWING, 
+  UPDATE_FOLLOWING_SUCCESS, 
+  UPDATE_FOLLOWING_FAILURE
 )<string, any, AxiosError>();
 
 
 const [
-  REMOVE_FRIEND, 
-  REMOVE_FRIEND_SUCCESS, 
-  REMOVE_FRIEND_FAILURE
-] = createActionTypes('profile/REMOVE_FRIEND');
+  REMOVE_FOLLOWING, 
+  REMOVE_FOLLOWING_SUCCESS, 
+  REMOVE_FOLLOWING_FAILURE
+] = createActionTypes('profile/REMOVE_FOLLOWING');
 
 export const removeFriend = createAsyncAction(
-  REMOVE_FRIEND, 
-  REMOVE_FRIEND_SUCCESS, 
-  REMOVE_FRIEND_FAILURE
+  REMOVE_FOLLOWING, 
+  REMOVE_FOLLOWING_SUCCESS, 
+  REMOVE_FOLLOWING_FAILURE
 )<string, any, AxiosError>();
 
 
@@ -111,32 +101,32 @@ export const initializeForm = createAction(
   (form: "search") => form
 )();
 
-
-const loadFriendsSaga = createAsyncSaga(LOAD_FRIENDS, friendAPI.loadFriends);
-const registerFriendSaga = createAsyncSaga(REGISTER_FRIEND, friendAPI.registerFriend);
-const updateFriendSaga = createAsyncSaga(UPDATE_FRIEND, friendAPI.updateFriend);
-const deleteFriendSaga = createAsyncSaga(REMOVE_FRIEND, friendAPI.deleteFriend);
+const loadProfileSaga = createAsyncSaga(LOAD_PROFILE, profileAPI.loadProfile);
+const registerFollowingSaga = createAsyncSaga(REGISTER_FOLLOWING, profileAPI.registerFollowing);
+const updateFollowingSaga = createAsyncSaga(UPDATE_FOLLOWING, profileAPI.updateFollowing);
+const deleteFollowingSaga = createAsyncSaga(REMOVE_FOLLOWING, profileAPI.deleteFollowing);
 const searchProfileSaga = createAsyncSaga(SEARCH_PROFILE, profileAPI.search);
 
 
 export function* profileSaga() {
-  yield takeLatest(LOAD_FRIENDS, loadFriendsSaga);
-  yield takeLatest(REGISTER_FRIEND, registerFriendSaga);
-  yield takeLatest(UPDATE_FRIEND, updateFriendSaga);
-  yield takeLatest(REMOVE_FRIEND, deleteFriendSaga);
+  yield takeLatest(LOAD_PROFILE, loadProfileSaga);
+  yield takeLatest(REGISTER_FOLLOWING, registerFollowingSaga);
+  yield takeLatest(UPDATE_FOLLOWING, updateFollowingSaga);
+  yield takeLatest(REMOVE_FOLLOWING, deleteFollowingSaga);
   yield takeLatest(SEARCH_PROFILE, searchProfileSaga);
 }
 
 
 interface ProfileState {
-  friends: any;
+  profile: any;
   searchEmail: any;
   searchResult: any;
   friend: any;
 }
 
 const initialState: ProfileState = {
-  friends: null,
+  profile: null,
+  
   searchEmail: '',
   searchResult: null,
   friend: null,
@@ -150,17 +140,17 @@ const profile = createReducer<ProfileState, any>(initialState, {
     ...state,
     [key]: value,
   }),
-  [LOAD_FRIENDS_SUCCESS]: (state, { payload: friends }) => ({
+  [LOAD_PROFILE_SUCCESS]: (state, { payload: profile }) => ({
     ...state,
-    friends,
+    profile,
   }),
-  [REGISTER_FRIEND_SUCCESS]: (state, { payload: friend }) => ({
-    ...state,
-  }),
-  [UPDATE_FRIEND_SUCCESS]: (state, { payload: friend }) => ({
+  [REGISTER_FOLLOWING_SUCCESS]: (state, { payload: friend }) => ({
     ...state,
   }),
-  [REMOVE_FRIEND_SUCCESS]: (state, { payload: result }) => ({
+  [UPDATE_FOLLOWING_SUCCESS]: (state, { payload: friend }) => ({
+    ...state,
+  }),
+  [REMOVE_FOLLOWING_SUCCESS]: (state, { payload: result }) => ({
     ...state,
   }),
   [SEARCH_PROFILE_SUCCESS]: (state, { payload: search }) => ({

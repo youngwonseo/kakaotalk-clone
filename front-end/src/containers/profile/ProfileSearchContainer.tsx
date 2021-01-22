@@ -22,18 +22,13 @@ const ProfileSearchContainer: React.FC<Props> = () => {
   }
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    
     dispatch(searchProfile.request(searchEmail));
-    
-
-
   };
 
 
-  const handleAddFriend = () => {
-    console.log({username: searchResult.username, friend: searchResult._id});
-    dispatch(registerFriend.request({username: searchResult.username, friend: searchResult._id}));
+  const handleAddFollowing = () => {
+    console.log({username: searchResult.username, following: searchResult._id});
+    dispatch(registerFriend.request({username: searchResult.username, following: searchResult._id}));
   }
 
   return (
@@ -41,7 +36,7 @@ const ProfileSearchContainer: React.FC<Props> = () => {
       <ProfileSearch
         searchEmail={searchEmail}
         searchResult={searchResult}
-        handleAddFriend={handleAddFriend}
+        handleAddFollowing={handleAddFollowing}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
       />

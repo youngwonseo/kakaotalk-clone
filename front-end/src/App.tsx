@@ -13,6 +13,7 @@ import ModalProvider from './lib/createModalProvider';
 import io from 'socket.io-client';
 
 import ModalContent from '../src/lib/ModalContent';
+import palette from './lib/styles/palette';
 
 const AppWrapper = styled.div`
   height: 100%;

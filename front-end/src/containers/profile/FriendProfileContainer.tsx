@@ -14,12 +14,12 @@ const FriendProfileContainer: React.FC<Props> = ({ history }) => {
 
   const dispatch = useDispatch();
   const {
-    friends,
+    // friends,
     // selectFriendIdx,
     chats,
   } = useSelector(
     (state: RootState) => ({
-      friends: state.profile.friends,
+      // friends: state.profile.friends,
       chats: state.chat.chats,
     })
   );
@@ -45,7 +45,7 @@ const FriendProfileContainer: React.FC<Props> = ({ history }) => {
 
   return (
     <ModalTemplate>
-      <FriendProfile profile={friends[0]} handleToChat={handleToChat}/>
+      {/* <FriendProfile profile={friends[0]} handleToChat={handleToChat}/> */}
     </ModalTemplate>
   );
 }

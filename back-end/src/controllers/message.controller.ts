@@ -2,7 +2,7 @@ import {
   Controller, Param, Get, Post, ValidationPipe, UsePipes, Body, Put, Delete
 } from '@nestjs/common';
 import { MessageService } from '../services/message.service';
-import Message, { MessageModel, MessageInterface } from "../database/models/message.model";
+// import Message, { MessageModel, MessageInterface } from "../database/schemas/message.model";
 import { validationPipeOptions } from '../validations';
 // import { AddUserDto, UpdateUserDto } from '../dto/chat';
 

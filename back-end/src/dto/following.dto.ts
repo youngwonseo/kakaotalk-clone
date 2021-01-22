@@ -1,17 +1,17 @@
 import { IsString } from "class-validator";
 
-export class AddFriendDto {
+export class AddFollowingDto {
   
   @IsString()
   readonly username: string;
 
   @IsString()
-  readonly friend: string;
+  readonly following: string;
 
 }
 
 
-export class UpdateFriendDto {
+export class UpdateFollowingDto {
 
   @IsString()
   readonly username: string;

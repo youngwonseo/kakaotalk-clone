@@ -2,7 +2,7 @@ import {
   Controller, Param, Get, Post, ValidationPipe, UsePipes, Body, Put, Delete
 } from '@nestjs/common';
 import { ChatService } from '../services/chat.service';
-import Chat, { ChatModel, ChatInterface } from "../database/models/chat.model";
+
 import { validationPipeOptions } from '../validations';
 import { AddChatDto } from '../dto/chat.dto';
 // import { AddUserDto, UpdateUserDto } from '../dto/chat';
@@ -10,16 +10,16 @@ import { AddChatDto } from '../dto/chat.dto';
 @Controller("/chats")
 export class ChatController {
 
-  public constructor(private readonly chatService: ChatService) {}
+  // public constructor(private readonly chatService: ChatService) {}
 
   @Get("/")
   public async getList() {
     
     const id = "6002f36991667013d2b3d46a";  
-    const chats = this.chatService.getChats(id);
+    // const chats = this.chatService.getChats(id);
     // const user = await this.userService.findUser(id);
     // return user;
-    return chats;
+    return null;
   }
 
 
@@ -38,7 +38,7 @@ export class ChatController {
 
 
 
-    this.chatService.addChat(id, addChatDto);
+    // this.chatService.addChat(id, addChatDto);
   }
   
   

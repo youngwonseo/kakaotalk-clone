@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthTemplate from '../components/auth/AuthTemplate';
+import AuthTemplate from '../components/template/AuthTemplate';
 import RegisterContainer from '../containers/auth/RegisterContainer';
 
 

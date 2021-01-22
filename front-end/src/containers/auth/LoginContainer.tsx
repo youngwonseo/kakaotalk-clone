@@ -26,6 +26,17 @@ const LoginContainer: React.FC<Props> = ({ history }) => {
     dispatch(initializeForm("login"));
   }, [dispatch]);
 
+
+
+  useEffect(()=> {
+
+    // 로그인 성공
+    if (auth) {
+      history.push("/");
+    }
+  },[auth]);
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     dispatch(changeField({ form: "login", key: name, value }));
@@ -33,12 +44,14 @@ const LoginContainer: React.FC<Props> = ({ history }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // const { email, password } = form;
-    // dispatch(login.request({ email, password }));
-    localStorage.setItem("token", "token!");
-    history.push('/');
+    const { email, password } = form;
+    dispatch(login.request({ email, password }));
+    // localStorage.setItem("token", "token!");
+    // history.push('/');
   };
 
+  
+  
   return (
     <LoginForm
       form={form}

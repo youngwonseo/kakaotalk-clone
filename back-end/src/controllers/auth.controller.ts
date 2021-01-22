@@ -1,11 +1,12 @@
 import {
-  Controller, Param, Get, Post, ValidationPipe, UsePipes, Body, Put, Delete, HttpStatus, NotFoundException
+  Controller, Param, Get, Post, ValidationPipe, UsePipes, Body, Put, Delete, HttpStatus, NotFoundException, Req, UseGuards
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
-import User, { UserInterface } from "../database/models/user.model";
+
 import { validationPipeOptions } from '../validations';
 import { LoginDto, RegisterDto } from '../dto/auth.dto';
 import { AuthService } from '../services/auth.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 
 // 식별자 email ? idx ?
@@ -13,43 +14,49 @@ import { AuthService } from '../services/auth.service';
 @Controller("/auth")
 export class AuthController {
 
-  public constructor(private readonly authService: AuthService) {}
+  public constructor(
+    private readonly authService: AuthService, 
+    private readonly userService: UserService
+    ) {}
 
+
+  /** 로그인 */
   @Post("/login")
-  public async login(@Body() loginDto: LoginDto): Promise<UserInterface>{
-    const user = await this.authService.login(loginDto);
+  public async login(@Body() loginDto: LoginDto): Promise<any>{
 
-    if(!user){
+    const result = await this.authService.login(loginDto);
+
+    if(!result){
       throw new NotFoundException('User Not Found');
     }
 
-    return user;
+    // 디비저장
+    
+    return result;
   }
 
-  //find one
+
+  /** 회원가입 */
   @Post("/register")
   public async register(@Body() registerDto: RegisterDto) {
     console.log(registerDto);
     
-
     const user = await this.authService.register(registerDto);
     // return user;
   }
 
-  @Post("/exists")
-  public async exists() {
 
+
+  /** 이메일 존재 유무 */
+  @Get("/email/:email")
+  public async exists(@Param("email") email: string) {
+    const user = await this.userService.findUserByEmail(email);
+    return user? true : false;
   }
 
+  /** 로그아웃 */
   @Post("/logout")
   public async logout() {
 
   }
-
-  @Post("/check")
-  public async check() {
-
-  }
-
-
 }

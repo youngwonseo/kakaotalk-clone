@@ -23,9 +23,7 @@ const ProfileModalTemplate: React.FC<Props> = ({ children }) => {
   return (
     <ModalWrapper>
       <CloseButtom onClick={closeModal}>닫기</CloseButtom>
-      
       {children}
-      
     </ModalWrapper>
   );
 };

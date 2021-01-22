@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ChatDao } from '../dao/chat.dao';
-import { ChatInterface } from "../database/models/chat.model";
+
+// import { ChatInterface } from "../database/schemas/chat.schema";
 import { AddUserDto } from '../dto/user.dto';
 
 
@@ -9,6 +9,6 @@ import { AddUserDto } from '../dto/user.dto';
 @Injectable()
 export class MessageService {
   
-  public constructor(private chatDao: ChatDao){}
+  // public constructor(private chatDao: ChatDao){}
 
 }

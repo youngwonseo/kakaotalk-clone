@@ -1,12 +1,29 @@
-import {Module} from "@nestjs/common";
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AuthController } from "../controllers/auth.controller";
 import { AuthService } from "../services/auth.service";
-import { AuthDao } from "../dao/auth.dao"; 
-import { authProviders } from "../database/providers/auth.provider";
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from "@nestjs/passport";
+import { jwtConstants } from "../constants";
+import { JwtStrategy } from "../auth/jwt.strategy";
+import { User, UserSchema } from '../schemas/user.schema';
+import { UserService } from '../services/user.service';
+import { FollowingSchema, Following } from '../schemas/following.schema';
+
 
 @Module({
+  imports: [
+    // AuthModule,
+    PassportModule,
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: "9990s" },
+    }),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: Following.name, schema: FollowingSchema }])
+  ],
   controllers: [AuthController],
-  providers: [...authProviders, AuthService, AuthDao]
+  providers: [AuthService, UserService, JwtStrategy],
+  // exports: [AuthService, JwtModule],
 })
-
 export class AuthModule {}

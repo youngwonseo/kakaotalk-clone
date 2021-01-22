@@ -44,6 +44,10 @@ export const register = createAsyncAction(
 )<object, any, AxiosError>();
 
 
+
+
+
+
 export const changeField = createAction(
   CHANGE_FIELD,
   ({
@@ -118,45 +122,46 @@ type InitializeForm = ActionType<typeof initializeForm>;
 type ChangeFieldAction = ActionType<typeof changeField>;
 
 const auth = createReducer<AuthState, any>(initialState, {
-  [INITIALIZE_FORM]: (state, { payload: form }: InitializeForm) => (
-    produce(state, draft => {
+  [INITIALIZE_FORM]: (state, { payload: form }: InitializeForm) =>
+    produce(state, (draft) => {
       draft[form] = initialState[form];
       draft.authError = null;
-    })
-  ),
-  [CHANGE_FIELD]: (state, { payload: {form, key, value} } : ChangeFieldAction ) => {
-    // if(key === 'remember'){
-    //   value = value ? true : false;
-    //   console.log(value)
-    // }
-    // state[form][key]
-    return produce(state, draft => {
-      // draft["register"]["username"] = "#4";
+    }),
+  [CHANGE_FIELD]: (
+    state,
+    { payload: { form, key, value } }: ChangeFieldAction
+  ) =>
+    produce(state, (draft) => {
       draft[form][key] = value;
-    })
-  },
+    }),
   [REGISTER_SUCCESS]: (state, { payload: auth }) => ({
     ...state,
     authError: null,
-    auth
+    auth,
   }),
   [REGISTER_FAILURE]: (state, { payload: error }) => ({
     ...state,
-    authError: error
+    authError: error,
   }),
-  [LOGIN_SUCCESS]: (state, { payload: accessToken }) => {
-    
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  [LOGIN_SUCCESS]: (state, { payload: result }) => {
+    localStorage.setItem("token", result.access_token);
+
+    axios.defaults.headers.common['Authorization'] = result.access_token;
+    console.log(result);
     return {
       ...state,
       // authError: null,
-      // auth
-    }
+      // token: result.access_token,
+      auth: true,
+    };
   },
-  [LOGIN_FAILURE]: (state, { payload: error }) => ({
-    ...state,
-    authError: error
-  })
+  [LOGIN_FAILURE]: (state, { payload: error }) => {
+    console.log("fail");
+    return {
+      ...state,
+      authError: error,
+    };
+  },
 });
 
 export default auth;

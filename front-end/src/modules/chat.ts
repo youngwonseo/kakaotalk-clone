@@ -9,7 +9,6 @@ import { takeLatest } from 'redux-saga/effects';
 import createAsyncSaga, {
   createActionTypes
 } from '../lib/createAsyncSaga';
-import * as friendAPI from '../lib/api/friend';
 import * as profileAPI from '../lib/api/profile';
 import * as chatAPI from '../lib/api/chat';
 import { AxiosError } from 'axios';

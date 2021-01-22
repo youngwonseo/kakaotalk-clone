@@ -4,3 +4,8 @@ export enum ErrorMsgs {
   UPDATE_USER = "Request parameters are invalid.",
   DELETE_USER = "Request parameters are invalid.",
 }
+
+
+export const jwtConstants = {
+  secret: 'secretKey',
+};

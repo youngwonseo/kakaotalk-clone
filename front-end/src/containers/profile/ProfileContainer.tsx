@@ -5,9 +5,11 @@ import ProfileList from '../../components/profile/ProfileList';
 import ProfileItem from '../../components/profile/ProfileItem';
 import { ModalContext } from "../../lib/createModalProvider";
 import { useDispatch, useSelector } from 'react-redux';
-import { loadFriends } from '../../modules/profile';
+import { loadProfile } from '../../modules/profile';
 import { RootState } from '../../modules';
-import { PROFILE_UPDATE_MODAL } from '../../lib/ModalContent';
+import { PROFILE_UPDATE_MODAL, MY_PROFILE_MODAL, PROFILE_SEARCH_MODAL } from '../../lib/ModalContent';
+import axios from 'axios';
+
 
 interface Props {};
 
@@ -15,21 +17,21 @@ interface Props {};
 const ProfileContainer : React.FC<Props> = () => {
   
   const dispatch = useDispatch();
-  
+
   const {
-    friends
+    profile
   } = useSelector(
     (state: RootState) => ({
-      friends: state.profile.friends,
+      profile: state.profile.profile,
     })
   );
 
   useEffect(()=>{
     // 내정보
-
-
+    dispatch(loadProfile.request());
+    
     // 친구정보
-    dispatch(loadFriends.request());
+    // dispatch(loadFriends.request());
     
   },[dispatch]);
 
@@ -50,10 +52,10 @@ const ProfileContainer : React.FC<Props> = () => {
   const { openModal, closeModal } = useContext(ModalContext);
 
   const handleProfileUpdate = () => {
-    openModal(PROFILE_UPDATE_MODAL);
+    openModal(MY_PROFILE_MODAL);
   }
   const handleSearch = () => {
-    openModal();
+    openModal(PROFILE_SEARCH_MODAL);
   }
 
   //friend id
@@ -68,7 +70,7 @@ const ProfileContainer : React.FC<Props> = () => {
     <>
       <ProfileItem profile={myProfile} handleSelect={handleProfileUpdate}/>
       <a onClick={handleSearch}>검색</a>
-      <ProfileList title={"친구"} profiles={friends} handleFriendSelect={handleFriendSelect} />
+      <ProfileList title={"친구"} profiles={profile && profile.friends} handleFriendSelect={handleFriendSelect} />
     </>
   );
 }

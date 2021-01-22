@@ -17,7 +17,7 @@ interface Props {
 const MessageList: React.FC<Props> = ({ messages }) => {
   return (
     <MessageListWrapper>
-      {messages.map((message: any) => (
+      {messages && messages.map((message: any) => (
         <Message message={message} />
       ))}
     </MessageListWrapper>

@@ -14,7 +14,7 @@ const ProfileSearchWrapper = styled.div`
 interface Props {
   searchEmail: any;
   searchResult: any;
-  handleAddFriend: any;
+  handleAddFollowing: any;
   handleChange: any;
   handleSubmit: any;
 }
@@ -22,7 +22,7 @@ interface Props {
 const ProfileSearch: React.FC<Props> = ({
   searchEmail,
   searchResult,
-  handleAddFriend,
+  handleAddFollowing,
   handleChange,
   handleSubmit,
 }) => {
@@ -31,7 +31,7 @@ const ProfileSearch: React.FC<Props> = ({
       {searchResult && (
         <div>
           <input type="text" value={searchResult.username} />
-          <button onClick={handleAddFriend}>추가</button>
+          <button onClick={handleAddFollowing}>추가</button>
         </div>
       )}
 

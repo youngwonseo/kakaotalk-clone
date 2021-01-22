@@ -1,8 +1,16 @@
 import React, { createContext, useState } from 'react';
 import styled from 'styled-components';
 import ProfileSearch from '../components/profile/ProfileSearch';
-// import ContentMap from '../lib/ModalContent';
+import {
+  PROFILE_UPDATE_MODAL,
+  MY_PROFILE_MODAL,
+  FRIEND_PROFILE_MODAL,
+  PROFILE_SEARCH_MODAL,
+  CHAT_MODAL
+} from '../lib/ModalContent';
 import DefaultComponent from './DefaultComponent';
+
+
 
 
 import MyProfileContainer from '../containers/profile/MyProfileContainer';
@@ -79,12 +87,15 @@ export { ModalContext };
 const ModalProvider = ({ contentsMap, children }: { contentsMap: any, children: React.ReactNode }) => {
   
   const [showModal, setShowModal] = useState<boolean>(false)
-  // const [Content, setContent] = useState<React.FC>(DefaultComponent);
-  let Content = DefaultComponent;
+  const [contentId, setContentId] = useState<string>(''); 
+  
   const openModal = (contentId: string) => {
     // setContent(contentsMap[contentId]);
-    Content = contentsMap[contentId];
-    console.log(Content);
+
+    // Content = contentsMap[contentId];
+    // console.log(contentId);
+    setContentId(contentId);
+    console.log(contentId);
     setShowModal(true);
   }
 
@@ -95,10 +106,13 @@ const ModalProvider = ({ contentsMap, children }: { contentsMap: any, children: 
   return (
     <ModalContext.Provider value={{ openModal, closeModal }}>
       {children}
-      {showModal && Content && (
+      {showModal && (
         <Modal>
-          {/* <MyProfileContainer/> */}
-          <ChatViewContainer/>
+          {contentId === MY_PROFILE_MODAL && <MyProfileContainer />}
+          {contentId === PROFILE_SEARCH_MODAL && <ProfileSearchContainer />}
+          {contentId === FRIEND_PROFILE_MODAL && <FriendProfileContainer />}
+          {contentId === CHAT_MODAL && <ChatViewContainer />}
+
           {/* <div>
             <a onClick={closeModal}>닫기</a>
           </div> */}
@@ -107,5 +121,7 @@ const ModalProvider = ({ contentsMap, children }: { contentsMap: any, children: 
     </ModalContext.Provider>
   );
 };
+
+
 
 export default ModalProvider;

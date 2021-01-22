@@ -1,8 +1,8 @@
-import axios from 'axios';
+import client from './client';
 
-export const checkUsernameExists = (email: string) => axios.get('/api/auth/exists/email/' + email);
+export const checkUsernameExists = (email: string) => client.get('/api/auth/exists/email/' + email);
 
-export const login = ({email, password}: {email: string, password: string}) => axios.post('/api/auth/login', { email, password })
+export const login = ({email, password}: {email: string, password: string}) => client.post('/api/auth/login', { email, password })
 
 export const register = ({
   username,
@@ -12,8 +12,10 @@ export const register = ({
   username: string;
   email: string;
   password: string;
-}) => axios.post("/api/auth/register", { username, email, password });
+}) => client.post("/api/auth/register", { username, email, password });
 
-export const check = () => axios.get('/api/auth/check');
+export const check = () => client.get('/api/auth/check');
 
-export const logout = () => axios.post('/api/auth/logout');
+export const loadProfile = () => client.get('/api/auth/profile');
+
+export const logout = () => client.post("/api/auth/logout");
