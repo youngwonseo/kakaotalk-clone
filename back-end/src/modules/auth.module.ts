@@ -9,21 +9,22 @@ import { JwtStrategy } from "../auth/jwt.strategy";
 import { User, UserSchema } from '../schemas/user.schema';
 import { UserService } from '../services/user.service';
 import { FollowingSchema, Following } from '../schemas/following.schema';
+import { ProfileModule } from './profile.module';
 
 
 @Module({
   imports: [
-    // AuthModule,
+    AuthModule,
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: "9990s" },
+      signOptions: { expiresIn: "9900s" },
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: Following.name, schema: FollowingSchema }])
   ],
   controllers: [AuthController],
   providers: [AuthService, UserService, JwtStrategy],
-  // exports: [AuthService, JwtModule],
+  // exports: [UserService],
 })
 export class AuthModule {}

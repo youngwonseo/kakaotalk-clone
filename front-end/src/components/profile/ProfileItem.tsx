@@ -37,11 +37,15 @@ const ProfileItem : React.FC<Props> = ({ profile, handleSelect }) => {
     <ProfileItemWrapper onClick={()=>{
       handleSelect(profile._id);
     }}>
-      <ProfileImg src={profile.img || "/profile-default.png"} />
-      <ProfileInfo>
-        <ProfileName>{profile.username}</ProfileName>
-        <ProfilelastMessage>{profile.stateMessage}</ProfilelastMessage>
-      </ProfileInfo>
+      {profile && 
+      <>
+        <ProfileImg src={profile.img || "/profile-default.png"} />
+        <ProfileInfo>
+          <ProfileName>{profile.username}</ProfileName>
+          <ProfilelastMessage>{profile.stateMessage}</ProfilelastMessage>
+        </ProfileInfo>
+      </>
+      }
     </ProfileItemWrapper>
   );
 }

@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AddChatDto } from '../dto/chat.dto';
+import { Chat, ChatDocument } from '../schemas/chat.schema';
+import { MessageDocument } from '../schemas/message.schema';
 
 
 
@@ -12,7 +14,7 @@ import { AddChatDto } from '../dto/chat.dto';
 export class ChatService {
   constructor(
     // @InjectModel(User.name) private userModel: Model<UserDocument>,
-    // @InjectModel(Chat.name) private chatModel: Model<ChatDocument>
+    @InjectModel(Chat.name) private chatModel: Model<ChatDocument>
   ) {}
 
   // public constructor(private chatDao: ChatDao, private userDao: UserDao){}
@@ -25,10 +27,28 @@ export class ChatService {
     
   }
 
-  public async create(id: string, addChatDto: AddChatDto) {
-    // const createdChat = new this.chatModel(addChatDto);
-    // return createdChat.save();
+
+  public async create(addChatDto: AddChatDto) {
+
+    const chat = new this.chatModel({ users: addChatDto.users } );
+    return await chat.save();
   }
 
+
+  public async addMessage(id: string, message: MessageDocument){
+    return this.chatModel
+      .findByIdAndUpdate(
+        id,
+        {
+          $push: { messages: message._id },
+          //$push: { friends: addFriendDto.friend },
+        },
+        {
+          new: true,
+        }
+      )
+      .exec();
+  }
+  
   // public async getChat
 }

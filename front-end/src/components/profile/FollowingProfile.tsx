@@ -34,20 +34,20 @@ const StateMessageText = styled.div``;
 
 
 interface Props{
-  profile: any;
+  following: any;
   handleToChat: any;
 }
-const FriendProfile: React.FC<Props> = ({ profile, handleToChat }) => {
+const FollowingProfile: React.FC<Props> = ({ following, handleToChat }) => {
   return (
     <FriendProfileWrapper>
       <CompleteButton>완료</CompleteButton>
-      <ProfileImg src={profile.profileImg}/>
-      <UsernameText>{profile.username}</UsernameText>
-      <StateMessageText>{profile.friend.stateMessage}</StateMessageText>
+      <ProfileImg src={following.user.profileImg}/>
+      <UsernameText>{following.username}</UsernameText>
+      <StateMessageText>{following.user.stateMessage}</StateMessageText>
 
       <ChatButton onClick={handleToChat}>채팅</ChatButton>
     </FriendProfileWrapper>
   );
 };
 
-export default FriendProfile;
+export default FollowingProfile;

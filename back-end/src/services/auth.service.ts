@@ -20,7 +20,8 @@ export class AuthService {
 
   //로그인 처리
   public async login(loginDto: LoginDto) {
-    const user =  await this.userModel.find(loginDto).exec();
+    // 로그인
+    const user =  await this.userModel.findOne({email: loginDto.email}).exec();
     if(!user) {
       return null;
     }
@@ -33,5 +34,10 @@ export class AuthService {
   // 회원가입
   public async register(registerDto: RegisterDto) {
     // return 
+    return await new this.userModel({
+      username: registerDto.username,
+      email: registerDto.email,
+      hashedPassword: registerDto.password,
+    }).save();
   }
 }

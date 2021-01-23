@@ -2,8 +2,9 @@ import {
   Controller, Param, Get, Post, Delete, Put, UseGuards, Req, Body
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AddFollowingDto } from '../dto/following.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { UpdateProfileDto } from '../dto/profile.dto';
 
 
 
@@ -17,16 +18,23 @@ export class ProfileController {
   @UseGuards(JwtAuthGuard)
   @Get("/")
   public async getProfile(@Req() req: any) {
-    console.log(req.user);
     const profile = await this.userService.findOne(req.user.id);
-    console.log(profile);
     return profile;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post("/")
+  public async postProfile(@Req() req: any, @Body() updatePofileDto: UpdateProfileDto) {
+  
+    const profile = await this.userService.updateOne(req.user.id, updatePofileDto);
+    // return profile;
+  }
+
 
   // 친구 추가를 위한 검색
   @UseGuards(JwtAuthGuard)
   @Get("/email/:email")
-  public async deleteUser(@Param("email") email: string) {
+  public async deleteUser(@Req() req: any, @Param("email") email: string) {
     //: Promise<UserInterface>
     const user = this.userService.findUserByEmail(email);
     return user;
@@ -41,7 +49,7 @@ export class ProfileController {
     @Body() addFollowingDto: AddFollowingDto
   ) {
     console.log("add following", addFollowingDto);
-    return this.userService.addFollowing(req.user.id, addFollowingDto);
+    return await this.userService.addFollowing(req.user.id, addFollowingDto);
   }
 
   // 친구 이름 변경

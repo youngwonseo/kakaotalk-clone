@@ -3,7 +3,7 @@ import { eventChannel  } from 'redux-saga';
 
 export function createSocketChannel(socket: any) {
   return eventChannel(emit => {
-    socket.on('data', (payload: any) => {
+    socket.on('message', (payload: any) => {
       emit(payload);
     });
     const unsubscribe = () => {

@@ -2,13 +2,25 @@ import client from "./client";
 
 export const loadProfile = () => client.get('/api/profiles');
 
-export const registerFollowing = ({
+export const updateProfile = ({
   username,
-  following,
+  stateMessage,
 }: {
   username: string;
-  following: string;
-}) => client.post("/api/profiles/following", { username, following });
+  stateMessage: string;
+}) => client.post("/api/profiles", { username, stateMessage });
+
+
+
+export const registerFollowing = ({
+  username,
+  user,
+}: {
+  username: string;
+  user: string;
+}) => {
+  return client.post("/api/profiles/following", { username, user });
+}
 
 export const updateFollowing = () => client.put("/api/profiles/following");
 

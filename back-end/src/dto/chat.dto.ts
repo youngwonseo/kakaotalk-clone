@@ -3,6 +3,9 @@ import { IsString } from "class-validator";
 export class AddChatDto {
 
   @IsString()
-  readonly friend: string;
+  readonly users: [string];
 
+  @IsString()
+  readonly message: string;
+  
 }

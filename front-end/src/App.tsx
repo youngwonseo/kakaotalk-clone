@@ -10,7 +10,7 @@ import ProfilePage from './pages/ProfilePage';
 import SettingPage from './pages/SettingPage';
 import ModalProvider from './lib/createModalProvider';
 
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
 import ModalContent from '../src/lib/ModalContent';
 import palette from './lib/styles/palette';
@@ -47,23 +47,26 @@ const App: React.FC<Props> = () => {
 
   
   useEffect(()=>{
-    console.log('silent refresh')
-    // localStorage.setItem("token", "token!!");
-  //   const socket = io('/');import io from 'socket.io-client';
 
-  //   socket.on('connect_error', (error: any)=> {
-  //     console.log("connect_error: ", error);
-  //   });
-  //   socket.on('connect_timeout', (err: any) => {
-  //     console.log("client connect_timeout: ", err);
-  // });
+    // const socket = io("/");
+    // socket.on('connect_error', (error: any)=> {
+    //   console.log("connect_error: ", error);
+    // });
+    // socket.on('connect_timeout', (err: any) => {
+    //   console.log("client connect_timeout: ", err);
+    // });
 
-  //   socket.on('connect', () => {
-  //     console.log('conection!');
-  //   });
-  //   socket.on('error', (error: any) => {
-  //     console.log(error);
-  //   });
+    // socket.on('connect', () => {
+    //   console.log('conection!');
+    // });
+    // socket.on('error', (error: any) => {
+    //   console.log(error);
+    // });
+
+    // socket.on('fromServer', (payload: string) => {
+    //   console.log(payload)
+    //   // dispatch(addMessage({message : { contents : payload } }));
+    // })
   }, []);
  
 

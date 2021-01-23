@@ -12,25 +12,19 @@ import { ProfileController } from "../controllers/profile.controller";
 import { JwtStrategy } from "../auth/jwt.strategy";
 import { Following, FollowingSchema } from "../schemas/following.schema";
 import { ChatSchema, Chat } from "../schemas/chat.schema";
+import { InitController } from "../controllers/init.controller";
 
 
 
 @Module({
   imports: [
-    AuthModule,
-    PassportModule,
-    JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: "9990s" },
-    }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: Chat.name, schema: ChatSchema }]),
     MongooseModule.forFeature([
       { name: Following.name, schema: FollowingSchema },
     ]),
   ],
-  controllers: [ProfileController],
-  providers: [UserService, JwtStrategy],
+  controllers: [InitController]  
   // exports: [UserService],
 })
-export class ProfileModule {}
+export class InitModule {}

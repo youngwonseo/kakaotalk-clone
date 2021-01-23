@@ -5,8 +5,8 @@ export class LoginDto {
   @IsString()
   readonly email: string;
 
-  @IsString()
-  readonly password: string;
+  // @IsString()
+  // readonly password: string;
 
 }
 

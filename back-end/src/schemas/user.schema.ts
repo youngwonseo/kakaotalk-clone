@@ -7,6 +7,7 @@ export type UserDocument = User & mongoose.Document;
 
 @Schema()
 export class User {
+  
   @Prop()
   username: String;
 
@@ -15,6 +16,9 @@ export class User {
 
   @Prop()
   hashedPassword: String;
+
+  @Prop()
+  stateMessage: String;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Following" }] })
   following: Following[];

@@ -14,15 +14,15 @@ const Title = styled.div`
 interface Props {
   title: string;
   profiles: any[];
-  handleFriendSelect: any;
+  handleFollowingSelect: any;
 };
 
 const ProfileList: React.FC<Props> = ({
   title,
   profiles,
-  handleFriendSelect,
+  handleFollowingSelect,
 }) => {
-  const { openModal, closeModal } = useContext(ModalContext);
+  
 
   useEffect(() => {
     return () => {
@@ -35,8 +35,9 @@ const ProfileList: React.FC<Props> = ({
       <Title>{title}</Title>
       {!profiles && 'loading...'}
       {profiles && profiles.map((profile: any) => (
-        <div onClick={openModal}>
-          <ProfileItem key={profile.idx} profile={profile} handleSelect={handleFriendSelect} />
+        <div >
+          {/* 친구의 경우 profile.username으로 표시 */}
+          <ProfileItem key={profile.idx} profile={profile.user} handleSelect={handleFollowingSelect} />
         </div>
       ))}
     </>

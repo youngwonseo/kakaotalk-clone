@@ -9,6 +9,10 @@ import { PassportModule } from "@nestjs/passport";
 import { AuthModule } from "./auth.module";
 import { JwtModule } from "@nestjs/jwt";
 import { jwtConstants } from "../constants";
+import { UserService } from "../services/user.service";
+import { FollowingSchema, Following } from "../schemas/following.schema";
+import { MessageSchema, Message } from "../schemas/message.schema";
+import { MessageService } from "../services/message.service";
 
 
 @Module({
@@ -19,10 +23,17 @@ import { jwtConstants } from "../constants";
       secret: jwtConstants.secret,
       signOptions: { expiresIn: "9990s" },
     }),
-    MongooseModule.forFeature([{ name: Chat.name, schema: ChatSchema }]),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: Chat.name, schema: ChatSchema }]),
+    MongooseModule.forFeature([
+      { name: Following.name, schema: FollowingSchema },
+    ]),
+    MongooseModule.forFeature([
+      { name: Message.name, schema: MessageSchema },
+    ]),
   ],
   controllers: [ChatController],
-  providers: [ChatGateway, ChatService],
+  providers: [ChatGateway, ChatService, MessageService, UserService],
+  // exports: [JwtModule],
 })
 export class ChatModule {}

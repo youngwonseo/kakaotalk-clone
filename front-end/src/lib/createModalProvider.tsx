@@ -4,7 +4,7 @@ import ProfileSearch from '../components/profile/ProfileSearch';
 import {
   PROFILE_UPDATE_MODAL,
   MY_PROFILE_MODAL,
-  FRIEND_PROFILE_MODAL,
+  FOLLOWING_PROFILE_MODAL,
   PROFILE_SEARCH_MODAL,
   CHAT_MODAL
 } from '../lib/ModalContent';
@@ -14,7 +14,7 @@ import DefaultComponent from './DefaultComponent';
 
 
 import MyProfileContainer from '../containers/profile/MyProfileContainer';
-import FriendProfileContainer from '../containers/profile/FriendProfileContainer';
+import FollowingProfileContainer from '../containers/profile/FollowingProfileContainer';
 import ProfileSearchContainer from '../containers/profile/ProfileSearchContainer';
 import ChatViewContainer from '../containers/chat/ChatViewContainer';
 
@@ -110,9 +110,8 @@ const ModalProvider = ({ contentsMap, children }: { contentsMap: any, children: 
         <Modal>
           {contentId === MY_PROFILE_MODAL && <MyProfileContainer />}
           {contentId === PROFILE_SEARCH_MODAL && <ProfileSearchContainer />}
-          {contentId === FRIEND_PROFILE_MODAL && <FriendProfileContainer />}
+          {contentId === FOLLOWING_PROFILE_MODAL && <FollowingProfileContainer />}
           {contentId === CHAT_MODAL && <ChatViewContainer />}
-
           {/* <div>
             <a onClick={closeModal}>닫기</a>
           </div> */}

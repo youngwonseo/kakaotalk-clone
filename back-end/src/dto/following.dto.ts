@@ -6,7 +6,7 @@ export class AddFollowingDto {
   readonly username: string;
 
   @IsString()
-  readonly following: string;
+  readonly user: string;
 
 }
 

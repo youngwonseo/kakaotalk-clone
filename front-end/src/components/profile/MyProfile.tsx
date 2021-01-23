@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Input from '../common/Input';
 
 const MyProfileWrapper = styled.div`
   width:100%;
@@ -24,19 +25,39 @@ const CompleteButton = styled.button`
 `;
 
 const UsernameText = styled.div``;
+
 const StateMessageText = styled.div``;
 
 
 interface Props{
   profile: any;
+  isEditMode: boolean;
+  handleChange: any;
+  handleChangeMode: any;
+  handleSubmit: any;
 }
-const MyProfile: React.FC<Props> = ({ profile }) => {
+const MyProfile: React.FC<Props> = ({ profile, isEditMode, handleChange, handleChangeMode, handleSubmit }) => {
   return (
     <MyProfileWrapper>
-      <CompleteButton>완료</CompleteButton>
-      <ProfileImg src={profile.profileImg}/>
-      <UsernameText>{profile.username}</UsernameText>
-      <StateMessageText>{profile.stateMessage}</StateMessageText>
+      {isEditMode && (
+        <>
+          <form onSubmit={handleSubmit}>
+            <CompleteButton onClick={handleSubmit}>완료</CompleteButton>
+            <ProfileImg src={profile.profileImg} />
+            <Input name="username" type="text" value={profile.username} onChange={handleChange}/>
+            <Input name="stateMessage" type="text" value={profile.stateMessage} onChange={handleChange}/>
+          </form>
+        </>
+      )}
+
+      {!isEditMode && (
+        <>
+          <CompleteButton onClick={handleChangeMode}>편집</CompleteButton>
+          <ProfileImg src={profile.profileImg} />
+          <UsernameText>{profile.username}</UsernameText>
+          <StateMessageText>{profile.stateMessage}</StateMessageText>
+        </>
+      )}
     </MyProfileWrapper>
   );
 };

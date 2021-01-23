@@ -38,7 +38,7 @@ const ProfileSearch: React.FC<Props> = ({
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          name="searchEmail"
+          name="email"
           value={searchEmail}
           onChange={handleChange}
         />
