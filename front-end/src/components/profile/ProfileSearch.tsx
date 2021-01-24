@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import Input from '../common/Input';
+import Button from '../common/Button';
 
 const ProfileSearchWrapper = styled.div`
   width:100%;
@@ -12,37 +14,45 @@ const ProfileSearchWrapper = styled.div`
 
 
 interface Props {
+  searchId: any;
   searchEmail: any;
-  searchResult: any;
-  handleAddFollowing: any;
+  searchUsername: any;
+  handleAddFollowingSubmit: any;
   handleChange: any;
-  handleSubmit: any;
+  handleSearchSubmit: any;
+  error: any;
 }
 
 const ProfileSearch: React.FC<Props> = ({
+  searchId,
   searchEmail,
-  searchResult,
-  handleAddFollowing,
+  searchUsername,
+  handleAddFollowingSubmit,
   handleChange,
-  handleSubmit,
+  handleSearchSubmit,
+  error,
 }) => {
   return (
     <ProfileSearchWrapper>
-      {searchResult && (
-        <div>
-          <input type="text" value={searchResult.username} />
-          <button onClick={handleAddFollowing}>추가</button>
-        </div>
+      
+      {error && error.message}
+      {searchId && (
+        <form onSubmit={handleAddFollowingSubmit}>
+          <Input name="username" type="text" value={searchUsername} onChange={handleChange}/>
+          <Button onClick={handleAddFollowingSubmit}>추가</Button>
+        </form>
       )}
+      
 
-      <form onSubmit={handleSubmit}>
-        <input
+      <form onSubmit={handleSearchSubmit}>
+        <Input
           type="text"
           name="email"
+          placeholder="이메일"
           value={searchEmail}
           onChange={handleChange}
         />
-        <button onClick={handleSubmit}>검색</button>
+        <Button onClick={handleSearchSubmit}>검색</Button>
       </form>
     </ProfileSearchWrapper>
   );

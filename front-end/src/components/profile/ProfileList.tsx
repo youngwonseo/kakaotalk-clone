@@ -6,21 +6,43 @@ import {  NavLink } from 'react-router-dom';
 import { ModalContext } from "../../lib/createModalProvider";
 
 
-const Title = styled.div`
+const ProfileListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
 
+const ToolBar = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 
+const NoData = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
 interface Props {
-  title: string;
-  profiles: any[];
-  handleFollowingSelect: any;
+  profile: any;
+  // handleFollowingSelect: any;
+  handleSearchOpen: any;
+  handleProfileOpen: any;
+  handleFollowingOpen: any;
+  error: any;
 };
 
 const ProfileList: React.FC<Props> = ({
-  title,
-  profiles,
-  handleFollowingSelect,
+  profile,
+  handleSearchOpen,
+  handleProfileOpen,
+  handleFollowingOpen,
+  error,
+  // handleFollowingSelect,
 }) => {
   
 
@@ -31,16 +53,39 @@ const ProfileList: React.FC<Props> = ({
   }, []);
 
   return (
-    <>
-      <Title>{title}</Title>
-      {!profiles && 'loading...'}
-      {profiles && profiles.map((profile: any) => (
-        <div >
-          {/* 친구의 경우 profile.username으로 표시 */}
-          <ProfileItem key={profile.idx} profile={profile.user} handleSelect={handleFollowingSelect} />
+    <ProfileListWrapper>
+      {!profile && "loading..."}
+      {/* 내 프로필 */}
+      {profile && (
+        <ProfileItem
+          key={profile._id}
+          id={profile._id}
+          username={profile.username}
+          stateMessage={profile.stateMessage}
+          handleProfileOpen={handleProfileOpen}
+        />
+      )}
+      <ToolBar>
+        <div>친구</div>
+        <div>
+          <a onClick={handleSearchOpen}>검색</a>
         </div>
-      ))}
-    </>
+      </ToolBar>
+      {/* 친구 프로필 */}
+      {profile && profile.following.length === 0 && (
+        <NoData>등록된 친구가 없습니다.</NoData>
+      )}
+      {profile &&
+        profile.following.map((following: any) => (
+          <ProfileItem
+            key={following._id}
+            id={following._id}
+            username={following.username}
+            stateMessage={following.user.stateMessage}
+            handleProfileOpen={handleFollowingOpen}
+          />
+        ))}
+    </ProfileListWrapper>
   );
 };
 

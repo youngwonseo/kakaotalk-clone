@@ -1,9 +1,9 @@
-import React from 'react';
-import ModalTemplate from '../../components/template/ProfileModalTemplate';
+import React, { useEffect } from 'react';
+import ProfileModalTemplate from '../../components/template/ProfileModalTemplate';
 import ProfileSearch from '../../components/profile/ProfileSearch';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../modules';
-import { changeField, searchProfile, registerFollowing } from '../../modules/profile';
+import { changeField, searchProfileByEmail, registerFollowing, initializeSearchForm } from '../../modules/profile';
 
 interface Props{}
 
@@ -11,35 +11,56 @@ interface Props{}
 const ProfileSearchContainer: React.FC<Props> = () => {
   const dispatch = useDispatch();
   // 내프로필정보 가져오기
-  const { searchEmail, searchResult } = useSelector((state: RootState) => ({
-    searchEmail: state.profile.search.email,
-    searchResult: state.profile.search.result,
-  }));
+  const { searchEmail, searchUsername, searchId, error } = useSelector(
+    (state: RootState) => ({
+      searchEmail: state.profile.search.email,
+      searchUsername: state.profile.search.username,
+      searchId: state.profile.search.id,
+      error: state.profile.error,
+    })
+  );
+
+  useEffect(()=>{
+    return ()=>{
+      dispatch(initializeSearchForm());
+    }
+  },[dispatch]);
+
+
+  // 추가 완료
+  useEffect(()=> {
+
+  },[]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     dispatch(changeField({ form: 'search', key: name, value }));
   }
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(searchProfile.request(searchEmail));
+    dispatch(searchProfileByEmail.request(searchEmail));
   };
 
 
-  const handleAddFollowing = () => {
-    dispatch(registerFollowing.request({username: searchResult.username, user: searchResult._id}));
+  const handleAddFollowingSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(registerFollowing.request({username: searchUsername, user: searchId}));
   }
 
+
   return (
-    <ModalTemplate>
+    <ProfileModalTemplate>
       <ProfileSearch
         searchEmail={searchEmail}
-        searchResult={searchResult}
-        handleAddFollowing={handleAddFollowing}
+        searchId={searchId}
+        searchUsername={searchUsername}
         handleChange={handleChange}
-        handleSubmit={handleSubmit}
+        handleAddFollowingSubmit={handleAddFollowingSubmit}
+        handleSearchSubmit={handleSearchSubmit}
+        error={error}
       />
-    </ModalTemplate>
+    </ProfileModalTemplate>
   );
 }
 

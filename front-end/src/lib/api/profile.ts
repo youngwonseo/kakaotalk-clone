@@ -8,7 +8,11 @@ export const updateProfile = ({
 }: {
   username: string;
   stateMessage: string;
-}) => client.post("/api/profiles", { username, stateMessage });
+}) => {
+  const result = client.post("/api/profiles", { username, stateMessage });
+  console.log(result);
+  return result;
+}
 
 
 
@@ -22,11 +26,25 @@ export const registerFollowing = ({
   return client.post("/api/profiles/following", { username, user });
 }
 
-export const updateFollowing = () => client.put("/api/profiles/following");
+export const updateFollowing = ({
+  id,
+  username,
+}: {
+  id: string;
+  username: string;
+}) => {
+  const result = client.post(`/api/profiles/following/${id}`, { username });
+  console.log(result);
+  return result;
+};
 
-export const deleteFollowing = () => client.delete('/api/profiles/following');
 
 
+export const deleteFollowing = () => client.delete("/api/profiles/following");
 
-export const search = (email: string) =>
+
+export const searchById = (id: string) =>
+  client.get(`/api/profiles/${id}`);
+
+export const searchByEmail = (email: string) =>
   client.get(`/api/profiles/email/${email}`);

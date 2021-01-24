@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import ChatList from '../../components/chat/ChatList';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { RootState, } from '../../modules';
-import { loadChats, setChatId } from '../../modules/chat';
+import { loadChats, setChatId, searchChatByUser } from '../../modules/chat';
 import { ModalContext } from '../../lib/createModalProvider';
 
 import { CHAT_MODAL } from "../../lib/ModalContent";
@@ -30,6 +30,7 @@ const ChatListContainer : React.FC<Props> = () => {
 
     // 채팅방 목록 불러오기
     dispatch(loadChats.request());
+
     
   },[dispatch]);
   // const chats: [] = [];
@@ -38,7 +39,7 @@ const ChatListContainer : React.FC<Props> = () => {
   const { openModal, closeModal } = useContext(ModalContext);
 
 
-
+  
   const handleOpenChat = (id: string) => {
     console.log(id);
 

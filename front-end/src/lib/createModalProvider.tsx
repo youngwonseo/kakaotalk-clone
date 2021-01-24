@@ -2,9 +2,7 @@ import React, { createContext, useState } from 'react';
 import styled from 'styled-components';
 import ProfileSearch from '../components/profile/ProfileSearch';
 import {
-  PROFILE_UPDATE_MODAL,
-  MY_PROFILE_MODAL,
-  FOLLOWING_PROFILE_MODAL,
+  PROFILE_MODAL,
   PROFILE_SEARCH_MODAL,
   CHAT_MODAL
 } from '../lib/ModalContent';
@@ -12,11 +10,9 @@ import DefaultComponent from './DefaultComponent';
 
 
 
-
-import MyProfileContainer from '../containers/profile/MyProfileContainer';
-import FollowingProfileContainer from '../containers/profile/FollowingProfileContainer';
 import ProfileSearchContainer from '../containers/profile/ProfileSearchContainer';
 import ChatViewContainer from '../containers/chat/ChatViewContainer';
+import ProfileViewContainer from '../containers/profile/ProfileViewContainer';
 
 interface State{
   openModal: any;
@@ -108,9 +104,8 @@ const ModalProvider = ({ contentsMap, children }: { contentsMap: any, children: 
       {children}
       {showModal && (
         <Modal>
-          {contentId === MY_PROFILE_MODAL && <MyProfileContainer />}
           {contentId === PROFILE_SEARCH_MODAL && <ProfileSearchContainer />}
-          {contentId === FOLLOWING_PROFILE_MODAL && <FollowingProfileContainer />}
+          {contentId === PROFILE_MODAL && <ProfileViewContainer />}
           {contentId === CHAT_MODAL && <ChatViewContainer />}
           {/* <div>
             <a onClick={closeModal}>닫기</a>

@@ -12,6 +12,7 @@ import { ProfileController } from "../controllers/profile.controller";
 import { JwtStrategy } from "../auth/jwt.strategy";
 import { Following, FollowingSchema } from "../schemas/following.schema";
 import { ChatSchema, Chat } from "../schemas/chat.schema";
+import { FollowingService } from "../services/following.service";
 
 
 
@@ -30,7 +31,7 @@ import { ChatSchema, Chat } from "../schemas/chat.schema";
     ]),
   ],
   controllers: [ProfileController],
-  providers: [UserService, JwtStrategy],
+  providers: [UserService, JwtStrategy, FollowingService],
   // exports: [UserService],
 })
 export class ProfileModule {}

@@ -28,24 +28,26 @@ const ProfilelastMessage = styled.div`
 `;
 
 interface Props {
-  profile: any;
-  handleSelect: any;
+  id: string;
+  username: string;
+  stateMessage: string;
+  handleProfileOpen: any;
 };
 
-const ProfileItem : React.FC<Props> = ({ profile, handleSelect }) => {
+const ProfileItem : React.FC<Props> = ({ id, username, stateMessage, handleProfileOpen }) => {
   return (
     <ProfileItemWrapper onClick={()=>{
-      handleSelect(profile._id);
+      handleProfileOpen(id);
     }}>
-      {profile && 
+      
       <>
-        <ProfileImg src={profile.img || "/profile-default.png"} />
+        <ProfileImg src={"/profile-default.png"} />
         <ProfileInfo>
-          <ProfileName>{profile.username}</ProfileName>
-          <ProfilelastMessage>{profile.stateMessage}</ProfilelastMessage>
+          <ProfileName>{username}</ProfileName>
+          <ProfilelastMessage>{stateMessage}</ProfilelastMessage>
         </ProfileInfo>
       </>
-      }
+      
     </ProfileItemWrapper>
   );
 }

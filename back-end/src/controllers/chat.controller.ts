@@ -33,53 +33,37 @@ export class ChatController {
     // return user;
   }
   
+  
   @UseGuards(JwtAuthGuard)
-  @Get("/userid/:userid")
+  @Get("/userid/:id")
   public async getChatByFollow(
     @Req() req: any,
-    @Param("userid") userid: string
+    @Param("id") id: string
   ) {
 
 
-    console.log("!!")
-    // const user = await this.userService.findOne(req.user.id);
+    const user = await this.userService.findOne(req.user.id);
 
-    // const chats = user.chats.find((chat: any) => chat.users.include(userid));
-    return null;
-    //
-
-    // const user = await this.userService.findUser(id);
-    // return user;
+    //상대방아이디 포함여부로 찾기
+    const idx = user.chats.findIndex((chat: any) => chat.users.indexOf(id) > 0);
+    console.log(idx);
+    if(idx < 0 ){
+      return {
+        users: [
+          id, // 상대방아이디
+          req.user.id // 내아이디
+        ]
+      };
+    }else{
+      return {
+        chat: user.chats[idx]._id,
+        users: user.chats[idx].users,
+      }
+    }
   }
 
-  // 채팅방 추가
-  @UseGuards(JwtAuthGuard)
-  @Post("/")
-  public async addChat(@Req() req: any, @Body() addChatDto: AddChatDto) {
-    // 채팅방 존재하는지 체크
-    console.log(addChatDto);
 
-    // 없으면 생성
-    const chat = await this.chatService.create(addChatDto);
 
-    // 사용자의 채팅방에 새로운 채팅방 추가
-    await this.userService.addChat(req.user.id, chat);
-    await this.userService.addChat(addChatDto.users[0], chat);
-
-    // 있으면 바로 반환
-    
-    // 메세지 추가
-    const message = await this.messageService.create({
-      user: req.user.id,
-      contents: addChatDto.message,
-      count: 1,
-    });
-    
-
-    await this.chatService.addMessage(chat._id, message);
-
-    return chat;
-  }
 
   // 채팅방 삭제 (방에서 나오기)
   @UseGuards(JwtAuthGuard)

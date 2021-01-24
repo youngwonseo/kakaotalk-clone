@@ -18,8 +18,10 @@ import { AxiosError } from 'axios';
 
 const CHANGE_FIELD = 'profile/CHANGE_FIELD';
 const INITIALIZE_FORM = 'profile/INITIALIZE_FORM';
-const SET_FOLLOWING_ID = 'profile/SET_FOLLOWING_ID';
-
+const INITIALIZE_SEARCH_FORM = 'profile/INITIALIZE_SEARCH_FORM';
+// const SET_FOLLOWING_ID = 'profile/SET_FOLLOWING_ID';
+const SET_UPDATE_PROFILE = 'profile/SET_UPDATE_PROFILE';
+const SET_DONE = 'profile/SET_DONE';
 
 const [
   LOAD_PROFILE,
@@ -46,6 +48,18 @@ export const updateProfile = createAsyncAction(
   UPDATE_PROFILE_FAILURE,
 )<any, any, AxiosError>();
 
+const [
+  UPDATE_FOLLOWING, 
+  UPDATE_FOLLOWING_SUCCESS, 
+  UPDATE_FOLLOWING_FAILURE
+] = createActionTypes('profile/UPDATE_FOLLOWING');
+
+export const updateFollowing = createAsyncAction(
+  UPDATE_FOLLOWING, 
+  UPDATE_FOLLOWING_SUCCESS, 
+  UPDATE_FOLLOWING_FAILURE
+)<any, any, AxiosError>();
+
 
 const [
   REGISTER_FOLLOWING, 
@@ -60,17 +74,6 @@ export const registerFollowing = createAsyncAction(
 )<any, any, AxiosError>();
 
 
-const [
-  UPDATE_FOLLOWING, 
-  UPDATE_FOLLOWING_SUCCESS, 
-  UPDATE_FOLLOWING_FAILURE
-] = createActionTypes('profile/UPDATE_FOLLOWING');
-
-export const updateFollowing = createAsyncAction(
-  UPDATE_FOLLOWING, 
-  UPDATE_FOLLOWING_SUCCESS, 
-  UPDATE_FOLLOWING_FAILURE
-)<string, any, AxiosError>();
 
 
 const [
@@ -85,20 +88,39 @@ export const removeFollowing = createAsyncAction(
   REMOVE_FOLLOWING_FAILURE
 )<string, any, AxiosError>();
 
+const [
+  SEARCH_PROFILE_BY_ID, 
+  SEARCH_PROFILE_BY_ID_SUCCESS, 
+  SEARCH_PROFILE_BY_ID_FAILURE
+] = createActionTypes('profile/SEARCH_PROFILE_BY_ID');
+
+export const searchProfileById = createAsyncAction(
+  SEARCH_PROFILE_BY_ID, 
+  SEARCH_PROFILE_BY_ID_SUCCESS, 
+  SEARCH_PROFILE_BY_ID_FAILURE
+)<string, any, AxiosError>();
+
+
 
 
 const [
-  SEARCH_PROFILE, 
-  SEARCH_PROFILE_SUCCESS, 
-  SEARCH_PROFILE_FAILURE
-] = createActionTypes('profile/SEARCH_PROFILE');
+  SEARCH_PROFILE_BY_EMAIL, 
+  SEARCH_PROFILE_BY_EMAIL_SUCCESS, 
+  SEARCH_PROFILE_BY_EMAIL_FAILURE
+] = createActionTypes('profile/SEARCH_PROFILE_BY_EMAIL');
 
-export const searchProfile = createAsyncAction(
-  SEARCH_PROFILE, 
-  SEARCH_PROFILE_SUCCESS, 
-  SEARCH_PROFILE_FAILURE
+export const searchProfileByEmail = createAsyncAction(
+  SEARCH_PROFILE_BY_EMAIL, 
+  SEARCH_PROFILE_BY_EMAIL_SUCCESS, 
+  SEARCH_PROFILE_BY_EMAIL_FAILURE
 )<string, any, AxiosError>();
 
+
+
+export const setDone = createAction(
+  SET_DONE,
+  (done: boolean) => done
+)();
 
 export const changeField = createAction(
   CHANGE_FIELD,
@@ -114,9 +136,18 @@ export const initializeForm = createAction(
   (form: "search") => form
 )();
 
-export const setFollowingId = createAction(
-  SET_FOLLOWING_ID,
-  (id) => id
+export const initializeSearchForm = createAction(
+  INITIALIZE_SEARCH_FORM,
+)();
+
+// export const setFollowingId = createAction(
+//   SET_FOLLOWING_ID,
+//   (id) => id
+// )();
+
+export const setUpdateProfile = createAction(
+  SET_UPDATE_PROFILE,
+  (profile) => profile,
 )();
 
 const loadProfileSaga = createAsyncSaga(LOAD_PROFILE, profileAPI.loadProfile);
@@ -124,7 +155,8 @@ const updateProfileSaga = createAsyncSaga(UPDATE_PROFILE, profileAPI.updateProfi
 const registerFollowingSaga = createAsyncSaga(REGISTER_FOLLOWING, profileAPI.registerFollowing);
 const updateFollowingSaga = createAsyncSaga(UPDATE_FOLLOWING, profileAPI.updateFollowing);
 const deleteFollowingSaga = createAsyncSaga(REMOVE_FOLLOWING, profileAPI.deleteFollowing);
-const searchProfileSaga = createAsyncSaga(SEARCH_PROFILE, profileAPI.search);
+const searchProfileByEmailSaga = createAsyncSaga(SEARCH_PROFILE_BY_EMAIL, profileAPI.searchByEmail);
+const searchProfileByIdSaga = createAsyncSaga(SEARCH_PROFILE_BY_ID, profileAPI.searchById);
 
 
 export function* profileSaga() {
@@ -133,35 +165,62 @@ export function* profileSaga() {
   yield takeLatest(REGISTER_FOLLOWING, registerFollowingSaga);
   yield takeLatest(UPDATE_FOLLOWING, updateFollowingSaga);
   yield takeLatest(REMOVE_FOLLOWING, deleteFollowingSaga);
-  yield takeLatest(SEARCH_PROFILE, searchProfileSaga);
+  yield takeLatest(SEARCH_PROFILE_BY_EMAIL, searchProfileByEmailSaga);
+  yield takeLatest(SEARCH_PROFILE_BY_ID, searchProfileByIdSaga);
 }
 
 
 interface ProfileState {
   [key:string] : any;
   profile: any;
+  // updateProfile: {
+  //   username: any;
+  //   stateMessage: any;
+  //   id: any;
+  // }
   search: {
     [key:string] : any;
     email: any;
-    result: any;
+    username: any;
+    stateMessage: any;
+    profileImg: any;
+    id: any;
   };
-  following: any; // 선택된 친구
-
+  done: boolean;
+  // following: any; // 선택된 친구
+  error: any;
 }
+
 
 const initialState: ProfileState = {
   profile: null,
   search: {
-    email: '',
-    result: null,
+    email: "",
+    username: "",
+    stateMessage: "",
+    profileImg: "",
+    id: "",
   },
-  following: null,
-}
+  done: false,
+  // following: null,
+  error: null,
+};
+
 type ChangeFieldAction = ActionType<typeof changeField>;
 
 // 친구추가 - 이름순
 
 const profile = createReducer<ProfileState, any>(initialState, {
+  [INITIALIZE_SEARCH_FORM] :(state) => ({
+    ...state,
+    search: initialState.search,
+    error: initialState.error,
+    done: false
+  }),
+  [SET_DONE]: (state) => ({
+    ...state,
+    done: false,
+  }),
   [CHANGE_FIELD]: (
     state,
     { payload: { form, key, value } }: ChangeFieldAction
@@ -169,30 +228,62 @@ const profile = createReducer<ProfileState, any>(initialState, {
     produce(state, (draft) => {
       draft[form][key] = value;
     }),
-  [SET_FOLLOWING_ID]: (state, { payload: id }) => ({
-    ...state,
-    following: id,
+  [SET_UPDATE_PROFILE]: (state, { payload }) => ({
+    ...state, 
+    search: payload
   }),
+  // [SET_FOLLOWING_ID]: (state, { payload: id }) => ({
+  //   ...state,
+  //   following: id,
+  // }),
   [LOAD_PROFILE_SUCCESS]: (state, { payload: profile }) => ({
     ...state,
     profile,
+  }), 
+  [UPDATE_PROFILE_SUCCESS]: (state, { payload: profile }) => ({
+    ...state,
+    profile: {
+      ...state.profile,
+      username: profile.username,
+      stateMessage: profile.stateMessage,
+    },
+    done: true,
   }),
-  [UPDATE_PROFILE_SUCCESS]: (state) => ({
+  [REGISTER_FOLLOWING_SUCCESS]: (state, { payload: following }) => ({
     ...state,
   }),
-  [REGISTER_FOLLOWING_SUCCESS]: (state, { payload: friend }) => ({
+  [UPDATE_FOLLOWING_SUCCESS]: (state, { payload: following }) => {
+    const idx = state.profile.following.findIndex(
+      (following: any) => following._id === following._id
+    );
+    return produce(state, (draft) => {
+      draft.profile.following[idx].username = following.username;
+      draft.done = true;
+    });
+  },
+  [REMOVE_FOLLOWING_SUCCESS]: (state, { payload: following }) => ({
     ...state,
   }),
-  [UPDATE_FOLLOWING_SUCCESS]: (state, { payload: friend }) => ({
-    ...state,
-  }),
-  [REMOVE_FOLLOWING_SUCCESS]: (state, { payload: result }) => ({
-    ...state,
-  }),
-  [SEARCH_PROFILE_SUCCESS]: (state, { payload: search }) =>
+  // [SEARCH_FOLLOW_PROFILE_SUCCESS]: (state, {payload: search }) => ({
+  //   ...state,
+  // }),
+  // [SEARCH_UPDATE_PROFILE_BY_ID_SUCCESS]: (state, { payload: search }) =>
+  //   produce(state, (draft) => {
+  //     draft.search.username = search.username;
+  //     draft.search.stateMessage = search.stateMessage;
+  //     draft.search.id = search._id;
+  //     draft.error = null;
+  //   }),
+  [SEARCH_PROFILE_BY_EMAIL_SUCCESS]: (state, { payload: search }) =>
     produce(state, (draft) => {
-      draft.search.result = search;
+      draft.search.username = search.username;
+      draft.search.id = search._id;
+      draft.error = null;
     }),
+  [SEARCH_PROFILE_BY_EMAIL_FAILURE]: (state, {payload: error}) => ({
+    ...state,
+    error
+  }),
 });
 
 

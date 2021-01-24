@@ -1,10 +1,12 @@
 import {
-  Controller, Param, Get, Post, Delete, Put, UseGuards, Req, Body
+  Controller, Param, Get, Post, Delete, Put, UseGuards, Req, Body, NotFoundException
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
-import { AddFollowingDto } from '../dto/following.dto';
+import { FollowingService } from '../services/following.service';
+import { AddFollowingDto, UpdateFollowingDto } from '../dto/following.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateProfileDto } from '../dto/profile.dto';
+
 
 
 
@@ -12,6 +14,7 @@ import { UpdateProfileDto } from '../dto/profile.dto';
 export class ProfileController {
   public constructor(
     private readonly userService: UserService,
+    private readonly followingService: FollowingService
   ) {}
 
   // 내프로필, 친구목록, 채팅목록 포함
@@ -24,19 +27,34 @@ export class ProfileController {
 
   @UseGuards(JwtAuthGuard)
   @Post("/")
-  public async postProfile(@Req() req: any, @Body() updatePofileDto: UpdateProfileDto) {
-  
-    const profile = await this.userService.updateOne(req.user.id, updatePofileDto);
-    // return profile;
+  public async postProfile(
+    @Req() req: any,
+    @Body() updatePofileDto: UpdateProfileDto
+  ) {
+    const profile = await this.userService.updateOne(
+      req.user.id,
+      updatePofileDto
+    );
+    return profile;
   }
 
+  // 내프로필, 친구목록, 채팅목록 포함
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id")
+  public async getProfileById(@Req() req: any, @Param("id") id: string) {
+    const profile = await this.userService.findOne(id);
+    return profile;
+  }
 
   // 친구 추가를 위한 검색
   @UseGuards(JwtAuthGuard)
   @Get("/email/:email")
   public async deleteUser(@Req() req: any, @Param("email") email: string) {
     //: Promise<UserInterface>
-    const user = this.userService.findUserByEmail(email);
+    const user = await this.userService.findUserByEmail(email);
+    if (!user) {
+      throw new NotFoundException("User Not Found");
+    }
     return user;
   }
 
@@ -49,13 +67,27 @@ export class ProfileController {
     @Body() addFollowingDto: AddFollowingDto
   ) {
     console.log("add following", addFollowingDto);
-    return await this.userService.addFollowing(req.user.id, addFollowingDto);
+    // 생성후 ?
+    const following = await this.userService.addFollowing(
+      req.user.id,
+      addFollowingDto
+    );
+    return following;
   }
 
   // 친구 이름 변경
-  @UseGuards(JwtAuthGuard)
-  @Put("/following/:id")
-  public async updateFriend(@Req() req: any) {}
+  // @UseGuards(JwtAuthGuard)
+  @Post("/following/:id")
+  public async updateFollowing(
+    @Req() req: any,
+    @Param("id") id: string,
+    @Body() updateFollowingDto: UpdateFollowingDto
+  ) {
+    //follow id
+    // await this.userService.updateOne(req.user.id, updatePofileDto);
+    // const following = await this.userService.findOne(req.user.id)
+    return await this.followingService.updateOne(id, updateFollowingDto);    
+  }
 
   // 친구 삭제
   @UseGuards(JwtAuthGuard)

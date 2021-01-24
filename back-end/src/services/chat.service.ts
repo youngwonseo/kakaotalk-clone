@@ -27,16 +27,22 @@ export class ChatService {
     
   }
 
+  public async findOne(id: string) {
+    return await this.chatModel
+      .findOne({ _id: id })
+      .populate({ path: "messages" })
+      .exec();
+  }
 
-  public async create(addChatDto: AddChatDto) {
+  public async create({users} : {users: any[]}) {
 
-    const chat = new this.chatModel({ users: addChatDto.users } );
+    const chat = new this.chatModel({ users: users } );
     return await chat.save();
   }
 
 
   public async addMessage(id: string, message: MessageDocument){
-    return this.chatModel
+    return await this.chatModel
       .findByIdAndUpdate(
         id,
         {
@@ -45,6 +51,7 @@ export class ChatService {
         },
         {
           new: true,
+          populate: "messages"
         }
       )
       .exec();

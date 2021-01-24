@@ -19,7 +19,7 @@ const MessageWrapper = styled.div`
 
 
 // 내가 작성한 메세지? (boolean)
-// 
+// 메세지
 interface Props {message: any;};
 
 

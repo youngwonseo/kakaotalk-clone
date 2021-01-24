@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import Input from '../common/Input';
+import Button from '../common/Button';
 
 const RegisterFormWrapper = styled.div`
 	padding: 0rem 3rem;
@@ -8,6 +10,14 @@ const RegisterFormWrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-items: center;
+`;
+
+
+
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 interface Props {
@@ -25,27 +35,31 @@ const RegisterForm: React.FC<Props> = ({
 }) => {
   return (
     <RegisterFormWrapper>
-      <form onSubmit={handleSubmit}>
-        <input
+      <Form onSubmit={handleSubmit}>
+        <Input
           type="text"
           name="username"
           onChange={handleChange}
           value={form.username}
+          placeholder="이름"
         />
-        <input
+        <Input
           type="text"
           name="email"
           onChange={handleChange}
           value={form.email}
+          placeholder="이메일"
         />
-        <input
+        <Input
           type="text"
           name="password"
           onChange={handleChange}
           value={form.password}
+          placeholder="비밀번호"
         />
-        <button onClick={handleSubmit}>회원가입</button>
-      </form>
+        <Button onClick={handleSubmit}>회원가입</Button>
+      </Form>
+      <Link to="/login">뒤로</Link>
       {error && error}
     </RegisterFormWrapper>
   );

@@ -44,7 +44,7 @@ const ChatItem : React.FC<Props> = ({ chat, handleOpenChat }) => {
       <ChatImg src={chat.img} />
       <ChatInfo>
         <ChatTitle>{chat.title}</ChatTitle>
-        <ChatLastMessage>{chat.lastMessage}</ChatLastMessage>
+        <ChatLastMessage>{chat.messages[chat.messages.length-1].contents}</ChatLastMessage>
       </ChatInfo>
     </ChatItemWrapper>
   );

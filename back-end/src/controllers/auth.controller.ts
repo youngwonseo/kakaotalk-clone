@@ -32,6 +32,7 @@ export class AuthController {
     return result;
   }
 
+  
   /** 회원가입 */
   @Post("/register")
   public async register(@Body() registerDto: RegisterDto) {

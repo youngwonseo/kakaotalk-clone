@@ -1,20 +1,108 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import Input from '../common/Input';
 
-
-const ProfileViewWrapper = styled.div`
-
+const MyProfileWrapper = styled.div`
+  width:100%;
+  height:100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 
-interface Props {}
+const Form = styled.form`
+  /* width: 100%; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
-const ProfileView: React.FC<Props> = () => {
+const ProfileImg = styled.img`
+  border-radius: 20%;
+  height: 64px;
+  width: 64px;
+`;
 
-  
+const CompleteButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
 
-  
-  return <ProfileViewWrapper></ProfileViewWrapper>;
+
+const ChatButton = styled.button`
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+`;
+
+
+const UsernameText = styled.div`
+  font-weight: bold;
+`;
+
+const StateMessageText = styled.div`
+`;
+
+
+interface Props{
+  profile: any;
+  isEditMode: boolean;
+  isMyProfile: boolean;
+  handleChange: any;
+  handleChangeMode: any;
+  handleProfileUpdateSubmit: any;
+  handleFollowUpdateSubmit: any;
+  handleToChat: any;
 }
+const ProfileView: React.FC<Props> = ({
+  profile,
+  isEditMode,
+  isMyProfile,
+  handleChange,
+  handleChangeMode,
+  handleProfileUpdateSubmit,
+  handleFollowUpdateSubmit,
+  handleToChat,
+}) => {
+  return (
+    <MyProfileWrapper>      
+      {isEditMode && (
+        
+        <Form onSubmit={!isMyProfile ? handleFollowUpdateSubmit: handleProfileUpdateSubmit }>
+          <CompleteButton onClick={!isMyProfile ? handleFollowUpdateSubmit : handleProfileUpdateSubmit }>완료</CompleteButton>
+          <ProfileImg src={profile.profileImg} />
+          <Input
+            name="username"
+            type="text"
+            value={profile.username}
+            onChange={handleChange}
+          />
+
+          {isMyProfile && 
+            <Input
+              name="stateMessage"
+              type="text"
+              value={profile.stateMessage}
+              onChange={handleChange}
+            />
+          }
+        </Form>
+      )}
+
+      {!isEditMode && (
+        <>
+          <CompleteButton onClick={handleChangeMode}>편집</CompleteButton>
+          <ProfileImg src={profile.profileImg} />
+          <UsernameText>{profile.username}</UsernameText>
+          <StateMessageText>{profile.stateMessage}</StateMessageText>
+          {!isMyProfile && <ChatButton onClick={handleToChat}>채팅</ChatButton>}
+        </>
+      )}
+    </MyProfileWrapper>
+  );
+};
 
 export default ProfileView;

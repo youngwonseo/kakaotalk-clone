@@ -18,6 +18,7 @@ import io from "socket.io-client";
 
 const CHANGE_FIELD = 'chat/CHANGE_FIELD';
 const INITIALIZE_FORM = 'chat/INITIALIZE_FORM';
+const ADD_CHAT = 'chat/ADD_CHAT';
 const ADD_MESSAGE = 'chat/ADD_MESSAGE';
 
 const SET_CHAT_ID = 'chat/SET_CHAT_ID';
@@ -50,42 +51,42 @@ export const searchChatByUser = createAsyncAction(
 )<any, any, AxiosError>();
 
 
-const [
-  REGISTER_CHAT, 
-  REGISTER_CHAT_SUCCESS, 
-  REGISTER_CHAT_FAILURE
-] = createActionTypes('chat/REGISTER_CHAT');
+// const [
+//   REGISTER_CHAT, 
+//   REGISTER_CHAT_SUCCESS, 
+//   REGISTER_CHAT_FAILURE
+// ] = createActionTypes('chat/REGISTER_CHAT');
 
-export const registerChat = createAsyncAction(
-  REGISTER_CHAT, 
-  REGISTER_CHAT_SUCCESS, 
-  REGISTER_CHAT_FAILURE
-)<any, any, AxiosError>();
+// export const registerChat = createAsyncAction(
+//   REGISTER_CHAT, 
+//   REGISTER_CHAT_SUCCESS, 
+//   REGISTER_CHAT_FAILURE
+// )<any, any, AxiosError>();
 
 
-const [
-  UPDATE_CHAT, 
-  UPDATE_CHAT_SUCCESS, 
-  UPDATE_CHAT_FAILURE
-] = createActionTypes('chat/UPDATE_CHAT');
+// const [
+//   UPDATE_CHAT, 
+//   UPDATE_CHAT_SUCCESS, 
+//   UPDATE_CHAT_FAILURE
+// ] = createActionTypes('chat/UPDATE_CHAT');
 
-export const updateChat = createAsyncAction(
-  UPDATE_CHAT, 
-  UPDATE_CHAT_SUCCESS, 
-  UPDATE_CHAT_FAILURE
-)<string, any, AxiosError>();
+// export const updateChat = createAsyncAction(
+//   UPDATE_CHAT, 
+//   UPDATE_CHAT_SUCCESS, 
+//   UPDATE_CHAT_FAILURE
+// )<string, any, AxiosError>();
 
-const [
-  REMOVE_CHAT, 
-  REMOVE_CHAT_SUCCESS, 
-  REMOVE_CHAT_FAILURE
-] = createActionTypes('chat/REMOVE_CHAT');
+// const [
+//   REMOVE_CHAT, 
+//   REMOVE_CHAT_SUCCESS, 
+//   REMOVE_CHAT_FAILURE
+// ] = createActionTypes('chat/REMOVE_CHAT');
 
-export const removeChat = createAsyncAction(
-  REMOVE_CHAT, 
-  REMOVE_CHAT_SUCCESS, 
-  REMOVE_CHAT_FAILURE
-)<string, any, AxiosError>();
+// export const removeChat = createAsyncAction(
+//   REMOVE_CHAT, 
+//   REMOVE_CHAT_SUCCESS, 
+//   REMOVE_CHAT_FAILURE
+// )<string, any, AxiosError>();
 
 
 export const changeField = createAction(
@@ -95,6 +96,8 @@ export const changeField = createAction(
     value,
   })
 )();
+
+export const addChat = createAction(ADD_CHAT, (chat) => chat)();
 
 export const addMessage = createAction(
   ADD_MESSAGE,
@@ -117,9 +120,9 @@ export const sendMessage = createAction(
 
 const loadChatsSaga = createAsyncSaga(LOAD_CHATS, chatAPI.loadChats);
 const searchChatByUserSaga = createAsyncSaga(SEARCH_CHAT_BY_USER, chatAPI.searchChatByUser);
-const registerChatSaga = createAsyncSaga(REGISTER_CHAT, chatAPI.registerChat);
-const updateChatSaga = createAsyncSaga(UPDATE_CHAT, chatAPI.updateChat);
-const deleteChatSaga = createAsyncSaga(REMOVE_CHAT, chatAPI.deleteChat);
+// const registerChatSaga = createAsyncSaga(REGISTER_CHAT, chatAPI.registerChat);
+// const updateChatSaga = createAsyncSaga(UPDATE_CHAT, chatAPI.updateChat);
+// const deleteChatSaga = createAsyncSaga(REMOVE_CHAT, chatAPI.deleteChat);
 // const searchProfileSaga = createAsyncSaga(SEARCH_PROFILE, profileAPI.search);
 
 
@@ -138,7 +141,7 @@ function createDataSocket() {
 function* writeSocket(socket: any) {
   while (true) {
     const { payload } = yield take(SEND_MESSAGE);
-    console.log(payload);
+    // console.log('SEND_MESSAGE', payload);
     socket.emit('message', payload);
   }
 }
@@ -158,12 +161,21 @@ function* listenData() {
     // // yield dispatch(LiveDataActions.connectionSuccess());
     while(true) {
       
-      const { chat, message } = yield take(socketChannel);
-      // 새로운 메세지 데이터
+      //
+      const { chat, message, isNew } = yield take(socketChannel);
+
+      // 새로 생성된 채팅방이면
+      if (isNew){
+        // 메세지는 포함되어 있음
+        yield put(addChat(chat));
+      }else{
+        // 새로운 메세지 데이터
       // chat, 
       // message
-      console.log(chat, message);
-      yield put(addMessage({ chat: chat, message: message}));
+        console.log(chat, message);
+        yield put(addMessage({ chat: chat._id, message: message}));
+      }
+      
     }
 
   } catch (error) {
@@ -184,9 +196,9 @@ function* listenData() {
 export function* chatSaga() {
   yield takeLatest(LOAD_CHATS, loadChatsSaga);
   yield takeLatest(SEARCH_CHAT_BY_USER, searchChatByUserSaga);
-  yield takeLatest(REGISTER_CHAT, registerChatSaga);
-  yield takeLatest(UPDATE_CHAT, updateChatSaga);
-  yield takeLatest(REMOVE_CHAT, deleteChatSaga);
+  // yield takeLatest(REGISTER_CHAT, registerChatSaga);
+  // yield takeLatest(UPDATE_CHAT, updateChatSaga);
+  // yield takeLatest(REMOVE_CHAT, deleteChatSaga);
   yield fork(listenData);
 }
 
@@ -194,7 +206,9 @@ export function* chatSaga() {
 
 interface ChatState {
   chats: any;
+  // to: any;
   chat: any; // 선택된 채팅창 아이디
+  users: any;
   message: any; //작성중인 메세지
   messages: any;
 }
@@ -203,7 +217,9 @@ interface ChatState {
 const initialState: ChatState = {
   chats: [],
   // messages: [],
+  // to: null,
   chat: null,
+  users: [],
   message: '',
   messages: []
 }
@@ -215,7 +231,7 @@ const chat = createReducer<ChatState, any>(initialState, {
   }),
   [SET_CHAT_ID]: (state, { payload: id}) => ({
     ...state,
-    chat: id
+    chat: id, //load chat?
   }),
   // [SEND_MESSAGE]: (state, { payload: message}) => {
 
@@ -226,35 +242,43 @@ const chat = createReducer<ChatState, any>(initialState, {
     ...state,
     chats,
   }),
-  [REGISTER_CHAT_SUCCESS]: (state, { payload: chat}) => ({
-    ...state,
-    chat: chat
-  }),
+  // [REGISTER_CHAT_SUCCESS]: (state, { payload: chat}) => ({
+  //   ...state,
+  //   chat: chat
+  // }),
+  [ADD_CHAT]: (state, { payload: chat }) => {
+    return produce(state, (draft) => {
+      draft.chats.push(chat);
+      draft.chat = chat._id;
+    });
+  },
   [ADD_MESSAGE]: (state, { payload: {chat, message} }) => {
-    console.log('reducer', chat, message);
-
+    // console.log('reducer', chat, message);
+    // chat은 채팅방 아이디
     const idx = state.chats.findIndex((_chat: any) => {
       // console.log(chat._id, chat;)
       return _chat._id === chat;
     });
     
-    if(idx != -1){
-      return produce(state, (draft) => {
-        draft.chats[idx].messages.push(message);
-      });
-    }else{
-      return state;
-    }
-
-    
+    return produce(state, (draft) => {
+      draft.chats[idx].messages.push(message);
+    });
+     
   },
-  [REGISTER_CHAT_SUCCESS]: (state, {payload}) => {
-    console.log('new chat', payload);
+  [SEARCH_CHAT_BY_USER_SUCCESS]: (state, { payload: {users, chat} }) => {
     return {
       ...state,
-      chat: payload._id
+      chat: chat,
+      users: users
     }
-  }
+  },
+  // [REGISTER_CHAT_SUCCESS]: (state, {payload}) => {
+  //   console.log('new chat', payload);
+  //   return {
+  //     ...state,
+  //     chat: payload._id
+  //   }
+  // }
   // [REGISTER_CHAT]
 });
 
