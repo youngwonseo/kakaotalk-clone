@@ -43,6 +43,8 @@ const ChatListContainer : React.FC<Props> = () => {
   const handleOpenChat = (id: string) => {
     console.log(id);
 
+    // dispatch(searchChatByUser.request({ userid: following }));
+
     dispatch(setChatId(id));
     
     openModal(CHAT_MODAL);

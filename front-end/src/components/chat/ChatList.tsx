@@ -17,7 +17,7 @@ const ChatList : React.FC<Props> = ({ chats, handleOpenChat }) => {
   return (
     <>
       {chats.map((chat: any) => (
-        <ChatItem key={chat.idx} chat={chat} handleOpenChat={handleOpenChat} />
+        <ChatItem key={chat._id} chat={chat} handleOpenChat={handleOpenChat} />
       ))}
     </>
   );

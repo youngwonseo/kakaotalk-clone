@@ -4,7 +4,6 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { initializeForm, changeField, login } from '../../modules/auth';
 import { withRouter, RouteComponentProps } from "react-router";
 
-
 interface Props extends RouteComponentProps{};
 
 const LoginContainer: React.FC<Props> = ({ history }) => {
@@ -32,9 +31,18 @@ const LoginContainer: React.FC<Props> = ({ history }) => {
 
     // 로그인 성공
     if (auth) {
+      // localStorage.setItem("token", auth.access_token);
+      // console.log(auth.access_token)
+      // console.log(localStorage.getItem("token"));
       history.push("/");
     }
-  },[auth]);
+
+    if(authError){
+      
+    }
+  },[auth, authError]);
+
+
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,8 +54,6 @@ const LoginContainer: React.FC<Props> = ({ history }) => {
     e.preventDefault();
     const { email, password } = form;
     dispatch(login.request({ email, password }));
-    // localStorage.setItem("token", "token!");
-    // history.push('/');
   };
 
   

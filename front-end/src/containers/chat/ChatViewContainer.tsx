@@ -48,31 +48,14 @@ const ChatViewContainer : React.FC<Props> = () => {
     // 챗이 존재하면 챗이 있음
     if (chat && chats) {
         const idx = chats.findIndex((_chat: any) => {
-          // console.log(chat._id, chat;)
           return _chat._id === chat;
         });
-        console.log(idx);
         setChatIdx(idx);
     }
 
-    if(!profile){
-      dispatch(loadProfile.request());
+    return () => {
+      // 초기화
     }
-    //   // 찾기
-    //   const idx = chats.findIndex((_chat: any) => {
-    //     // console.log(chat._id, chat;)
-    //     return _chat._id === chat;
-    //   });
-    //   console.log(idx);
-    //   setChatIdx(idx);
-    // } 
-    
-    // else if (following) {
-    //   // 프로필에서 채팅 선택
-    //   // 기존 채팅이 있는지 검색
-    //   dispatch(searchChatByUser.request({ userid: following }));
-    // }
-
   }, [dispatch, chat, chats]);
 
 

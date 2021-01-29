@@ -14,6 +14,8 @@ import io from "socket.io-client";
 
 import ModalContent from '../src/lib/ModalContent';
 import palette from './lib/styles/palette';
+import axios from 'axios';
+
 
 const AppWrapper = styled.div`
   height: 100%;
@@ -47,7 +49,7 @@ const App: React.FC<Props> = () => {
 
   
   useEffect(()=>{
-
+    axios.defaults.withCredentials = true;
     // const socket = io("/");
     // socket.on('connect_error', (error: any)=> {
     //   console.log("connect_error: ", error);

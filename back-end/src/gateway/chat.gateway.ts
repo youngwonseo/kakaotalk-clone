@@ -63,27 +63,8 @@ export class ChatGateway
     // data.chat.users
 
     // 방에 참여중인 사람들
-    console.log(data.users);
-
-
     
-    // // data.chat이 널이면 채팅망이 존재하지 않음
-    let isNew = false;
-    if(!data.chat) {
-      // 채팅방 생성(채팅방에 참여하고 있는 사람목록)
-      const chat = await this.chatService.create({users: data.users});
-      data.chat = chat._id;
-      isNew = true;
-      // 유저에 채팅방 추가
-      for(let i=0,n=data.users.length;i<n;i++){
-        //chat.users로 대채
-        await this.userService.addChat(data.users[i], data.chat);
-      }
-    }
-    
-    // else{
-    //   chat = await this.chatService.findOne(data.chat);
-    // }
+
 
 
     // 메세지 생성
@@ -92,19 +73,47 @@ export class ChatGateway
       contents: data.message, //내용
       count: 1,
     });
+
+
     
+    // // data.chat이 널이면 채팅망이 존재하지 않음
+    let isNew = false;
+    if(!data.chat) {
+      // 채팅방 생성(채팅방에 참여하고 있는 사람목록)
+      isNew = true;
+      const chat = await this.chatService.create({users: data.users});
+
+      // console.log(chat);
+      data.chat = chat._id;
+      console.log('chatid', chat._id);
+      // 유저에 채팅방 추가
+      for(let i=0,n=data.users.length;i<n;i++){
+        //chat.users로 대채
+        console.log(i, data.users[i]);
+        const user = await this.userService.addChat(data.users[i], chat);
+        // console.log(user.chats);
+        
+      }
+    }    
 
     // 해당 채팅방에 메시지 입력
-    data.chat = await this.chatService.addMessage(data.chat, message);
-
+    const chat = await this.chatService.addMessage(data.chat, message);
+    console.log('users', chat.users);
 
     // // 채팅방에 참여하고 있는 사람들에게 emit
     // // client.broadcast.emit("message", message);
     // // 나자신에게
-    client.emit("message", { chat: data.chat, message: message, isNew: isNew });
+    const result = {
+      isNew,
+      message,
+      chatid: !isNew ? chat._id: false,
+      chat: isNew ? chat: false,
+    }
+    
+    client.emit("message", result);
 
     // // 나머지 모든 사람들
-    client.broadcast.emit("message", { chat: data.chat, message: message, isNew: isNew });
+    client.broadcast.emit("message", result);
 
     // // 채팅방이 생성된경우
     

@@ -54,4 +54,10 @@ export class AuthController {
   public async logout() {}
 
 
+
+  @Get("/profiles")
+  public async profiles(){
+    return await this.userService.findAll();
+  }
+
 }

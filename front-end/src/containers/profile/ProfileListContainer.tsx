@@ -31,7 +31,7 @@ const ProfileListContainer : React.FC<Props> = () => {
   useEffect(()=>{
     // 내정보
     dispatch(loadProfile.request());
-    
+    console.log(axios.defaults.headers);
     // 친구정보
     // dispatch(loadFriends.request());
     
@@ -75,6 +75,7 @@ const ProfileListContainer : React.FC<Props> = () => {
       username: profile.following[idx].username,
       profileImg: profile.following[idx].user.username || '',
       stateMessage: profile.following[idx].user.stateMessage || '',
+      userid: profile.following[idx].user._id
     }));
 
 

@@ -22,11 +22,21 @@ export class UserService {
     private followingModel: Model<FollowingDocument>
   ) {}
 
+  public findAll(){
+    return this.userModel.find();
+  }
+
   public findOne(id: string) {
     return this.userModel
       .findOne({ _id: id })
       .populate({ path: "following", populate: { path: "user" } })
-      .populate({ path: "chats", populate: [{ path: "messages" }, { path: "users" }] })
+      .populate({
+        path: "chats",
+        populate: [
+          { path: "messages", populate: { path: "user" } },
+          { path: "users" },
+        ],
+      })
       .exec();
   }
 
@@ -68,7 +78,7 @@ export class UserService {
   }
 
   public async addChat(id: string, chat: ChatDocument) {
-    return this.userModel
+    return await this.userModel
       .findByIdAndUpdate(
         id,
         {

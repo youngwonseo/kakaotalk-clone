@@ -161,8 +161,14 @@ function* listenData() {
     // // yield dispatch(LiveDataActions.connectionSuccess());
     while(true) {
       
-      //
-      const { chat, message, isNew } = yield take(socketChannel);
+      /**
+       * 
+       * isNew,
+      message,
+      chatid: !isNew ? chat._id: false,
+      chat: isNew ? chat: false,
+       */
+      const { chat, chatid, message, isNew } = yield take(socketChannel);
 
       // 새로 생성된 채팅방이면
       if (isNew){
@@ -170,10 +176,7 @@ function* listenData() {
         yield put(addChat(chat));
       }else{
         // 새로운 메세지 데이터
-      // chat, 
-      // message
-        console.log(chat, message);
-        yield put(addMessage({ chat: chat._id, message: message}));
+        yield put(addMessage({ chat: chatid, message: message}));
       }
       
     }
@@ -206,25 +209,25 @@ export function* chatSaga() {
 
 interface ChatState {
   chats: any;
-  // to: any;
   chat: any; // 선택된 채팅창 아이디
   users: any;
   message: any; //작성중인 메세지
-  messages: any;
 }
 
 
 const initialState: ChatState = {
   chats: [],
-  // messages: [],
-  // to: null,
   chat: null,
   users: [],
   message: '',
-  messages: []
 }
 
 const chat = createReducer<ChatState, any>(initialState, {
+  [INITIALIZE_FORM]: (state) => ({
+    ...state,
+    message: initialState.message,
+    chat: initialState.chat,
+  }),
   [CHANGE_FIELD]: (state, { payload: { key, value } }) => ({
     ...state,
     [key]: value,
@@ -233,11 +236,10 @@ const chat = createReducer<ChatState, any>(initialState, {
     ...state,
     chat: id, //load chat?
   }),
-  // [SEND_MESSAGE]: (state, { payload: message}) => {
-
-  //   console.log('reducer', message);
-  //   return state;
-  // },
+  [SEND_MESSAGE]: (state) => ({
+    ...state,
+    message: initialState.message,
+  }),
   [LOAD_CHATS_SUCCESS]: (state, { payload: chats }) => ({
     ...state,
     chats,
@@ -259,7 +261,7 @@ const chat = createReducer<ChatState, any>(initialState, {
       // console.log(chat._id, chat;)
       return _chat._id === chat;
     });
-    
+    console.log(idx);
     return produce(state, (draft) => {
       draft.chats[idx].messages.push(message);
     });

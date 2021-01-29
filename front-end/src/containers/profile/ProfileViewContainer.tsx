@@ -77,8 +77,10 @@ const ProfileViewContainer: React.FC<Props> = ({ history }) => {
   }
 
   const handleToChat = () => {
-    const { id } = searchProfile;
-    dispatch(searchChatByUser.request(id));
+
+    // 잘못됨
+    const { userid } = searchProfile;
+    dispatch(searchChatByUser.request(userid));
 
     // following 으로 chat 검색후 ?
     history.push("/chat");

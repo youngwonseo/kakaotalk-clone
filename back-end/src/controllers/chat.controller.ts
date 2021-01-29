@@ -26,6 +26,7 @@ export class ChatController {
     return user.chats;
   }
 
+  
   @UseGuards(JwtAuthGuard)
   @Get("/")
   public async getChat(@Param("id") id: string) {
@@ -41,14 +42,18 @@ export class ChatController {
     @Param("id") id: string
   ) {
 
-
-    const user = await this.userService.findOne(req.user.id);
-
+    // const user = await this.userService.findOne(req.user.id);
+    const chats = await this.chatService.findAll(req.user.id);
     //상대방아이디 포함여부로 찾기
-    const idx = user.chats.findIndex((chat: any) => chat.users.indexOf(id) > 0);
+
+
+    const idx = chats.findIndex((chat: any) => chat.users.map((user:any)=> user._id === id).length > 0);
+
+
     console.log(idx);
     if(idx < 0 ){
       return {
+        chat: null,
         users: [
           id, // 상대방아이디
           req.user.id // 내아이디
@@ -56,8 +61,8 @@ export class ChatController {
       };
     }else{
       return {
-        chat: user.chats[idx]._id,
-        users: user.chats[idx].users,
+        chat: chats[idx]._id,
+        users: chats[idx].users,
       }
     }
   }

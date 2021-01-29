@@ -17,7 +17,12 @@ export class MessageService {
 
   public async create(addMessageDto: AddMessageDto) {
     // return 
-    return await new this.messageModel(addMessageDto).save();
+    const message = await new this.messageModel(addMessageDto).save();
+    console.log(message);
+    return await this.messageModel
+      .findOne({ _id: message._id })
+      .populate({ path: "user" })
+      .exec();
   }
 
 }
