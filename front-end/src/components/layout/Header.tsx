@@ -5,7 +5,11 @@ const HeaderWrapper = styled.div`
   height: 40px;
   display: flex;
   /* background-color: #0000ff; */
-  padding: 0.5rem 0rem;
+  /* padding: 0.5rem 0rem; */
+  padding: 0.5rem;
+  /* padding: 1rem; */
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const Title = styled.div`
@@ -13,15 +17,20 @@ const Title = styled.div`
   font-weight: bold;
 `;
 
+const Contents = styled.div`
+  
+`;
+
 interface Props {
   title: string;
 };
 
 
-const Header: React.FC<Props> = ({ title }) => {
+const Header: React.FC<Props> = ({ title, children }) => {
   return (
     <HeaderWrapper>
       <Title>{title}</Title>
+      <Contents>{children}</Contents>
     </HeaderWrapper>
   );
 };

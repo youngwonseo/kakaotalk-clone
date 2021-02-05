@@ -27,7 +27,7 @@ const ChatListContainer : React.FC<Props> = () => {
 
 
   useEffect(()=>{
-
+    console.log('chat!!');
     // 채팅방 목록 불러오기
     dispatch(loadChats.request());
 

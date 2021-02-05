@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../lib/createModalProvider';
 
+import { IoCloseOutline } from 'react-icons/io5';
 
 const ModalWrapper = styled.div`
   display: flex;
@@ -22,7 +23,7 @@ const ProfileModalTemplate: React.FC<Props> = ({ children }) => {
 
   return (
     <ModalWrapper>
-      <CloseButtom onClick={closeModal}>닫기</CloseButtom>
+      <a onClick={closeModal}><IoCloseOutline/></a>
       {children}
     </ModalWrapper>
   );

@@ -20,6 +20,7 @@ const Form = styled.form`
 
 
 interface Props {
+  loading: boolean;
 	form: any;
 	handleChange: any;
 	handleSubmit: any;
@@ -28,6 +29,7 @@ interface Props {
 
 
 const LoginForm: React.FC<Props> = ({
+  loading,
   form,
   handleChange,
   handleSubmit,

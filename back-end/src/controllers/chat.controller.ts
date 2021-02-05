@@ -23,16 +23,20 @@ export class ChatController {
   @Get("/")
   public async getList(@Req() req: any) {
     const user = await this.userService.findOne(req.user.id);
+    
+    console.log(user);
+
     return user.chats;
+
   }
 
   
-  @UseGuards(JwtAuthGuard)
-  @Get("/")
-  public async getChat(@Param("id") id: string) {
-    // const user = await this.userService.findUser(id);
-    // return user;
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @Get("/")
+  // public async getChat(@Param("id") id: string) {
+  //   // const user = await this.userService.findUser(id);
+  //   // return user;
+  // }
   
   
   @UseGuards(JwtAuthGuard)
@@ -53,7 +57,7 @@ export class ChatController {
     console.log(idx);
     if(idx < 0 ){
       return {
-        chat: null,
+        chㅇt: null,
         users: [
           id, // 상대방아이디
           req.user.id // 내아이디

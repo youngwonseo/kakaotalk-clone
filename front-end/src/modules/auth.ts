@@ -144,15 +144,15 @@ const auth = createReducer<AuthState, any>(initialState, {
     authError: error,
   }),
   [LOGIN_SUCCESS]: (state, { payload: result }) => {
-    localStorage.setItem("token", result.access_token);
-
+    // localStorage.setItem("token", result.access_token);
+    // localStorage.setItem("id", result.id);
     // axios.defaults.headers.common['Authorization'] = result.access_token;
-    console.log(result);
+    // console.log(result);
     return {
       ...state,
       // authError: null,
       // token: result.access_token,
-      auth: true,
+      auth: result,
     }; 
   },
   [LOGIN_FAILURE]: (state, { payload: error }) => {

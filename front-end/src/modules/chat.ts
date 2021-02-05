@@ -169,6 +169,8 @@ function* listenData() {
       chat: isNew ? chat: false,
        */
       const { chat, chatid, message, isNew } = yield take(socketChannel);
+      //아이디 검사
+
 
       // 새로 생성된 채팅방이면
       if (isNew){
@@ -176,7 +178,15 @@ function* listenData() {
         yield put(addChat(chat));
       }else{
         // 새로운 메세지 데이터
-        yield put(addMessage({ chat: chatid, message: message}));
+        yield put(
+          addMessage({
+            chat: chatid,
+            message: {
+              ...message,
+              isMine: message.user._id === localStorage.getItem("id"),
+            },
+          })
+        );
       }
       
     }

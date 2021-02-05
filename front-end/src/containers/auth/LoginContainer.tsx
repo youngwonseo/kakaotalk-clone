@@ -3,6 +3,9 @@ import LoginForm from '../../components/auth/LoginForm';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { initializeForm, changeField, login } from '../../modules/auth';
 import { withRouter, RouteComponentProps } from "react-router";
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
 
 interface Props extends RouteComponentProps{};
 
@@ -10,11 +13,13 @@ const LoginContainer: React.FC<Props> = ({ history }) => {
   const dispatch = useDispatch();
   const [error, setError] = useState<any>(null);
   const {
+    loading,
     form,
     auth,
     authError,
     // user
   } = useSelector(({ auth, user }: { auth: any; user: any }) => ({
+    loading: true,
     form: auth.login,
     auth: auth.auth,
     authError: auth.authError,
@@ -22,6 +27,7 @@ const LoginContainer: React.FC<Props> = ({ history }) => {
   }), shallowEqual);
 
   useEffect(() => {
+    localStorage.clear();
     dispatch(initializeForm("login"));
   }, [dispatch]);
 
@@ -31,14 +37,33 @@ const LoginContainer: React.FC<Props> = ({ history }) => {
 
     // 로그인 성공
     if (auth) {
-      // localStorage.setItem("token", auth.access_token);
+      localStorage.setItem("token", auth.access_token);
+      console.log(localStorage.getItem("token"));
+
+
+
+      axios.defaults.withCredentials = true;
+      axios.defaults.headers.common['Authorization'] = `Bearer ${auth.access_token}`;
+      history.push("/");
+      
+      // setInterval(()=>{
+      //   console.log('hi')
+      //   const token = localStorage.getItem("token");
+      //   if(token){
+      //     console.log(token)
+      //     // history.push("/");
+      //   }
+      // }, 1000);
+      
+
+      
       // console.log(auth.access_token)
       // console.log(localStorage.getItem("token"));
-      history.push("/");
+      
     }
 
     if(authError){
-      
+      setError(authError);
     }
   },[auth, authError]);
 
@@ -60,6 +85,7 @@ const LoginContainer: React.FC<Props> = ({ history }) => {
   
   return (
     <LoginForm
+      loading={loading}
       form={form}
       handleChange={handleChange}
       handleSubmit={handleSubmit}

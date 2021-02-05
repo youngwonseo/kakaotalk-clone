@@ -15,7 +15,7 @@ const ProfileImg = styled.img`
 `;
 
 const ProfileInfo = styled.div`
-  padding: 5px 2px;
+  padding: 0.5rem 0;
 `;
 
 const ProfileName = styled.div`
@@ -24,7 +24,7 @@ const ProfileName = styled.div`
 `;
 
 const ProfilelastMessage = styled.div`
-
+  color: #495057;
 `;
 
 interface Props {

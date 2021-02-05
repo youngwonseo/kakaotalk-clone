@@ -6,13 +6,14 @@ import { LoginDto, RegisterDto } from '../dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../schemas/user.schema';
-import { Model } from 'mongoose';
+import Mongoose, { Model } from 'mongoose';
 import { AddFollowingDto } from '../dto/following.dto';
 import { FollowingDocument, Following } from '../schemas/following.schema';
 import { UpdateProfileDto } from '../dto/profile.dto';
 import { Chat, ChatDocument } from '../schemas/chat.schema';
 
 
+const ObjectId = Mongoose.Types.ObjectId;
 
 @Injectable()
 export class UserService {
@@ -26,18 +27,105 @@ export class UserService {
     return this.userModel.find();
   }
 
-  public findOne(id: string) {
-    return this.userModel
-      .findOne({ _id: id })
-      .populate({ path: "following", populate: { path: "user" } })
-      .populate({
-        path: "chats",
-        populate: [
-          { path: "messages", populate: { path: "user" } },
-          { path: "users" },
+  public async findOne(ida: string) {
+    console.log(Chat.name);
+    
+
+    const result = await this.userModel
+      .aggregate()
+      .match({ _id: new ObjectId(ida) })
+      // .unwind("following")
+      .lookup({
+        from: "followings",
+        let: { following: "$following" },
+        pipeline: [
+          { $match: { $expr: { $in: ["$_id", "$$following"] } } },
+          {
+            $lookup: {
+              from: "users",
+              let: { user: "$user" },
+              pipeline: [
+                { $match: { $expr: { $eq: ["$_id", "$$user"] } } },
+              ],
+              as: "user"
+            },
+          },
+          { $unwind: "$user" }         
         ],
+        // localField: "following",
+        // foreignField: "_id",
+        as: "following",
+      })
+      .lookup({
+        from: "chats",
+        let: {chats: "$chats"},
+        pipeline: [
+          { $match: { $expr: { $in: ["$_id", "$$chats"] } } },
+          {
+            $lookup: {
+              from: "messages",
+              let: { messages: "$messages" },
+              pipeline: [
+                { $addFields: {
+                  isMine: { 
+                    $cond: { 
+                      if: { 
+                          $eq: [new ObjectId(ida), "$user"] 
+                      }, 
+                      then: true, 
+                      else: false 
+                  }
+                  }
+                }},
+                { $match: { $expr: { $in: ["$_id", "$$messages"] } } },
+                {
+                  $lookup: {
+                    from: "users",
+                    let: { user: "$user" },
+                    pipeline: [
+                      { $match: { $expr: { $eq: ["$_id", "$$user"] } } },
+                    ],
+                    as: "user"
+                  },
+                },
+                { $unwind: "$user" }
+              ],
+              as: "messages"
+            },
+          },
+          {
+            $lookup: {
+              from: "users",
+              let: { users: "$users" },
+              pipeline: [
+                { $match: { $expr: { $in: ["$_id", "$$users"] } } },
+              ],
+              as: "users"
+            },
+          }
+        ],
+        as: "chats"
       })
       .exec();
+
+
+    
+      
+    // const result = this.userModel
+    //   .findOne({ _id: id })
+    //   .populate({ path: "following", populate: { path: "user" } })
+    //   .populate({
+    //     path: "chats",
+    //     populate: [
+    //       { path: "messages", populate: { path: "user" } },
+    //       { path: "users" },
+    //     ],
+    //   })
+    //   .exec();
+
+    
+    
+    return result[0];
   }
 
   public findUserByEmail(email: string) {

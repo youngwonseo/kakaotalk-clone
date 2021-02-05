@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Input from '../common/Input';
 
-const MyProfileWrapper = styled.div`
+const ProfileViewWrapper = styled.div`
   width:100%;
   height:100%;
   display: flex;
@@ -68,7 +68,7 @@ const ProfileView: React.FC<Props> = ({
   handleToChat,
 }) => {
   return (
-    <MyProfileWrapper>      
+    <ProfileViewWrapper>      
       {isEditMode && (
         
         <Form onSubmit={!isMyProfile ? handleFollowUpdateSubmit: handleProfileUpdateSubmit }>
@@ -94,14 +94,18 @@ const ProfileView: React.FC<Props> = ({
 
       {!isEditMode && (
         <>
-          <CompleteButton onClick={handleChangeMode}>편집</CompleteButton>
+          
           <ProfileImg src={profile.profileImg} />
           <UsernameText>{profile.username}</UsernameText>
           <StateMessageText>{profile.stateMessage}</StateMessageText>
-          {!isMyProfile && <ChatButton onClick={handleToChat}>채팅</ChatButton>}
+          {/* {!isMyProfile && <ChatButton onClick={handleToChat}>채팅</ChatButton>} */}
+
+          <div>
+            <a onClick={handleChangeMode}>편집</a>
+          </div>
         </>
       )}
-    </MyProfileWrapper>
+    </ProfileViewWrapper>
   );
 };
 

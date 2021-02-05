@@ -1,9 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
-const MessageWrapper = styled.div`
+
+interface MessageWrapperProps {
+  isMyMessage? : boolean;
+}
+
+const MessageWrapper = styled.div<MessageWrapperProps>`
   /* background: #333333; */
   display: flex;
+
+  ${props=>props.isMyMessage && css`
+    flex-direction: row-reverse;
+  `}
   /* flex-direction: row-reverse; */
   /* border: 1px solid black; */
   border-radius: 10px;
@@ -27,10 +36,17 @@ const ProfileImg = styled.img`
   width: 64px;
 `;
 
-const MessageInfo = styled.div`
+interface MessageInfoProps {
+  isMyMessage? : boolean;
+}
+
+const MessageInfo = styled.div<MessageInfoProps>`
   display: flex;
   flex-direction: column;
-  /* align-items: flex-end; * 내가작성한 메세지 flex-end */
+  ${props=>props.isMyMessage && css`
+    align-items: flex-end;
+  `}
+  
 
 `;
 
@@ -43,15 +59,16 @@ const MessageContent = styled.div`
 
 // 내가 작성한 메세지? (boolean)
 // 메세지
-interface Props {message: any;};
+interface Props {
+  message: any;
+};
 
 
 const Message: React.FC<Props> = ({ message }) => {
   return (
-    <MessageWrapper>
+    <MessageWrapper isMyMessage={message.isMine}>
       <ProfileImg src="/profile-default.png" />
-
-      <MessageInfo>
+      <MessageInfo isMyMessage={message.isMine}>
         <ProfileName>{message.user.username}</ProfileName>
         <MessageContent>{message.contents}</MessageContent>
       </MessageInfo>

@@ -9,8 +9,8 @@ import { ModalContext } from "../../lib/createModalProvider";
 const ProfileListWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
   height: 100%;
+  padding: 0.5rem;
 `;
 
 const ToolBar = styled.div`
@@ -66,10 +66,11 @@ const ProfileList: React.FC<Props> = ({
         />
       )}
       <ToolBar>
-        <div>친구</div>
         <div>
-          <a onClick={handleSearchOpen}>검색</a>
+          친구
+          {profile && profile.following.length}
         </div>
+        
       </ToolBar>
       {/* 친구 프로필 */}
       {profile && profile.following.length === 0 && (

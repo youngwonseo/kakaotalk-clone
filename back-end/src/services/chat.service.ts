@@ -18,9 +18,9 @@ export class ChatService {
     @InjectModel(Chat.name) private chatModel: Model<ChatDocument>
   ) {}
 
-  // public constructor(private chatDao: ChatDao, private userDao: UserDao){}
-
   public async findAll(id: string) {
+
+    console.log('chat!!');
     const user = await this.userModel
       .findOne({ _id: id })
       .populate({
@@ -28,6 +28,8 @@ export class ChatService {
         // populate: [{ path: "messages" }, { path: "users" }],
       })
       .exec();
+
+
     // const chats = await this.chatModel.find({
     //   users: {$in : id}
     // }).exec();

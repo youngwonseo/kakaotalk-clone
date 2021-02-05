@@ -94,7 +94,7 @@ export class ChatGateway
         // console.log(user.chats);
         
       }
-    }    
+    }
 
     // 해당 채팅방에 메시지 입력
     const chat = await this.chatService.addMessage(data.chat, message);

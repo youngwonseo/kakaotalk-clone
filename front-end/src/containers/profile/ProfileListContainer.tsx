@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadProfile, searchProfileById, setUpdateProfile } from '../../modules/profile';
 import { RootState } from '../../modules';
 import { PROFILE_SEARCH_MODAL, PROFILE_MODAL } from '../../lib/ModalContent';
-import axios from 'axios';
+import { loadToken } from '../../lib/clientToken';
 
 
 interface Props {};
@@ -29,10 +29,11 @@ const ProfileListContainer : React.FC<Props> = () => {
   );
 
   useEffect(()=>{
+    
     // 내정보
     dispatch(loadProfile.request());
-    console.log(axios.defaults.headers);
     // 친구정보
+    
     // dispatch(loadFriends.request());
     
   },[dispatch]);

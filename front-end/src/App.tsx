@@ -14,7 +14,7 @@ import io from "socket.io-client";
 
 import ModalContent from '../src/lib/ModalContent';
 import palette from './lib/styles/palette';
-import axios from 'axios';
+import { loadToken } from './lib/clientToken';
 
 
 const AppWrapper = styled.div`
@@ -32,6 +32,8 @@ const Intro = styled.div`
 
 const Main = styled.div`
   width: 400px;
+  border: 1px solid black;
+  
   position: relative;
   display: flex;
   justify-content: center;
@@ -47,10 +49,10 @@ interface Props {
 
 const App: React.FC<Props> = () => {
 
-  
+  //?
+  loadToken();
   useEffect(()=>{
-    axios.defaults.withCredentials = true;
-    // const socket = io("/");
+    //xios.defaults.withCredentials = true; const socket = io("/");
     // socket.on('connect_error', (error: any)=> {
     //   console.log("connect_error: ", error);
     // });

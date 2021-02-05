@@ -3,6 +3,8 @@ import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { WsAdapter } from "@nestjs/platform-ws";
 import { SocketIoAdapter } from "./lib/socket.io-adapter";
+// import cookieParser from 'cookie-parser';
+
 // import helmet = require("helmet");
 
 async function bootstrap() {
@@ -10,7 +12,9 @@ async function bootstrap() {
   app.setGlobalPrefix("/api");
   // const app = await NestFactory.create(ApplicationModule);
   // app.useWebSocketAdapter(new WsAdapter(app));
+  
   app.useWebSocketAdapter(new SocketIoAdapter(app));
+  // app.use(cookieParser());
   // app.use(helmet());
 
   process.on("SIGTERM", function() {

@@ -1,11 +1,11 @@
-import client from "./client";
+import axios from 'axios';
 
 
 
-export const loadChats = () => client.get('/api/chats');
+export const loadChats = () => axios.get('/api/chats');
 
 export const searchChatByUser = (id: string) =>
-  client.get(`/api/chats/userid/${id}`);
+axios.get(`/api/chats/userid/${id}`);
 
 // export const registerChat = ({ users, message }: { users: [], message: string }) =>
 //   client.post("/api/chats", { users, message });
