@@ -54,11 +54,10 @@ const ProfileViewContainer: React.FC<Props> = ({ history }) => {
     dispatch(changeField({ form: 'search', key: name, value }));
   }
 
+
   const handleChangeMode = () => {
     setIsEditMode(!isEditMode);
   }
-
-
 
 
   // 내프로필 수정
@@ -76,6 +75,7 @@ const ProfileViewContainer: React.FC<Props> = ({ history }) => {
     dispatch(updateFollowing.request({ id, username }));
   }
 
+
   const handleToChat = () => {
 
     // 잘못됨
@@ -85,6 +85,11 @@ const ProfileViewContainer: React.FC<Props> = ({ history }) => {
     // following 으로 chat 검색후 ?
     history.push("/chat");
     openModal(CHAT_MODAL);
+  }
+
+
+  const handleCloseModal = () => {
+    closeModal();
   }
 
 
@@ -100,6 +105,7 @@ const ProfileViewContainer: React.FC<Props> = ({ history }) => {
         handleProfileUpdateSubmit={handleProfileUpdateSubmit}
         handleFollowUpdateSubmit={handleFollowUpdateSubmit}
         handleToChat={handleToChat}
+        handleCloseModal={handleCloseModal}
       />
     </ProfileModalTemplate>
   );

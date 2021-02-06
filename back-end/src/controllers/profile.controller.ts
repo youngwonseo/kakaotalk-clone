@@ -5,7 +5,7 @@ import { UserService } from '../services/user.service';
 import { FollowingService } from '../services/following.service';
 import { AddFollowingDto, UpdateFollowingDto } from '../dto/following.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UpdateProfileDto } from '../dto/profile.dto';
+import { UpdateProfileDto, GetProfileDto } from '../dto/profile.dto';
 
 
 
@@ -17,10 +17,11 @@ export class ProfileController {
     private readonly followingService: FollowingService
   ) {}
 
+
   // 내프로필, 친구목록, 채팅목록 포함
   @UseGuards(JwtAuthGuard)
   @Get("/")
-  public async getProfile(@Req() req: any) {
+  public async getProfile(@Req() req: any): Promise<GetProfileDto> {
     const profile = await this.userService.findOne(req.user.id);
     return profile;
   }

@@ -31,18 +31,15 @@ const Overlay = styled.div`
   background-color: white;
 `;
 
-const Wrapper = styled.div`
-  vertical-align: middle;
-  width: 100%;
-    height: 100%;
-`;
 
 const Container = styled.div`
   /* margin: 40px auto 0px; */
   /* padding: */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   background-color: white;
-  width: 100%;
-    height: 100%;
+
   /* width: 400px; */
 `;
 
@@ -52,15 +49,10 @@ const Modal : React.FC = ({ children }) => {
     
       
 
-      <Overlay>
-      <Wrapper>
-        <Container>
-
-          {children}
-        
-          {/* <a onClick={onCloseModal}>닫기</a> */}
-        </Container>
-      </Wrapper>
+    <Overlay>     
+      <Container>
+        {children}
+      </Container>
     </Overlay>
    
   )

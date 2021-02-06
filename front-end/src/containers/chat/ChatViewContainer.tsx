@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import ChatModalTemplate from '../../components/template/ChatModalTemplate';
@@ -6,6 +6,7 @@ import ChatView from '../../components/chat/ChatView';
 import { RootState } from '../../modules';
 import { changeField, sendMessage } from '../../modules/chat';
 import { loadProfile } from '../../modules/profile';
+import { ModalContext } from '../../lib/createModalProvider';
 
 
 // 모달에서 열림
@@ -14,7 +15,7 @@ interface Props {};
 
 
 const ChatViewContainer : React.FC<Props> = () => {
-
+  const { openModal, closeModal } = useContext(ModalContext);
   const dispatch = useDispatch();
   // 해당 채팅방 정보 가져오기
   // 서비스 워커
@@ -100,13 +101,19 @@ const ChatViewContainer : React.FC<Props> = () => {
 
   }
 
+  const handleCloseModal = () => {
+    closeModal();
+  }
+
   return (
     <ChatModalTemplate>
+      
       <ChatView
         message={message}
         messages={chats && chats[chatIdx] && chats[chatIdx].messages}
         handleChangeMessage={handleChangeMessage}
         handleSendMessage={handleSendMessage}
+        handleCloseModal={handleCloseModal}
       />
     </ChatModalTemplate>
   );

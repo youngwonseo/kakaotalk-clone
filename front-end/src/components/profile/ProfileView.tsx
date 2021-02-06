@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Input from '../common/Input';
+import { IoPencil, IoChatbubbleSharp, IoCloseOutline } from 'react-icons/io5';
 
 const ProfileViewWrapper = styled.div`
-  width:100%;
   height:100%;
   display: flex;
   flex-direction: column;
@@ -25,7 +25,20 @@ const ProfileImg = styled.img`
   width: 64px;
 `;
 
-const CompleteButton = styled.button`
+const CloseButton = styled.a`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+`;
+
+const CancelButton = styled.a`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+`;
+
+
+const CompleteButton = styled.a`
   position: absolute;
   top: 10px;
   right: 10px;
@@ -46,6 +59,19 @@ const UsernameText = styled.div`
 const StateMessageText = styled.div`
 `;
 
+const BottomButtonGroup = styled.div`
+  position: absolute;
+  bottom: 0px;
+  display: flex;
+`;
+
+const ButtomButton = styled.a`
+  /* font-size: 3rem; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0rem 1rem;
+`;
 
 interface Props{
   profile: any;
@@ -53,6 +79,7 @@ interface Props{
   isMyProfile: boolean;
   handleChange: any;
   handleChangeMode: any;
+  handleCloseModal: any;
   handleProfileUpdateSubmit: any;
   handleFollowUpdateSubmit: any;
   handleToChat: any;
@@ -63,17 +90,34 @@ const ProfileView: React.FC<Props> = ({
   isMyProfile,
   handleChange,
   handleChangeMode,
+  handleCloseModal,
   handleProfileUpdateSubmit,
   handleFollowUpdateSubmit,
   handleToChat,
 }) => {
   return (
-    <ProfileViewWrapper>      
+    <ProfileViewWrapper>
       {isEditMode && (
-        
-        <Form onSubmit={!isMyProfile ? handleFollowUpdateSubmit: handleProfileUpdateSubmit }>
-          <CompleteButton onClick={!isMyProfile ? handleFollowUpdateSubmit : handleProfileUpdateSubmit }>완료</CompleteButton>
-          <ProfileImg src={profile.profileImg} />
+        <Form
+          onSubmit={
+            !isMyProfile ? handleFollowUpdateSubmit : handleProfileUpdateSubmit
+          }
+        >
+          <CancelButton onClick={handleChangeMode}>취소</CancelButton>
+          <CompleteButton
+            onClick={
+              !isMyProfile
+                ? handleFollowUpdateSubmit
+                : handleProfileUpdateSubmit
+            }
+          >
+            완료
+          </CompleteButton>
+          <ProfileImg
+            src={
+              profile.profileImg ? profile.profileImg : "/profile-default.png"
+            }
+          />
           <Input
             name="username"
             type="text"
@@ -81,29 +125,58 @@ const ProfileView: React.FC<Props> = ({
             onChange={handleChange}
           />
 
-          {isMyProfile && 
+          {isMyProfile && (
             <Input
               name="stateMessage"
               type="text"
               value={profile.stateMessage}
               onChange={handleChange}
             />
-          }
+          )}
         </Form>
       )}
 
       {!isEditMode && (
         <>
-          
-          <ProfileImg src={profile.profileImg} />
+          <CloseButton onClick={handleCloseModal}>
+            <IoCloseOutline size="1.5rem" />
+          </CloseButton>
+          <ProfileImg
+            src={
+              profile.profileImg ? profile.profileImg : "/profile-default.png"
+            }
+          />
           <UsernameText>{profile.username}</UsernameText>
           <StateMessageText>{profile.stateMessage}</StateMessageText>
           {/* {!isMyProfile && <ChatButton onClick={handleToChat}>채팅</ChatButton>} */}
-
-          <div>
-            <a onClick={handleChangeMode}>편집</a>
-          </div>
         </>
+      )}
+
+      {!isEditMode && isMyProfile && (
+        <BottomButtonGroup>
+          <ButtomButton onClick={handleChangeMode}>
+            <IoPencil size="2.5rem" />
+            프로필 편집
+          </ButtomButton>
+          <ButtomButton>
+            <IoChatbubbleSharp size="2.5rem" />
+            나와의 채팅
+          </ButtomButton>
+        </BottomButtonGroup>
+      )}
+
+
+      {!isEditMode && !isMyProfile && (
+        <BottomButtonGroup>
+          <ButtomButton onClick={handleToChat}>
+            <IoChatbubbleSharp size="2.5rem" />
+            1:1 채팅
+          </ButtomButton>
+          <ButtomButton onClick={handleChangeMode}>
+            <IoPencil size="2.5rem" />
+            친구 편집
+          </ButtomButton>
+        </BottomButtonGroup>
       )}
     </ProfileViewWrapper>
   );

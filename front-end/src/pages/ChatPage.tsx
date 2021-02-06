@@ -10,7 +10,7 @@ const ChatPage : React.FC<Props> = () => {
 
   
   return (
-    <UserTemplate title={"채팅"}>
+    <UserTemplate>
       <ChatListContainer />
     </UserTemplate>
   );

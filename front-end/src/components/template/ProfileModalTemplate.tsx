@@ -6,9 +6,14 @@ import { IoCloseOutline } from 'react-icons/io5';
 
 const ModalWrapper = styled.div`
   display: flex;
-  width: 100%;
+  flex-direction: column;
   height: 100%;
+  padding: 0.5rem;
 `;
+
+const ModalHeader = styled.div`
+`;
+
 
 const CloseButtom = styled.button`
   position: absolute;
@@ -23,7 +28,6 @@ const ProfileModalTemplate: React.FC<Props> = ({ children }) => {
 
   return (
     <ModalWrapper>
-      <a onClick={closeModal}><IoCloseOutline/></a>
       {children}
     </ModalWrapper>
   );

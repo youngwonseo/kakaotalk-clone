@@ -4,9 +4,9 @@ import { ModalContext } from '../../lib/createModalProvider';
 
 
 const ModalWrapper = styled.div`
-  display: flex;
-  width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const CloseButtom = styled.a`
@@ -22,7 +22,6 @@ const ChatModalTemplate: React.FC<Props> = ({ children }) => {
 
   return (
     <ModalWrapper>
-      <CloseButtom onClick={closeModal}>닫기</CloseButtom>
       {children}
     </ModalWrapper>
   );

@@ -54,7 +54,7 @@ const ProfileListContainer : React.FC<Props> = () => {
     dispatch(setUpdateProfile({
       id: profile._id,
       username: profile.username,
-      profileImg: profile.stateMessage ||'',
+      profileImg: profile.profileImg ||'',
       stateMessage: profile.stateMessage || '',
     }));
 
@@ -74,7 +74,7 @@ const ProfileListContainer : React.FC<Props> = () => {
     dispatch(setUpdateProfile({
       id: profile.following[idx]._id,
       username: profile.following[idx].username,
-      profileImg: profile.following[idx].user.username || '',
+      profileImg: profile.following[idx].user.profileImg || '',
       stateMessage: profile.following[idx].user.stateMessage || '',
       userid: profile.following[idx].user._id
     }));

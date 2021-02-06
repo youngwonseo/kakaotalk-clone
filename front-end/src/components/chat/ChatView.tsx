@@ -9,10 +9,9 @@ import ChatHeader from './ChatHeader';
 
 
 const ChatViewWrapper = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
 `;
 
 interface Props {
@@ -20,6 +19,7 @@ interface Props {
   messages: any;
   handleChangeMessage: any;
   handleSendMessage: any;  
+  handleCloseModal: any;
 };
 
 
@@ -28,10 +28,11 @@ const ChatView: React.FC<Props> = ({
   messages,
   handleChangeMessage,
   handleSendMessage,
+  handleCloseModal,
 }) => {
   return (
     <ChatViewWrapper>
-      <ChatHeader />
+      <ChatHeader title="서영원" handleCloseModal={handleCloseModal} />
       <MessageList messages={messages} />
       <MessageTool
         message={message}

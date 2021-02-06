@@ -31,12 +31,10 @@ const Contents = styled.div`
 `;
 
 
-interface Props {
-  title: string;
-};
+interface Props {};
 
 
-const UserTemplate : React.FC<Props> = ({ title, children }) => {
+const UserTemplate : React.FC<Props> = ({ children }) => {
   return (
     <UserTemplateWrapper>
       

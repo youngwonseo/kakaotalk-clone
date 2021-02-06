@@ -11,7 +11,7 @@ interface Props {
 
 const ProfilePage : React.FC<Props> = ({ match }) => {
   return (
-    <UserTemplate title={"친구"}>
+    <UserTemplate>
       <ProfileHeaderContainer />
       <ProfileListContainer />
     </UserTemplate>
