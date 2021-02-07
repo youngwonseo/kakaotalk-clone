@@ -55,9 +55,9 @@ export class AuthController {
 
 
 
-  @Get("/profiles")
-  public async profiles(){
-    return await this.userService.findAll();
-  }
+  // @Get("/profiles")
+  // public async profiles(){
+  //   return await this.userService.findAll();
+  // }
 
 }

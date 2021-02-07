@@ -18,7 +18,7 @@ const ProfileHeaderContainer: React.FC<Props> = () => {
   
   return (
     <Header title="친구">
-      <a onClick={handleSearchOpen}><IoSearchSharp/></a>
+      <a onClick={handleSearchOpen}><IoSearchSharp /></a>
       <a onClick={handleSearchOpen}><IoPersonAddOutline/></a>
     </Header>
   );

@@ -12,6 +12,7 @@ import createAsyncSaga, {
 import * as authAPI from '../lib/api/auth';
 // import * as friendAPI from '../lib/api/friend';
 import * as profileAPI from '../lib/api/profile';
+import * as followingAPI from '../lib/api/following';
 import { AxiosError } from 'axios';
 
 
@@ -60,6 +61,18 @@ export const updateFollowing = createAsyncAction(
   UPDATE_FOLLOWING_FAILURE
 )<any, any, AxiosError>();
 
+
+const [
+  LOAD_FOLLOWING,
+  LOAD_FOLLOWING_SUCCESS,
+  LOAD_FOLLOWING_FAILURE
+] = createActionTypes('profile/LOAD_FOLLOWING');
+
+export const loadFollowing = createAsyncAction(
+  LOAD_FOLLOWING,
+  LOAD_FOLLOWING_SUCCESS,
+  LOAD_FOLLOWING_FAILURE
+)<void, any, AxiosError>();
 
 const [
   REGISTER_FOLLOWING, 
@@ -152,16 +165,18 @@ export const setUpdateProfile = createAction(
 
 const loadProfileSaga = createAsyncSaga(LOAD_PROFILE, profileAPI.loadProfile);
 const updateProfileSaga = createAsyncSaga(UPDATE_PROFILE, profileAPI.updateProfile)
-const registerFollowingSaga = createAsyncSaga(REGISTER_FOLLOWING, profileAPI.registerFollowing);
-const updateFollowingSaga = createAsyncSaga(UPDATE_FOLLOWING, profileAPI.updateFollowing);
-const deleteFollowingSaga = createAsyncSaga(REMOVE_FOLLOWING, profileAPI.deleteFollowing);
 const searchProfileByEmailSaga = createAsyncSaga(SEARCH_PROFILE_BY_EMAIL, profileAPI.searchByEmail);
 const searchProfileByIdSaga = createAsyncSaga(SEARCH_PROFILE_BY_ID, profileAPI.searchById);
 
+const loadFollowingSaga = createAsyncSaga(LOAD_FOLLOWING, followingAPI.loadProfile);
+const registerFollowingSaga = createAsyncSaga(REGISTER_FOLLOWING, followingAPI.registerFollowing);
+const updateFollowingSaga = createAsyncSaga(UPDATE_FOLLOWING, followingAPI.updateFollowing);
+const deleteFollowingSaga = createAsyncSaga(REMOVE_FOLLOWING, followingAPI.deleteFollowing);
 
 export function* profileSaga() {
   yield takeLatest(LOAD_PROFILE, loadProfileSaga);
   yield takeLatest(UPDATE_PROFILE, updateProfileSaga);
+  yield takeLatest(LOAD_FOLLOWING, loadFollowingSaga);
   yield takeLatest(REGISTER_FOLLOWING, registerFollowingSaga);
   yield takeLatest(UPDATE_FOLLOWING, updateFollowingSaga);
   yield takeLatest(REMOVE_FOLLOWING, deleteFollowingSaga);
@@ -173,11 +188,7 @@ export function* profileSaga() {
 interface ProfileState {
   [key:string] : any;
   profile: any;
-  // updateProfile: {
-  //   username: any;
-  //   stateMessage: any;
-  //   id: any;
-  // }
+  following: any;
   search: {
     [key:string] : any;
     email: any;
@@ -194,6 +205,7 @@ interface ProfileState {
 
 const initialState: ProfileState = {
   profile: null,
+  following: [],
   search: {
     email: "",
     username: "",
@@ -248,6 +260,10 @@ const profile = createReducer<ProfileState, any>(initialState, {
       stateMessage: profile.stateMessage,
     },
     done: true,
+  }),
+  [LOAD_FOLLOWING_SUCCESS]: (state, { payload: following }) => ({
+    ...state,
+    following,
   }),
   [REGISTER_FOLLOWING_SUCCESS]: (state, { payload: following }) => ({
     ...state,

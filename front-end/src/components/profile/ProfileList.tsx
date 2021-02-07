@@ -29,7 +29,7 @@ const NoData = styled.div`
 
 interface Props {
   profile: any;
-  // handleFollowingSelect: any;
+  following: any;
   handleSearchOpen: any;
   handleProfileOpen: any;
   handleFollowingOpen: any;
@@ -38,6 +38,7 @@ interface Props {
 
 const ProfileList: React.FC<Props> = ({
   profile,
+  following,
   handleSearchOpen,
   handleProfileOpen,
   handleFollowingOpen,
@@ -68,16 +69,16 @@ const ProfileList: React.FC<Props> = ({
       <ToolBar>
         <div>
           친구
-          {profile && profile.following.length}
+          {following && following.length}
         </div>
         
       </ToolBar>
       {/* 친구 프로필 */}
-      {profile && profile.following.length === 0 && (
+      {following && following.length === 0 && (
         <NoData>등록된 친구가 없습니다.</NoData>
       )}
-      {profile &&
-        profile.following.map((following: any) => (
+      {following &&
+        following.map((following: any) => (
           <ProfileItem
             key={following._id}
             id={following._id}

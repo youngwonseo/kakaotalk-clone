@@ -14,6 +14,7 @@ import * as chatAPI from '../lib/api/chat';
 import { AxiosError } from 'axios';
 import { createSocketChannel } from '../lib/createSocketChannel';
 import io from "socket.io-client";
+import profile from './profile';
 
 
 const CHANGE_FIELD = 'chat/CHANGE_FIELD';
@@ -168,8 +169,9 @@ function* listenData() {
       chatid: !isNew ? chat._id: false,
       chat: isNew ? chat: false,
        */
+      // 새로운 채팅
       const { chat, chatid, message, isNew } = yield take(socketChannel);
-      //아이디 검사
+      
 
 
       // 새로 생성된 채팅방이면
@@ -183,7 +185,7 @@ function* listenData() {
             chat: chatid,
             message: {
               ...message,
-              isMine: message.user._id === localStorage.getItem("id"),
+              // isMine: message.user._id === profile._id,
             },
           })
         );

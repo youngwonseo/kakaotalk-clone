@@ -19,24 +19,24 @@ export class ChatController {
     private readonly messageService: MessageService
   ) {}
 
+
+
   @UseGuards(JwtAuthGuard)
   @Get("/")
-  public async getList(@Req() req: any) {
-    const user = await this.userService.findOne(req.user.id);
-    
-    console.log(user);
-
-    return user.chats;
-
+  public async getChat(@Req() req: any): Promise<any> {
+    return await this.chatService.findAllByUser(req.user.id);
   }
 
   
-  // @UseGuards(JwtAuthGuard)
-  // @Get("/")
-  // public async getChat(@Param("id") id: string) {
-  //   // const user = await this.userService.findUser(id);
-  //   // return user;
-  // }
+
+  // 채팅방 나오기
+  // 남아 있는 사용자가 없으면 삭제
+  @UseGuards(JwtAuthGuard)
+  @Put("/:id")
+  public async putChat(@Param("id") id: string) {
+
+  }
+  
   
   
   @UseGuards(JwtAuthGuard)
@@ -47,7 +47,7 @@ export class ChatController {
   ) {
 
     // const user = await this.userService.findOne(req.user.id);
-    const chats = await this.chatService.findAll(req.user.id);
+    const chats = await this.chatService.findAllByUser(req.user.id);
     //상대방아이디 포함여부로 찾기
 
 
@@ -72,12 +72,6 @@ export class ChatController {
   }
 
 
-
-
-  // 채팅방 삭제 (방에서 나오기)
-  @UseGuards(JwtAuthGuard)
-  @Delete("/:id")
-  public async deleteUser(@Param("id") id: string) {}
 
 
   

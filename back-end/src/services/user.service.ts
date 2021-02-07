@@ -20,20 +20,21 @@ export class UserService {
   public constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Following.name)
-    private followingModel: Model<FollowingDocument>
+    private followingModel: Model<FollowingDocument>,
+    @InjectModel(Chat.name) private chatModel: Model<ChatDocument>,
   ) {}
 
-  public findAll(){
-    return this.userModel.find();
+
+  
+  public async findOne(id: string){
+    return await this.userModel.findById(id);
   }
 
-  public async findOne(ida: string) {
-    console.log(Chat.name);
-    
 
+  public async findOneWithFollowingAndChat(id: string) {
     const result = await this.userModel
       .aggregate()
-      .match({ _id: new ObjectId(ida) })
+      .match({ _id: new ObjectId(id) })
       // .unwind("following")
       .lookup({
         from: "followings",
@@ -70,7 +71,7 @@ export class UserService {
                   isMine: { 
                     $cond: { 
                       if: { 
-                          $eq: [new ObjectId(ida), "$user"] 
+                          $eq: [new ObjectId(id), "$user"] 
                       }, 
                       then: true, 
                       else: false 
@@ -107,30 +108,15 @@ export class UserService {
         as: "chats"
       })
       .exec();
-
-
-    
-      
-    // const result = this.userModel
-    //   .findOne({ _id: id })
-    //   .populate({ path: "following", populate: { path: "user" } })
-    //   .populate({
-    //     path: "chats",
-    //     populate: [
-    //       { path: "messages", populate: { path: "user" } },
-    //       { path: "users" },
-    //     ],
-    //   })
-    //   .exec();
-
-    
     
     return result[0];
   }
 
+
   public findUserByEmail(email: string) {
     return this.userModel.findOne({ email: email }).exec();
   }
+
 
   public updateOne(id: string, updateProfileDto: UpdateProfileDto){
     return this.userModel
@@ -147,15 +133,19 @@ export class UserService {
       .exec();
   }
 
-  public async addFollowing(id: string, addFollowingDto: AddFollowingDto) {
-    const following = await this.followingModel.create(addFollowingDto);
-    // const user = await this.userModel.findOne({_id: id}).exec();
+  
+  
+  
 
-    return this.userModel
+  // 채팅방 참여
+  public async joinChat(id: any, chatId: any){
+
+    // 채팅방에 사용자 추가
+    await this.chatModel
       .findByIdAndUpdate(
         id,
         {
-          $push: { following: following._id },
+          $push: { users: id },
           //$push: { friends: addFriendDto.friend },
         },
         {
@@ -163,14 +153,13 @@ export class UserService {
         }
       )
       .exec();
-  }
 
-  public async addChat(id: string, chat: ChatDocument) {
-    return await this.userModel
+    // 사용자의 채팅방목록에 채팅방 추가
+    await this.userModel
       .findByIdAndUpdate(
         id,
         {
-          $push: { chats: chat._id },
+          $push: { chats: chatId },
           //$push: { friends: addFriendDto.friend },
         },
         {
@@ -178,7 +167,12 @@ export class UserService {
         }
       )
       .exec();
+
+
+      
   }
+
+
   // public async findUsers(): Promise<[User]> {
   //   return await this.userDao.getList(3,1);
   // }

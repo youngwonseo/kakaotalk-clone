@@ -5,7 +5,7 @@ import ProfileList from '../../components/profile/ProfileList';
 import ProfileItem from '../../components/profile/ProfileItem';
 import { ModalContext } from "../../lib/createModalProvider";
 import { useDispatch, useSelector } from 'react-redux';
-import { loadProfile, searchProfileById, setUpdateProfile } from '../../modules/profile';
+import { loadProfile, searchProfileById, setUpdateProfile, loadFollowing } from '../../modules/profile';
 import { RootState } from '../../modules';
 import { PROFILE_SEARCH_MODAL, PROFILE_MODAL } from '../../lib/ModalContent';
 import { loadToken } from '../../lib/clientToken';
@@ -20,10 +20,12 @@ const ProfileListContainer : React.FC<Props> = () => {
 
   const {
     profile,
+    following,
     error,
   } = useSelector(
     (state: RootState) => ({
       profile: state.profile.profile,
+      following: state.profile.following,
       error: state.profile.error,
     })
   );
@@ -32,6 +34,7 @@ const ProfileListContainer : React.FC<Props> = () => {
     
     // 내정보
     dispatch(loadProfile.request());
+    dispatch(loadFollowing.request());
     // 친구정보
     
     // dispatch(loadFriends.request());
@@ -62,7 +65,7 @@ const ProfileListContainer : React.FC<Props> = () => {
     // 해당 id로 조회?
     // 목적
     // dispatch(searchProfile.request(id));   
-    openModal(PROFILE_MODAL);   
+    openModal(PROFILE_MODAL);
   }
 
 
@@ -94,6 +97,7 @@ const ProfileListContainer : React.FC<Props> = () => {
   return (
     <ProfileList
       profile={profile}
+      following={following}
       handleSearchOpen={handleSearchOpen}
       handleProfileOpen={handleProfileOpen}
       handleFollowingOpen={handleFollowingOpen}

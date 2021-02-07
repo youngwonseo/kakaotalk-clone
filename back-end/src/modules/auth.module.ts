@@ -10,6 +10,7 @@ import { User, UserSchema } from '../schemas/user.schema';
 import { UserService } from '../services/user.service';
 import { FollowingSchema, Following } from '../schemas/following.schema';
 import { ProfileModule } from './profile.module';
+import { ChatSchema, Chat } from '../schemas/chat.schema';
 
 
 @Module({
@@ -21,7 +22,8 @@ import { ProfileModule } from './profile.module';
       signOptions: { expiresIn: "9900s" },
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    MongooseModule.forFeature([{ name: Following.name, schema: FollowingSchema }])
+    MongooseModule.forFeature([{ name: Following.name, schema: FollowingSchema }]),
+    MongooseModule.forFeature([{ name: Chat.name, schema: ChatSchema }]),
   ],
   controllers: [AuthController],
   providers: [AuthService, UserService, JwtStrategy],

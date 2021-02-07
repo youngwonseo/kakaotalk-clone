@@ -8,6 +8,7 @@ import { loadChats, setChatId, searchChatByUser } from '../../modules/chat';
 import { ModalContext } from '../../lib/createModalProvider';
 
 import { CHAT_MODAL } from "../../lib/ModalContent";
+import { loadProfile } from '../../modules/profile';
 
 interface Props {};
 
@@ -17,7 +18,6 @@ const ChatListContainer : React.FC<Props> = () => {
   const dispatch = useDispatch();
   const {
     chats,
-    // selectFriendIdx,
   } = useSelector(
     (state: RootState) => ({
       chats: state.chat.chats,
@@ -27,13 +27,11 @@ const ChatListContainer : React.FC<Props> = () => {
 
 
   useEffect(()=>{
-    console.log('chat!!');
-    // 채팅방 목록 불러오기
+    // 추후 Main.ts에서 관리
+    dispatch(loadProfile.request());
     dispatch(loadChats.request());
-
-    
   },[dispatch]);
-  // const chats: [] = [];
+
 
 
   const { openModal, closeModal } = useContext(ModalContext);
@@ -41,19 +39,12 @@ const ChatListContainer : React.FC<Props> = () => {
 
   
   const handleOpenChat = (id: string) => {
-    console.log(id);
-
-    // dispatch(searchChatByUser.request({ userid: following }));
-
     dispatch(setChatId(id));
-    
     openModal(CHAT_MODAL);
   }
 
 
-  return (
-    <ChatList chats={chats} handleOpenChat={handleOpenChat}/>
-  );
+  return <ChatList chats={chats} handleOpenChat={handleOpenChat} />;
 }
 
 export default ChatListContainer;

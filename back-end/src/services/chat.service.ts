@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import Mongoose, { Model } from 'mongoose';
 import { AddChatDto } from '../dto/chat.dto';
 import { Chat, ChatDocument } from '../schemas/chat.schema';
 import { MessageDocument } from '../schemas/message.schema';
@@ -9,7 +9,7 @@ import { UserDocument, User } from '../schemas/user.schema';
 
 
 
-
+const ObjectId = Mongoose.Types.ObjectId;
 
 @Injectable()
 export class ChatService {
@@ -18,27 +18,69 @@ export class ChatService {
     @InjectModel(Chat.name) private chatModel: Model<ChatDocument>
   ) {}
 
-  public async findAll(id: string) {
 
-    console.log('chat!!');
-    const user = await this.userModel
-      .findOne({ _id: id })
-      .populate({
-        path: "chats",
-        // populate: [{ path: "messages" }, { path: "users" }],
+
+  public async findAllByUser(id: string) {
+
+    
+    const result = await this.userModel
+      .aggregate()
+      .match({ _id: new ObjectId(id) })      
+      .lookup({
+        from: "chats",
+        let: {chats: "$chats"},
+        pipeline: [
+          { $match: { $expr: { $in: ["$_id", "$$chats"] } } },
+          {
+            $lookup: {
+              from: "messages",
+              let: { messages: "$messages" },
+              pipeline: [
+                { $addFields: {
+                  isMine: { 
+                    $cond: { 
+                      if: { 
+                          $eq: [new ObjectId(id), "$user"] 
+                      }, 
+                      then: true, 
+                      else: false 
+                  }
+                  }
+                }},
+                { $match: { $expr: { $in: ["$_id", "$$messages"] } } },
+                {
+                  $lookup: {
+                    from: "users",
+                    let: { user: "$user" },
+                    pipeline: [
+                      { $match: { $expr: { $eq: ["$_id", "$$user"] } } },
+                    ],
+                    as: "user"
+                  },
+                },
+                { $unwind: "$user" }
+              ],
+              as: "messages"
+            },
+          },
+          {
+            $lookup: {
+              from: "users",
+              let: { users: "$users" },
+              pipeline: [
+                { $match: { $expr: { $in: ["$_id", "$$users"] } } },
+              ],
+              as: "users"
+            },
+          }
+        ],
+        as: "chats"
       })
       .exec();
-
-
-    // const chats = await this.chatModel.find({
-    //   users: {$in : id}
-    // }).exec();
-    // // const user = await this.userDao.getOne(id);
-    // // console.log('user', user);
-    // return user.chats;
-    //popluate 안됨
-    return user.chats;
+    return result[0].chats;
   }
+
+
 
   public async findOne(id: string) {
     return await this.chatModel
@@ -47,14 +89,17 @@ export class ChatService {
       .exec();
   }
 
-  public async create({users} : {users: any[]}) {
 
-    const chat = new this.chatModel({ users: users } );
-    return await chat.save();
+
+  public async saveOne() {
+    const chat = new this.chatModel().save();
+    return chat;
   }
 
 
-  public async addMessage(id: string, message: MessageDocument){
+
+
+  public async saveMessage(id: string, message: MessageDocument){
     return await this.chatModel
       .findByIdAndUpdate(
         id,

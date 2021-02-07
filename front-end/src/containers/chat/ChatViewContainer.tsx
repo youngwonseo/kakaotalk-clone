@@ -29,17 +29,15 @@ const ChatViewContainer : React.FC<Props> = () => {
     chats,
     users,
     message,
-    // messages,
-
   } = useSelector((state: RootState) => ({
     profile: state.profile.profile,
     chat: state.chat.chat,
     chats: state.chat.chats, 
     users: state.chat.users,
+    // 작성중인 채팅
     message: state.chat.message,
-    // messages: state.chat.messages,
-    // following: state.profile.following,
   }), shallowEqual);
+
 
 
   useEffect(() => {
@@ -82,16 +80,6 @@ const ChatViewContainer : React.FC<Props> = () => {
         message: message,
       })
     );
-    
-    // 선택된 채팅방 아이디가 없으면 채팅방 추가
-    // if (!chat) {
-    //   dispatch(registerChat.request({ users : [following], message}));
-    // }else{
-    //   // console.log('send message!');
-      
-    // }
-    // console.log(message);
-    // socket.emit("toServer", message);
   }
 
 
@@ -107,7 +95,6 @@ const ChatViewContainer : React.FC<Props> = () => {
 
   return (
     <ChatModalTemplate>
-      
       <ChatView
         message={message}
         messages={chats && chats[chatIdx] && chats[chatIdx].messages}
