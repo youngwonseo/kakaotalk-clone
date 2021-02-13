@@ -49,11 +49,12 @@ const ProfileListContainer : React.FC<Props> = () => {
     openModal(PROFILE_SEARCH_MODAL);
   }
 
+
+
+  /**
+   * 내아이디 클릭
+   */
   const handleProfileOpen = () => {
-
- 
-
-    //내아이디인지 상대방 아이디인지?
     dispatch(setUpdateProfile({
       id: profile._id,
       username: profile.username,
@@ -61,34 +62,24 @@ const ProfileListContainer : React.FC<Props> = () => {
       stateMessage: profile.stateMessage || '',
     }));
 
-    // 선택한 프로필의 id 또는 idx
-    // 해당 id로 조회?
-    // 목적
-    // dispatch(searchProfile.request(id));   
     openModal(PROFILE_MODAL);
   }
 
-
+  /**
+   * 친구 아이디 클릭
+   * @param id 
+   */
   const handleFollowingOpen = (id: string) => {
     
-    const idx = profile.following.findIndex((following: any) => following._id === id);
+    const idx = following.findIndex((following: any) => following._id === id);
     
-    console.log(idx)
     dispatch(setUpdateProfile({
-      id: profile.following[idx]._id,
-      username: profile.following[idx].username,
-      profileImg: profile.following[idx].user.profileImg || '',
-      stateMessage: profile.following[idx].user.stateMessage || '',
-      userid: profile.following[idx].user._id
+      id: following[idx]._id,
+      username: following[idx].username,
+      profileImg: following[idx].user.profileImg || '',
+      stateMessage: following[idx].user.stateMessage || '',
+      userid: following[idx].user._id
     }));
-
-
-    //내아이디인지 상대방 아이디인지?
-
-    // 선택한 프로필의 id 또는 idx
-    // 해당 id로 조회?
-    // 목적
-    // dispatch(loadFollowing.request(id));   
     openModal(PROFILE_MODAL);   
   }
 

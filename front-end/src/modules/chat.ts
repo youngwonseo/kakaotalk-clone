@@ -159,21 +159,14 @@ function* listenData() {
     
     yield fork(writeSocket, socket); 
 
-    // // yield dispatch(LiveDataActions.connectionSuccess());
+
     while(true) {
       
-      /**
-       * 
-       * isNew,
-      message,
-      chatid: !isNew ? chat._id: false,
-      chat: isNew ? chat: false,
-       */
       // 새로운 채팅
       const { chat, chatid, message, isNew } = yield take(socketChannel);
       
 
-
+      console.log(chat, chatid, message, isNew);
       // 새로 생성된 채팅방이면
       if (isNew){
         // 메세지는 포함되어 있음

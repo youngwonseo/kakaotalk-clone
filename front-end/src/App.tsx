@@ -15,7 +15,7 @@ import io from "socket.io-client";
 import ModalContent from '../src/lib/ModalContent';
 import palette from './lib/styles/palette';
 import { loadToken } from './lib/clientToken';
-
+import PrivateRoute from './lib/PrivateRoute';
 
 const AppWrapper = styled.div`
   height: 100%;
@@ -72,22 +72,33 @@ const App: React.FC<Props> = () => {
     //   // dispatch(addMessage({message : { contents : payload } }));
     // })
   }, []);
+
+  const requireAuth = (nextState: any, replace: any, next: any) => {
+    const authenticated = localStorage.getItem("token");
+    console.log(authenticated);
+    if (!authenticated){
+       replace({
+         pathname: 'login',
+       })
+    }
+    // next();
+  }
  
 
   return (
     <AppWrapper>
       <Intro>
-        <h1>Kakao Talk</h1>
+        <h1>Kakao Talk Clone</h1>
       </Intro>
       <Main>
         <ModalProvider contentsMap={ModalContent}>
           <Switch>
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/register" component={RegisterPage} />
-            <Route exact path="/" component={ProfilePage} />
-            <Route path="/profile/:id" component={ProfilePage} />
-            <Route path="/chat" component={ChatPage} />
-            <Route path="/setting" component={SettingPage} />
+            <PrivateRoute exact path="/" component={ProfilePage}/>
+            <PrivateRoute path="/profile/:id" component={ProfilePage}/>
+            <PrivateRoute path="/chat" component={ChatPage}/>
+            <PrivateRoute path="/setting" component={SettingPage}/>
           </Switch>
         </ModalProvider>
       </Main>

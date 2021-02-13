@@ -9,7 +9,7 @@ export const registerFollowing = ({
   username: string;
   user: string;
 }) => {
-  return axios.post("/api/profiles/following", { username, user });
+  return axios.post("/api/following", { username, user });
 }
 
 export const updateFollowing = ({
@@ -19,11 +19,11 @@ export const updateFollowing = ({
   id: string;
   username: string;
 }) => {
-  const result = axios.post(`/api/profiles/following/${id}`, { username });
+  const result = axios.put(`/api/following/${id}`, { username });
   console.log(result);
   return result;
 };
 
 
 
-export const deleteFollowing = () => axios.delete("/api/profiles/following");
+export const deleteFollowing = () => axios.delete("/api/following");

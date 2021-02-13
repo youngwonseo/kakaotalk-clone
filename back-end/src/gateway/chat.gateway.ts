@@ -75,7 +75,7 @@ export class ChatGateway
 
     // 해당 채팅방에 메시지 입력
     const chat = await this.chatService.saveMessage(data.chat, message);
-  
+    
     // 새로운 채팅방 여부
     const result = {
       isNew,
@@ -84,14 +84,15 @@ export class ChatGateway
       chat: chat,
     };
 
+    // 내 채팅방?
     client.emit("message", {
       ...result,
-      message: {
-        user: result.message.user,
-        content: result.message.content,
-        count: result.message.count,
-        isMine: true,
-      },
+      // message: {
+      //   user: result.message.user,
+      //   contents: result.message.contents,
+      //   count: result.message.count,
+      //   isMine: true,
+      // },
     });
 
     // // 나머지 모든 사람들

@@ -62,8 +62,8 @@ export class FollowingService {
   }
 
   
-  public updateOne(id: string, updateFollowingDto: UpdateFollowingDto){
-    return this.followingModel
+  public async updateOne(id: string, updateFollowingDto: UpdateFollowingDto){
+    return await this.followingModel
       .findByIdAndUpdate(
         id,
         {
