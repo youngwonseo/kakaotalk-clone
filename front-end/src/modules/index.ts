@@ -21,26 +21,13 @@ const rootReducer = combineReducers({
   auth,
   profile,
   chat,
-  // data,
-  // main,
-  // device,
-  // patient,
-  // search,
-  // user,
 });
 
 export function* rootSaga() {
   yield all([
-    // baseSaga(),
     authSaga(),
     profileSaga(),
     chatSaga(),
-    // dataSaga(),
-    // mainSaga(),
-    // deviceSaga(),
-    // patientSaga(),
-    // searchSaga(),
-    // userSaga(),
   ]);
 };
 

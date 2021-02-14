@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Input from '../common/Input';
 import { IoPencil, IoChatbubbleSharp, IoCloseOutline } from 'react-icons/io5';
@@ -75,53 +75,47 @@ const ButtomButton = styled.a`
 
 interface Props{
   profile: any;
+  change: any;
   isEditMode: boolean;
   isMyProfile: boolean;
   handleChange: any;
   handleChangeMode: any;
   handleCloseModal: any;
-  handleProfileUpdateSubmit: any;
-  handleFollowUpdateSubmit: any;
+  handleUpdateSubmit: any;
   handleToChat: any;
 }
+
 const ProfileView: React.FC<Props> = ({
   profile,
+  change,
   isEditMode,
   isMyProfile,
   handleChange,
   handleChangeMode,
   handleCloseModal,
-  handleProfileUpdateSubmit,
-  handleFollowUpdateSubmit,
+  handleUpdateSubmit,
   handleToChat,
 }) => {
+
+
+  useEffect(()=>{
+    console.log(isMyProfile);
+  },[]);
+
   return (
     <ProfileViewWrapper>
       {isEditMode && (
-        <Form
-          onSubmit={
-            !isMyProfile ? handleFollowUpdateSubmit : handleProfileUpdateSubmit
-          }
-        >
+        <Form onSubmit={handleUpdateSubmit}>
           <CancelButton onClick={handleChangeMode}>취소</CancelButton>
-          <CompleteButton
-            onClick={
-              !isMyProfile
-                ? handleFollowUpdateSubmit
-                : handleProfileUpdateSubmit
-            }
-          >
-            완료
-          </CompleteButton>
-          <ProfileImg
-            src={
-              profile.profileImg ? profile.profileImg : "/profile-default.png"
-            }
-          />
+          <CompleteButton onClick={handleUpdateSubmit}>완료</CompleteButton>
+
+          <input type="file" name="profileImg" onChange={handleChange} />
+          <ProfileImg src={change.profilePreview} />
+
           <Input
             name="username"
             type="text"
-            value={profile.username}
+            value={change.username}
             onChange={handleChange}
           />
 
@@ -129,7 +123,7 @@ const ProfileView: React.FC<Props> = ({
             <Input
               name="stateMessage"
               type="text"
-              value={profile.stateMessage}
+              value={change.stateMessage}
               onChange={handleChange}
             />
           )}
@@ -141,13 +135,9 @@ const ProfileView: React.FC<Props> = ({
           <CloseButton onClick={handleCloseModal}>
             <IoCloseOutline size="1.5rem" />
           </CloseButton>
-          <ProfileImg
-            src={
-              profile.profileImg ? profile.profileImg : "/profile-default.png"
-            }
-          />
-          <UsernameText>{profile.username}</UsernameText>
-          <StateMessageText>{profile.stateMessage}</StateMessageText>
+          <ProfileImg src={change.profilePreview} />
+          <UsernameText>{profile && profile.username}</UsernameText>
+          <StateMessageText>{profile && profile.stateMessage}</StateMessageText>
           {/* {!isMyProfile && <ChatButton onClick={handleToChat}>채팅</ChatButton>} */}
         </>
       )}
@@ -164,7 +154,6 @@ const ProfileView: React.FC<Props> = ({
           </ButtomButton>
         </BottomButtonGroup>
       )}
-
 
       {!isEditMode && !isMyProfile && (
         <BottomButtonGroup>

@@ -22,17 +22,20 @@ export class ProfileController {
     return profile;
   }
 
+
   // 내 프로필 수정
   @UseGuards(JwtAuthGuard)
-  @Post("/")
-  public async postProfile(
+  @Put("/")
+  public async putProfile(
     @Req() req: any,
     @Body() updatePofileDto: UpdateProfileDto
   ) {
+
     const profile = await this.userService.updateOne(
       req.user.id,
       updatePofileDto
     );
+    console.log(profile);
     return profile;
   }
 

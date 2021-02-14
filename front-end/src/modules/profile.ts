@@ -10,7 +10,6 @@ import createAsyncSaga, {
   createActionTypes
 } from '../lib/createAsyncSaga';
 import * as authAPI from '../lib/api/auth';
-// import * as friendAPI from '../lib/api/friend';
 import * as profileAPI from '../lib/api/profile';
 import * as followingAPI from '../lib/api/following';
 import { AxiosError } from 'axios';
@@ -20,8 +19,10 @@ import { AxiosError } from 'axios';
 const CHANGE_FIELD = 'profile/CHANGE_FIELD';
 const INITIALIZE_FORM = 'profile/INITIALIZE_FORM';
 const INITIALIZE_SEARCH_FORM = 'profile/INITIALIZE_SEARCH_FORM';
+const INITIALIZE_CHANGE_FORM = 'profile/INITIALIZE_CHANGE_FORM';
 // const SET_FOLLOWING_ID = 'profile/SET_FOLLOWING_ID';
-const SET_UPDATE_PROFILE = 'profile/SET_UPDATE_PROFILE';
+const SET_CHANGE_PROFILE = 'profile/SET_CHANGE_PROFILE';
+const SET_CHANGE_FOLLOWING = 'profile/SET_CHANGE_FOLLOWING';
 const SET_DONE = 'profile/SET_DONE';
 
 const [
@@ -48,6 +49,22 @@ export const updateProfile = createAsyncAction(
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_FAILURE,
 )<any, any, AxiosError>();
+
+
+const [
+  REGISTER_PROFILE_IMG,
+  REGISTER_PROFILE_IMG_SUCCESS,
+  REGISTER_PROFILE_IMG_FAILURE,
+] = createActionTypes('profile/REGISTER_PROFILE_IMG');
+
+export const registerProfileImg = createAsyncAction(
+  REGISTER_PROFILE_IMG,
+  REGISTER_PROFILE_IMG_SUCCESS,
+  REGISTER_PROFILE_IMG_FAILURE,
+)<any, any, AxiosError>();
+
+
+
 
 const [
   UPDATE_FOLLOWING, 
@@ -137,7 +154,7 @@ export const setDone = createAction(
 
 export const changeField = createAction(
   CHANGE_FIELD,
-  ({ form, key, value }: { form: string; key: string; value: string }) => ({
+  ({ form, key, value }: { form: string; key: string; value: any }) => ({
     form,
     key,
     value,
@@ -153,18 +170,29 @@ export const initializeSearchForm = createAction(
   INITIALIZE_SEARCH_FORM,
 )();
 
+export const initializeChangeForm = createAction(
+  INITIALIZE_CHANGE_FORM,
+)();
+
 // export const setFollowingId = createAction(
 //   SET_FOLLOWING_ID,
 //   (id) => id
 // )();
 
-export const setUpdateProfile = createAction(
-  SET_UPDATE_PROFILE,
+export const setChangeProfile = createAction(
+  SET_CHANGE_PROFILE,
   (profile) => profile,
 )();
 
+export const setChangeFollowing = createAction(
+  SET_CHANGE_FOLLOWING,
+  (profile) => profile,
+)();
+
+
 const loadProfileSaga = createAsyncSaga(LOAD_PROFILE, profileAPI.loadProfile);
 const updateProfileSaga = createAsyncSaga(UPDATE_PROFILE, profileAPI.updateProfile)
+const registerProfileImgSaga = createAsyncSaga(REGISTER_PROFILE_IMG, profileAPI.registerProfileImg)
 const searchProfileByEmailSaga = createAsyncSaga(SEARCH_PROFILE_BY_EMAIL, profileAPI.searchByEmail);
 const searchProfileByIdSaga = createAsyncSaga(SEARCH_PROFILE_BY_ID, profileAPI.searchById);
 
@@ -176,6 +204,7 @@ const deleteFollowingSaga = createAsyncSaga(REMOVE_FOLLOWING, followingAPI.delet
 export function* profileSaga() {
   yield takeLatest(LOAD_PROFILE, loadProfileSaga);
   yield takeLatest(UPDATE_PROFILE, updateProfileSaga);
+  yield takeLatest(REGISTER_PROFILE_IMG, registerProfileImgSaga);
   yield takeLatest(LOAD_FOLLOWING, loadFollowingSaga);
   yield takeLatest(REGISTER_FOLLOWING, registerFollowingSaga);
   yield takeLatest(UPDATE_FOLLOWING, updateFollowingSaga);
@@ -197,6 +226,25 @@ interface ProfileState {
     profileImg: any;
     id: any;
   };
+  changeProfile: {
+    [key:string] : any;
+    email: any;
+    username: any;
+    stateMessage: any;
+    profileImg: any;
+    profilePreview: any;
+    id: any;
+  },
+  changeFollowing: {
+    [key:string] : any;
+    email: any;
+    username: any;
+    stateMessage: any;
+    profileImg: any;
+    profilePreview: any;
+    id: any;
+  },
+  mode: any;
   done: boolean;
   // following: any; // 선택된 친구
   error: any;
@@ -213,6 +261,23 @@ const initialState: ProfileState = {
     profileImg: "",
     id: "",
   },
+  changeProfile: {
+    email: "",
+    username: "",
+    stateMessage: "",
+    profileImg: "",
+    profilePreview: "",
+    id: "",
+  },
+  changeFollowing: {
+    email: "",
+    username: "",
+    stateMessage: "",
+    profileImg: "",
+    profilePreview: "",
+    id: "",
+  },
+  mode: "",
   done: false,
   // following: null,
   error: null,
@@ -229,6 +294,11 @@ const profile = createReducer<ProfileState, any>(initialState, {
     error: initialState.error,
     done: false
   }),
+  [INITIALIZE_CHANGE_FORM]: (state) => ({
+    ...state,
+    changeFollowing: initialState.changeFollowing,
+    changeProfile: initialState.changeProfile,
+  }),
   [SET_DONE]: (state) => ({
     ...state,
     done: false,
@@ -240,9 +310,13 @@ const profile = createReducer<ProfileState, any>(initialState, {
     produce(state, (draft) => {
       draft[form][key] = value;
     }),
-  [SET_UPDATE_PROFILE]: (state, { payload }) => ({
+  [SET_CHANGE_PROFILE]: (state, { payload }) => ({
     ...state, 
-    search: payload
+    changeProfile: payload
+  }),
+  [SET_CHANGE_FOLLOWING]: (state, { payload }) => ({
+    ...state, 
+    changeFollowing: payload
   }),
   // [SET_FOLLOWING_ID]: (state, { payload: id }) => ({
   //   ...state,
@@ -261,6 +335,11 @@ const profile = createReducer<ProfileState, any>(initialState, {
     },
     done: true,
   }),
+  [REGISTER_PROFILE_IMG_SUCCESS]: (state, { payload: file}) => 
+    produce(state, (draft) => {
+      draft.changeProfile.profileImg= file._id;
+      draft.profile.profileImages.unshift(file)
+    }), 
   [LOAD_FOLLOWING_SUCCESS]: (state, { payload: following }) => ({
     ...state,
     following,
@@ -273,10 +352,16 @@ const profile = createReducer<ProfileState, any>(initialState, {
       (following: any) => following._id === following._id
     );
     return produce(state, (draft) => {
-      draft.profile.following[idx].username = following.username;
+      draft.following[idx].username = following.username;
       draft.done = true;
     });
   },
+  // [UPDATE_FOLLOWING_FAILURE]: (state, { payload }) => {
+  //   console.log(payload);
+  //   return {
+  //   ...state
+  //   }
+  // },
   [REMOVE_FOLLOWING_SUCCESS]: (state, { payload: following }) => ({
     ...state,
   }),

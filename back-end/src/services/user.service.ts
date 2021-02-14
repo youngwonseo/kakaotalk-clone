@@ -27,7 +27,13 @@ export class UserService {
 
   
   public async findOne(id: string){
-    return await this.userModel.findById(id);
+    return await this.userModel
+      .findById(id)
+      .populate({
+        path: "profileImages",
+        options: { sort: { createdAt: -1 } },
+      })
+      .exec();
   }
 
 
@@ -45,13 +51,11 @@ export class UserService {
             $lookup: {
               from: "users",
               let: { user: "$user" },
-              pipeline: [
-                { $match: { $expr: { $eq: ["$_id", "$$user"] } } },
-              ],
-              as: "user"
+              pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$user"] } } }],
+              as: "user",
             },
           },
-          { $unwind: "$user" }         
+          { $unwind: "$user" },
         ],
         // localField: "following",
         // foreignField: "_id",
@@ -59,7 +63,7 @@ export class UserService {
       })
       .lookup({
         from: "chats",
-        let: {chats: "$chats"},
+        let: { chats: "$chats" },
         pipeline: [
           { $match: { $expr: { $in: ["$_id", "$$chats"] } } },
           {
@@ -67,17 +71,19 @@ export class UserService {
               from: "messages",
               let: { messages: "$messages" },
               pipeline: [
-                { $addFields: {
-                  isMine: { 
-                    $cond: { 
-                      if: { 
-                          $eq: [new ObjectId(id), "$user"] 
-                      }, 
-                      then: true, 
-                      else: false 
-                  }
-                  }
-                }},
+                {
+                  $addFields: {
+                    isMine: {
+                      $cond: {
+                        if: {
+                          $eq: [new ObjectId(id), "$user"],
+                        },
+                        then: true,
+                        else: false,
+                      },
+                    },
+                  },
+                },
                 { $match: { $expr: { $in: ["$_id", "$$messages"] } } },
                 {
                   $lookup: {
@@ -86,29 +92,33 @@ export class UserService {
                     pipeline: [
                       { $match: { $expr: { $eq: ["$_id", "$$user"] } } },
                     ],
-                    as: "user"
+                    as: "user",
                   },
                 },
-                { $unwind: "$user" }
+                { $unwind: "$user" },
               ],
-              as: "messages"
+              as: "messages",
             },
           },
           {
             $lookup: {
               from: "users",
               let: { users: "$users" },
-              pipeline: [
-                { $match: { $expr: { $in: ["$_id", "$$users"] } } },
-              ],
-              as: "users"
+              pipeline: [{ $match: { $expr: { $in: ["$_id", "$$users"] } } }],
+              as: "users",
             },
-          }
+          },
         ],
-        as: "chats"
+        as: "chats",
       })
+      // .lookup({
+      //   from: "files",
+      //   let: { profileImages: "$profileImages" },
+      //   pipeline: [{ $match: { $expr: { $in: ["$_id", "$$profileImages"] } } }],
+      //   as: "profileImages",
+      // })
       .exec();
-    
+
     return result[0];
   }
 
@@ -119,12 +129,21 @@ export class UserService {
 
 
   public updateOne(id: string, updateProfileDto: UpdateProfileDto){
+
+
+    let profileImages = {};
+
+    if(updateProfileDto.profileImg){
+      profileImages = { profileImages: updateProfileDto.profileImg }
+    }
+
     return this.userModel
       .findByIdAndUpdate(
         id,
         {
           username: updateProfileDto.username,
           stateMessage: updateProfileDto.stateMessage,
+          $push: profileImages,
         },
         {
           new: true

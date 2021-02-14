@@ -1,4 +1,5 @@
 import { IsString } from "class-validator";
+import { FileDocument } from "../schemas/file.schema";
 
 
 export class ProfileDto {
@@ -48,5 +49,7 @@ export class UpdateProfileDto {
   @IsString()
   readonly stateMessage: string;
 
+  @IsString()
+  readonly profileImg: any;
 }
 

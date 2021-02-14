@@ -5,7 +5,7 @@ import ProfileList from '../../components/profile/ProfileList';
 import ProfileItem from '../../components/profile/ProfileItem';
 import { ModalContext } from "../../lib/createModalProvider";
 import { useDispatch, useSelector } from 'react-redux';
-import { loadProfile, searchProfileById, setUpdateProfile, loadFollowing } from '../../modules/profile';
+import { loadProfile, searchProfileById, loadFollowing, setChangeProfile, setChangeFollowing } from '../../modules/profile';
 import { RootState } from '../../modules';
 import { PROFILE_SEARCH_MODAL, PROFILE_MODAL } from '../../lib/ModalContent';
 import { loadToken } from '../../lib/clientToken';
@@ -55,25 +55,24 @@ const ProfileListContainer : React.FC<Props> = () => {
    * 내아이디 클릭
    */
   const handleProfileOpen = () => {
-    dispatch(setUpdateProfile({
+    dispatch(setChangeProfile({
       id: profile._id,
       username: profile.username,
-      profileImg: profile.profileImg ||'',
+      profilePreview: profile.profileImages && profile.profileImages.length > 0 ? `/api/files/${profile.profileImages[0].filename}` : "/profile-default.png",
       stateMessage: profile.stateMessage || '',
     }));
-
     openModal(PROFILE_MODAL);
   }
+
 
   /**
    * 친구 아이디 클릭
    * @param id 
    */
-  const handleFollowingOpen = (id: string) => {
-    
+  const handleFollowingOpen = (id: string) => {   
     const idx = following.findIndex((following: any) => following._id === id);
-    
-    dispatch(setUpdateProfile({
+    dispatch(setChangeFollowing({
+      idx: idx,
       id: following[idx]._id,
       username: following[idx].username,
       profileImg: following[idx].user.profileImg || '',

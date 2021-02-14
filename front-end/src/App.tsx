@@ -52,37 +52,10 @@ const App: React.FC<Props> = () => {
   //?
   loadToken();
   useEffect(()=>{
-    //xios.defaults.withCredentials = true; const socket = io("/");
-    // socket.on('connect_error', (error: any)=> {
-    //   console.log("connect_error: ", error);
-    // });
-    // socket.on('connect_timeout', (err: any) => {
-    //   console.log("client connect_timeout: ", err);
-    // });
-
-    // socket.on('connect', () => {
-    //   console.log('conection!');
-    // });
-    // socket.on('error', (error: any) => {
-    //   console.log(error);
-    // });
-
-    // socket.on('fromServer', (payload: string) => {
-    //   console.log(payload)
-    //   // dispatch(addMessage({message : { contents : payload } }));
-    // })
+  
   }, []);
 
-  const requireAuth = (nextState: any, replace: any, next: any) => {
-    const authenticated = localStorage.getItem("token");
-    console.log(authenticated);
-    if (!authenticated){
-       replace({
-         pathname: 'login',
-       })
-    }
-    // next();
-  }
+
  
 
   return (

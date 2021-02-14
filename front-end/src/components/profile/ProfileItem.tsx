@@ -31,17 +31,18 @@ interface Props {
   id: string;
   username: string;
   stateMessage: string;
+  profileImg: string;
   handleProfileOpen: any;
 };
 
-const ProfileItem : React.FC<Props> = ({ id, username, stateMessage, handleProfileOpen }) => {
+const ProfileItem : React.FC<Props> = ({ id, username, stateMessage, profileImg, handleProfileOpen }) => {
   return (
     <ProfileItemWrapper onClick={()=>{
       handleProfileOpen(id);
     }}>
       
       <>
-        <ProfileImg src={"/profile-default.png"} />
+        <ProfileImg src={profileImg} />
         <ProfileInfo>
           <ProfileName>{username}</ProfileName>
           <ProfilelastMessage>{stateMessage}</ProfilelastMessage>

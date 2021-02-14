@@ -63,6 +63,7 @@ const ProfileList: React.FC<Props> = ({
           id={profile._id}
           username={profile.username}
           stateMessage={profile.stateMessage}
+          profileImg={profile.profileImages && profile.profileImages.length > 0 ? `/api/files/${profile.profileImages[0].filename}` : "/profile-default.png"}
           handleProfileOpen={handleProfileOpen}
         />
       )}
@@ -84,6 +85,7 @@ const ProfileList: React.FC<Props> = ({
             id={following._id}
             username={following.username}
             stateMessage={following.user.stateMessage}
+            profileImg={following.user.profileImages && following.user.profileImages.length > 0 ? `/api/files/${following.user.profileImages[0].filename}` : "/profile-default.png"}
             handleProfileOpen={handleFollowingOpen}
           />
         ))}

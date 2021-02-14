@@ -20,6 +20,9 @@ export class User {
   @Prop()
   stateMessage: String;
 
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: "File" }] })
+  profileImages: File[];
+
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Following" }] })
   following: Following[];
 

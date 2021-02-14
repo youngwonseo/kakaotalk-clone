@@ -43,12 +43,17 @@ export class FollowingController {
   
   @UseGuards(JwtAuthGuard)
   @Put("/:id")
-  public async updateFollowing(
+  public async putFollowing(
     @Req() req: any,
     @Param("id") id: string,
     @Body() updateFollowingDto: UpdateFollowingDto
   ) {
-    return await this.followingService.updateOne(id, updateFollowingDto);
+    const following = await this.followingService.updateOne(
+      id,
+      updateFollowingDto
+    );
+    console.log(following);
+    return following;
   }
 
 

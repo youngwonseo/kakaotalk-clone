@@ -6,6 +6,7 @@ import { AuthModule } from "./auth.module";
 import { ChatModule } from "./chat.module";
 import { ProfileModule } from "./profile.module";
 import { FollowingModule} from "./following.module";
+import { FileModule } from './file.module';
 import { JwtStrategy } from "../auth/jwt.strategy";
 import { PassportModule } from "@nestjs/passport";
 import { JwtModule } from "@nestjs/jwt";
@@ -18,6 +19,7 @@ import { jwtConstants } from "../constants";
     AuthModule,
     ProfileModule,
     FollowingModule,
+    FileModule,
     ChatModule,
   ],
   providers: [JwtStrategy],

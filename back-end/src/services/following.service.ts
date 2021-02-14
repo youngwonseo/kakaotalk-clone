@@ -34,14 +34,28 @@ export class FollowingService {
               let: { user: "$user" },
               pipeline: [
                 { $match: { $expr: { $eq: ["$_id", "$$user"] } } },
+                {
+                  $lookup: {
+                    from: "files",
+                    let: { profileImages: "$profileImages" },
+                    pipeline: [
+                      {
+                        $match: { $expr: { $in: ["$_id", "$$profileImages"] } },
+                      },
+                      { $sort: { createdAt: -1 } },
+                    ],
+                    as: "profileImages",
+                  },
+                },
               ],
-              as: "user"
+              as: "user",
             },
           },
-          { $unwind: "$user" }
+          { $unwind: "$user" },
         ],
         as: "following",
-      }).exec();
+      })
+      .exec();
     return user[0].following;
   }
 
@@ -62,8 +76,8 @@ export class FollowingService {
   }
 
   
-  public async updateOne(id: string, updateFollowingDto: UpdateFollowingDto){
-    return await this.followingModel
+  public updateOne(id: string, updateFollowingDto: UpdateFollowingDto){
+    return this.followingModel
       .findByIdAndUpdate(
         id,
         {

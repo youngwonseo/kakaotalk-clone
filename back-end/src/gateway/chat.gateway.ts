@@ -87,15 +87,17 @@ export class ChatGateway
     // 내 채팅방?
     client.emit("message", {
       ...result,
-      // message: {
-      //   user: result.message.user,
-      //   contents: result.message.contents,
-      //   count: result.message.count,
-      //   isMine: true,
-      // },
+      
+      //isMine을 추가하기위해
+      message: {
+        user: result.message.user,
+        contents: result.message.contents,
+        count: result.message.count,
+        isMine: true,
+      },
     });
 
-    // // 나머지 모든 사람들
+    // 나머지 모든 사람들
     client.broadcast.emit("message", result);
 
     // // 채팅방이 생성된경우

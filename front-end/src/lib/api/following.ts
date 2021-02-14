@@ -26,4 +26,6 @@ export const updateFollowing = ({
 
 
 
+
+
 export const deleteFollowing = () => axios.delete("/api/following");
